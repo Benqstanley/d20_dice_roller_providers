@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:flutter/material.dart';
 
 class DiceRollerDrawer extends StatelessWidget {
@@ -15,13 +16,27 @@ class DiceRollerDrawer extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.blue),
       ),
       ListTile(
-        leading: Icon(Icons.home),
-        title: Text(
-          "Home",
-          style: TextStyle(fontSize: 20),
-        ),
-        onTap: () async => Navigator.of(context).pushNamed('/home'),
-      )
+          leading: Icon(Icons.home),
+          title: Text(
+            "Home",
+            style: TextStyle(fontSize: 20),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.rollerScreenPath);
+          }),
+      ListTile(
+          leading: Icon(Icons.history),
+          title: Text(
+            "History",
+            style: TextStyle(fontSize: 20),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.sessionHistoryScreenPath);
+          })
     ];
     return Drawer(
       child: ListView.builder(

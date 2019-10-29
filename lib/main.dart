@@ -1,5 +1,9 @@
+import 'package:d20_dice_roller/app_wide_strings.dart';
+import 'package:d20_dice_roller/choose_named_collection/ui/choose_named_collection_screen.dart';
+import 'package:d20_dice_roller/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/navigation/dice_roller_drawer.dart';
 import 'package:d20_dice_roller/roller/ui/roller_screen.dart';
+import 'package:d20_dice_roller/session_history/ui/session_history_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(DiceRollerMain());
@@ -22,12 +26,43 @@ class DiceRollerMain extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        drawer: DiceRollerDrawer(),
-        body: RollerScreen(),
-        appBar: AppBar(
-          title: Text("Dice Roller"),
-        ),
+      home: PageWrapper(
+        title: AppWideStrings.rollerScreenTitle,
+        child: RollerScreen(),
+      ),
+      routes: {
+        AppWideStrings.sessionHistoryScreenPath: (ctx)  {
+          return PageWrapper(
+              title: AppWideStrings.sessionHistoryScreenTitle,
+              child: SessionHistoryScreen(),
+            );},
+        AppWideStrings.createCollectionPath: (ctx) => PageWrapper(
+              child: CreateNamedCollection(),
+              title: AppWideStrings.createCollectionTitle,
+            ),
+        AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
+              child: ViewNamedCollections(),
+              title: AppWideStrings.viewNamedCollectionTitle,
+            )
+      },
+    );
+  }
+}
+
+class PageWrapper extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  PageWrapper({@required this.child, @required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: UniqueKey(),
+      drawer: DiceRollerDrawer(),
+      body: child,
+      appBar: AppBar(
+        title: Text(title),
       ),
     );
   }

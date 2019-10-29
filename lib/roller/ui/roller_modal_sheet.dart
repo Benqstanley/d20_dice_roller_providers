@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/roller/ui/roll_result.dart';
 import 'package:flutter/material.dart';
 
 class RollerModalSheet extends StatelessWidget {
@@ -12,28 +13,7 @@ class RollerModalSheet extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListView(
         children: results.map((result) {
-          return Container(
-            decoration: BoxDecoration(border: Border(bottom:BorderSide())),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(result['collectionDescription'],
-                        style: rollerModalSheetStyle)),
-                Container(),
-                Flexible(
-                  child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        result['expandedResult'],
-                        style: rollerModalSheetStyle,
-                      )),
-                ),
-              ],
-            ),
-          );
+          return RollResult(result, rollerModalSheetStyle);
         }).toList(),
       ),
     );
