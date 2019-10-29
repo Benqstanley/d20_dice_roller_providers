@@ -38,7 +38,10 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
       key: UniqueKey(),
       onDismissed: (direction) => collectionModel.onDismissed(),
       background: Container(
+        decoration: BoxDecoration(
           color: Colors.red,
+          borderRadius: BorderRadius.circular(5),
+        ),
           child: Center(
               child: ListTile(
             trailing: Icon(Icons.delete),
@@ -73,7 +76,7 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
                   hint: Text("Type"),
                   value: collectionModel.diceType,
                   onChanged: (DiceType type) {
-                    collectionModel.setType(type);
+                    collectionModel.updateWith(diceType: type);
                   },
                   items: diceTypes
                       .map((type) => DropdownMenuItem<DiceType>(
@@ -102,7 +105,7 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
                     Checkbox(
                       value: collectionModel.toRoll,
                       onChanged: (newValue) {
-                        collectionModel.toRoll = newValue;
+                        collectionModel.updateWith(toRoll: newValue);
                       },
                     ),
                   ],

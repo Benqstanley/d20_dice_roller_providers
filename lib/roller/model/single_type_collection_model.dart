@@ -49,18 +49,27 @@ class SingleTypeCollectionModel extends ChangeNotifier {
 
   SingleTypeCollectionModel();
 
+  void updateWith({
+    int numberOfDice,
+    DiceType diceType,
+    int modifier,
+    bool toRoll,
+  }) {
+    bool noChanges = numberOfDice == null &&
+        diceType == null &&
+        modifier == null &&
+        toRoll == null;
+    this.numberOfDice = numberOfDice ?? this.numberOfDice;
+    this.diceType = diceType ?? this.diceType;
+    this.modifier = modifier ?? this.modifier;
+    this.toRoll = toRoll ?? this.toRoll;
+    if(!noChanges){
+      notifyListeners();
+    }
+  }
+
   String modifierString() {
     return modifier != null && modifier != 0 ? " + $modifier" : "";
-  }
-
-  void setType(DiceType type){
-    diceType = type;
-    notifyListeners();
-  }
-
-  void updateToRoll(bool newValue){
-    toRoll = newValue;
-    notifyListeners();
   }
 
   @override
@@ -68,7 +77,7 @@ class SingleTypeCollectionModel extends ChangeNotifier {
     return "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString();
   }
 
-  bool determineValidity(){
+  bool determineValidity() {
     return toRoll && diceType != null && numberOfDice != null;
   }
 }
