@@ -5,11 +5,21 @@ class DiceRollerDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> drawerItems = [
       DrawerHeader(
+        child: Text(
+          'Dice Roller',
+          style: TextStyle(
+            fontSize: 26,
+            color: Colors.white,
+          ),
+        ),
         decoration: BoxDecoration(color: Colors.blue),
       ),
       ListTile(
         leading: Icon(Icons.home),
-        title: Text("Home"),
+        title: Text(
+          "Home",
+          style: TextStyle(fontSize: 20),
+        ),
         onTap: () async => Navigator.of(context).pushNamed('/home'),
       )
     ];

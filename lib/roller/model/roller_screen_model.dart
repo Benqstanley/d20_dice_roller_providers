@@ -1,8 +1,10 @@
+import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
 import 'package:d20_dice_roller/roller/ui/single_type_collection_row.dart';
 import 'package:d20_dice_roller/utility/utility_class.dart';
 import 'package:flutter/material.dart';
 
 class RollerScreenModel extends ChangeNotifier {
+  bool showExpanded = true;
   List<SingleTypeCollectionRow> singleTypeCollections = [];
 
   RollerScreenModel() {
@@ -30,13 +32,20 @@ class RollerScreenModel extends ChangeNotifier {
     addSingleTypeCollectionRow();
   }
 
-  void rollCollections(){
+  void rollCollections(BuildContext context){
+    List<Map<String, dynamic>> results = [];
     for(SingleTypeCollectionRow row in singleTypeCollections){
       if(row.collectionModel.determineValidity()){
        Map result = Utility.rollSingleTypeCollection(row.collectionModel);
-       print(result['rollValue']);
-       print(result['expandedResult']);
+       results.add(result);
       }
+    }
+    if(results.isNotEmpty){
+      showModalBottomSheet(
+        context: context,
+        builder: (context){
+        return RollerModalSheet(results);
+      });
     }
   }
 }

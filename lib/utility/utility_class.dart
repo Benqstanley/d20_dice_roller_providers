@@ -21,6 +21,7 @@ class Utility {
     }
     expandedResultBuffer.write(" = $rollValue");
     String expandedResult = expandedResultBuffer.toString().substring(3);
+    result['collectionDescription'] = model.toString();
     result['expandedResult'] = expandedResult;
     result['rollValue'] = rollValue;
     return result;

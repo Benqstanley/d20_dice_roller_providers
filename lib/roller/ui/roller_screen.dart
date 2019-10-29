@@ -52,7 +52,7 @@ class RollerScreenContents extends StatelessWidget {
               RaisedButton(
                 child: Text('Roll'),
                 onPressed: () {
-                  rollerScreenModel.rollCollections();
+                  rollerScreenModel.rollCollections(context);
                 },
               ),
             ],

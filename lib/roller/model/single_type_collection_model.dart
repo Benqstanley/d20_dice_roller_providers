@@ -74,7 +74,7 @@ class SingleTypeCollectionModel extends ChangeNotifier {
 
   @override
   String toString() {
-    return "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString();
+    return "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString() + ": ";
   }
 
   bool determineValidity() {
