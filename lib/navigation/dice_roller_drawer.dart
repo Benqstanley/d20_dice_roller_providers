@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class DiceRollerDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ColorScheme appColor = Theme.of(context).colorScheme;
     List<Widget> drawerItems = [
       DrawerHeader(
         child: Text(
@@ -13,7 +14,7 @@ class DiceRollerDrawer extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        decoration: BoxDecoration(color: Colors.blue),
+        decoration: BoxDecoration(color: appColor.primary),
       ),
       ListTile(
           leading: Icon(Icons.home),
