@@ -67,19 +67,21 @@ class PageWrapper extends StatelessWidget {
   final Widget child;
   final AppBar appBar;
   final bool keyed;
+  final bool displayDrawer;
 
-  PageWrapper({
-    @required this.child,
-    this.title,
-    this.appBar,
-    this.keyed = false
-  }) : assert(appBar != null || title != null);
+  PageWrapper(
+      {@required this.child,
+      this.displayDrawer = true,
+      this.title,
+      this.appBar,
+      this.keyed = false})
+      : assert(appBar != null || title != null);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: keyed ? UniqueKey() : null,
-      drawer: DiceRollerDrawer(),
+      drawer: displayDrawer ? DiceRollerDrawer() : null,
       body: child,
       appBar: appBar ??
           AppBar(
@@ -88,4 +90,3 @@ class PageWrapper extends StatelessWidget {
     );
   }
 }
-

@@ -6,38 +6,55 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateNamedCollection extends StatelessWidget {
+  final bool canBeMulti;
+
+  CreateNamedCollection({this.canBeMulti = true});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       builder: (ctx) {
         return NamedCollectionModel();
       },
-      child: CreateNamedCollectionContents(),
+      child: CreateNamedCollectionContents(
+        canBeMulti: canBeMulti,
+      ),
     );
   }
 }
 
 class CreateNamedCollectionContents extends StatelessWidget {
   final TextEditingController nameEditingController = TextEditingController();
+  final bool canBeMulti;
+
+  CreateNamedCollectionContents({
+    this.canBeMulti = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     NamedCollectionModel namedCollectionModel =
         Provider.of<NamedCollectionModel>(context);
-    bool isMultiPart = namedCollectionModel.isMultiPart;
+    bool isMultiPart = canBeMulti && namedCollectionModel.isMultiPart;
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
       ),
+      displayDrawer: canBeMulti,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            buildNameAndTypeRow(context),
+            buildNameAndTypeRow(
+              context,
+              namedCollectionModel,
+            ),
             Expanded(
                 child: isMultiPart
                     ? buildMultiPartCreator(
-                        namedCollectionModel: namedCollectionModel)
+                        namedCollectionModel: namedCollectionModel,
+                        context: context,
+                      )
                     : buildSinglePartCreator(
                         namedCollectionModel: namedCollectionModel)),
           ],
@@ -46,32 +63,39 @@ class CreateNamedCollectionContents extends StatelessWidget {
     );
   }
 
-  Widget buildNameAndTypeRow(BuildContext context) {
-    NamedCollectionModel namedCollectionModel =
-        Provider.of<NamedCollectionModel>(context);
+  Widget buildNameAndTypeRow(
+    BuildContext context,
+    NamedCollectionModel namedCollectionModel,
+  ) {
     return Row(
       children: <Widget>[
         Expanded(
           child: TextField(
             controller: nameEditingController,
-            decoration: InputDecoration(hintText: "Name Your Collection"),
+            decoration: InputDecoration(
+              hintText: canBeMulti ? "Name Your Collection" : "Name This Part",
+            ),
           ),
         ),
-        Column(
-          children: <Widget>[
-            Text("Multi"),
-            Checkbox(
-              value: namedCollectionModel.isMultiPart,
-              onChanged: (newValue) =>
-                  namedCollectionModel.changeMultiPartStatus(newValue),
-            )
-          ],
-        )
+        if (canBeMulti)
+          Column(
+            children: <Widget>[
+              Text("Multi"),
+              Checkbox(
+                value: namedCollectionModel.isMultiPart,
+                onChanged: (newValue) =>
+                    namedCollectionModel.changeMultiPartStatus(newValue),
+              )
+            ],
+          )
       ],
     );
   }
 
-  Widget buildMultiPartCreator({NamedCollectionModel namedCollectionModel}) {
+  Widget buildMultiPartCreator({
+    NamedCollectionModel namedCollectionModel,
+    BuildContext context,
+  }) {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -97,8 +121,13 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 RaisedButton(
                   child: Text('Add Part'),
                   onPressed: () {
-                    namedCollectionModel
-                        .addSingleTypeCollectionRowForCurrentPart();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => ChangeNotifierProvider.value(
+                              value: namedCollectionModel,
+                              child: CreateNamedCollectionContents(
+                                canBeMulti: false,
+                              ),
+                            )));
                   },
                 ),
                 RaisedButton(
@@ -123,10 +152,6 @@ class CreateNamedCollectionContents extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          if (namedCollectionModel.isMultiPart)
-            TextField(
-              decoration: InputDecoration(hintText: "Name This Part"),
-            ),
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
