@@ -1,5 +1,4 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
-import 'package:d20_dice_roller/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:flutter/material.dart';
 
 class DiceRollerDrawer extends StatelessWidget {
@@ -37,8 +36,8 @@ class DiceRollerDrawer extends StatelessWidget {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => CreateNamedCollection()));
+            Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.createCollectionPath);
           }),
       Divider(),
       ListTile(
