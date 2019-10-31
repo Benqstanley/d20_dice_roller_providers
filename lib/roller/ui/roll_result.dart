@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class RollResult extends StatelessWidget {
   TextStyle rollResultStyle;
   Map<String, dynamic> result;
+
   RollResult(this.result, this.rollResultStyle);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border(bottom:BorderSide())),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide())),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -20,11 +21,12 @@ class RollResult extends StatelessWidget {
           Container(),
           Flexible(
             child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  result['expandedResult'],
-                  style: rollResultStyle,
-                )),
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                result['expandedResult'],
+                style: rollResultStyle,
+              ),
+            ),
           ),
         ],
       ),

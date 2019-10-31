@@ -33,7 +33,7 @@ class RollerScreenModel extends ChangeNotifier {
     addSingleTypeCollectionRow();
   }
 
-  void rollCollections(BuildContext context){
+  void rollCollections(BuildContext context, SessionHistoryModel sessionHistoryModel){
     List<Map<String, dynamic>> results = [];
     for(SingleTypeCollectionRow row in singleTypeCollections){
       if(row.collectionModel.determineValidity()){
@@ -42,7 +42,7 @@ class RollerScreenModel extends ChangeNotifier {
       }
     }
     if(results.isNotEmpty){
-      SessionHistoryModel.addSessionResult(results);
+      sessionHistoryModel.addSessionResult(results);
       showModalBottomSheet(
         context: context,
         builder: (context){

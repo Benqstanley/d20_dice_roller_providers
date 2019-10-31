@@ -27,6 +27,7 @@ class DiceRollerDrawer extends StatelessWidget {
             Navigator.of(context)
                 .pushReplacementNamed(AppWideStrings.rollerScreenPath);
           }),
+      Divider(),
       ListTile(
           leading: Icon(Icons.history),
           title: Text(
@@ -37,7 +38,8 @@ class DiceRollerDrawer extends StatelessWidget {
             Navigator.of(context).pop();
             Navigator.of(context)
                 .pushReplacementNamed(AppWideStrings.sessionHistoryScreenPath);
-          })
+          }),
+      Divider(),
     ];
     return Drawer(
       child: ListView.builder(
