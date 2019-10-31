@@ -55,7 +55,7 @@ class DiceRollerMain extends StatelessWidget {
           AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
                 child: ViewNamedCollections(),
                 title: AppWideStrings.viewNamedCollectionTitle,
-              )
+              ),
         },
       ),
     );
@@ -66,17 +66,19 @@ class PageWrapper extends StatelessWidget {
   final String title;
   final Widget child;
   final AppBar appBar;
+  final bool keyed;
 
   PageWrapper({
     @required this.child,
     this.title,
     this.appBar,
+    this.keyed = false
   }) : assert(appBar != null || title != null);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: UniqueKey(),
+      key: keyed ? UniqueKey() : null,
       drawer: DiceRollerDrawer(),
       body: child,
       appBar: appBar ??
@@ -86,3 +88,4 @@ class PageWrapper extends StatelessWidget {
     );
   }
 }
+

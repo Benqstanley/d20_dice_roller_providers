@@ -6,7 +6,9 @@ class SingleTypeCollectionRow extends StatelessWidget {
   final Function onDismissed;
   final Key key = UniqueKey();
   final collectionModel = SingleTypeCollectionModel();
-  SingleTypeCollectionRow(this.onDismissed,);
+  final bool needsCheckbox;
+
+  SingleTypeCollectionRow(this.onDismissed, {this.needsCheckbox = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class SingleTypeCollectionRow extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: collectionModel,
       key: key,
-      child: SingleTypeCollectionRowContents(),
+      child: SingleTypeCollectionRowContents(needsCheckbox),
     );
   }
 }
@@ -23,6 +25,9 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
   final TextEditingController numberOfDiceController = TextEditingController();
   final TextEditingController modifierController = TextEditingController();
   final double spacing = 4;
+  final bool needsCheckbox;
+
+  SingleTypeCollectionRowContents(this.needsCheckbox);
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +43,10 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
       key: UniqueKey(),
       onDismissed: (direction) => collectionModel.onDismissed(),
       background: Container(
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(5),
-        ),
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(5),
+          ),
           child: Center(
               child: ListTile(
             trailing: Icon(Icons.delete),
@@ -99,17 +104,18 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                Column(
-                  children: <Widget>[
-                    Text('Roll'),
-                    Checkbox(
-                      value: collectionModel.toRoll,
-                      onChanged: (newValue) {
-                        collectionModel.updateWith(toRoll: newValue);
-                      },
-                    ),
-                  ],
-                )
+                if (needsCheckbox)
+                  Column(
+                    children: <Widget>[
+                      Text('Roll'),
+                      Checkbox(
+                        value: collectionModel.toRoll,
+                        onChanged: (newValue) {
+                          collectionModel.updateWith(toRoll: newValue);
+                        },
+                      ),
+                    ],
+                  )
               ],
             ),
           ),
