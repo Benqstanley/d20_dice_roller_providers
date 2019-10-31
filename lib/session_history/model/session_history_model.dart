@@ -5,7 +5,7 @@ class SessionHistoryModel extends ChangeNotifier{
   TextStyle historyStyle = TextStyle(fontSize: 22);
   final List<Map<String, dynamic>> sessionResults = [];
   void addSessionResult(List<Map<String, dynamic>> currentResults){
-    sessionResults.addAll(currentResults);
+    sessionResults.insertAll(0, currentResults.reversed);
   }
 
   List<Widget> sessionResultsWidgets(){

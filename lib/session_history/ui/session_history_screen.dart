@@ -35,11 +35,10 @@ class SessionHistoryScreen extends StatelessWidget {
                 ),
               ),
             ),
-            ListView.separated(
+            ListView.builder(
                 shrinkWrap: true,
                 itemBuilder: (context, k) =>
                     sessionHistoryModel.sessionResultsWidgets()[k],
-                separatorBuilder: (context, j) => Divider(),
                 itemCount: sessionHistoryModel.sessionResults.length),
           ],
         ));
