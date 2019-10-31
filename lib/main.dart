@@ -29,9 +29,7 @@ class DiceRollerMain extends StatelessWidget {
         title: 'Dice Roller',
         theme: ThemeData(
             textTheme: TextTheme(
-              headline: TextStyle(
-                fontSize: 26
-              ),
+                headline: TextStyle(fontSize: 26),
                 button: TextStyle(
                   fontSize: 18,
                 ),
@@ -53,10 +51,7 @@ class DiceRollerMain extends StatelessWidget {
               child: SessionHistoryScreen(),
             );
           },
-          AppWideStrings.createCollectionPath: (ctx) => PageWrapper(
-                child: CreateNamedCollection(),
-                title: AppWideStrings.createCollectionTitle,
-              ),
+          AppWideStrings.createCollectionPath: (ctx) => CreateNamedCollection(),
           AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
                 child: ViewNamedCollections(),
                 title: AppWideStrings.viewNamedCollectionTitle,
@@ -70,8 +65,13 @@ class DiceRollerMain extends StatelessWidget {
 class PageWrapper extends StatelessWidget {
   final String title;
   final Widget child;
+  final AppBar appBar;
 
-  PageWrapper({@required this.child, @required this.title});
+  PageWrapper({
+    @required this.child,
+    this.title,
+    this.appBar,
+  }) : assert(appBar != null || title != null);
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +79,10 @@ class PageWrapper extends StatelessWidget {
       key: UniqueKey(),
       drawer: DiceRollerDrawer(),
       body: child,
-      appBar: AppBar(
-        title: Text(title),
-      ),
+      appBar: appBar ??
+          AppBar(
+            title: Text(title),
+          ),
     );
   }
 }
