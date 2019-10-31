@@ -13,4 +13,10 @@ class SessionHistoryModel extends ChangeNotifier{
       return RollResult(result, historyStyle);
     }).toList();
   }
+
+  void clearHistory(){
+    sessionResults.clear();
+    notifyListeners();
+  }
+
 }

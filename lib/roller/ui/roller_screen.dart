@@ -1,5 +1,6 @@
 import 'package:d20_dice_roller/roller/model/roller_screen_model.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
+import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,11 +26,7 @@ class RollerScreen extends StatelessWidget {
               },
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 2,
-            color: Theme.of(context).dividerColor,
-          ),
+          ScreenDivider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
