@@ -29,6 +29,30 @@ class DiceRollerDrawer extends StatelessWidget {
           }),
       Divider(),
       ListTile(
+          leading: Icon(Icons.add),
+          title: Text(
+            "Create Named Collection",
+            style: TextStyle(fontSize: 20),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.createCollectionPath);
+          }),
+      Divider(),
+      ListTile(
+          leading: Icon(Icons.folder),
+          title: Text(
+            "View Named Collections",
+            style: TextStyle(fontSize: 20),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.viewNamedCollectionsPath);
+          }),
+      Divider(),
+      ListTile(
           leading: Icon(Icons.history),
           title: Text(
             "History",
@@ -42,12 +66,15 @@ class DiceRollerDrawer extends StatelessWidget {
       Divider(),
     ];
     return Drawer(
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: drawerItems.length,
-        itemBuilder: (context, index) {
-          return drawerItems[index];
-        },
+      child: Container(
+        color: Colors.green[100],
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: drawerItems.length,
+          itemBuilder: (context, index) {
+            return drawerItems[index];
+          },
+        ),
       ),
     );
   }

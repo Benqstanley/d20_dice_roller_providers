@@ -40,6 +40,7 @@ class DiceRollerMain extends StatelessWidget {
                   color: Colors.black,
                 )),
             primarySwatch: Colors.green,
+            dividerColor: Colors.black,
             scaffoldBackgroundColor: Colors.green[100]),
         home: PageWrapper(
           title: AppWideStrings.rollerScreenTitle,
