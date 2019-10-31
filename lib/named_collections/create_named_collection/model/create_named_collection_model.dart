@@ -1,10 +1,12 @@
+import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_type_collection_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
 import 'package:d20_dice_roller/roller/ui/single_type_collection_row.dart';
 import 'package:flutter/material.dart';
 
 class NamedCollectionModel extends ChangeNotifier {
   bool isMultiPart = false;
   TextEditingController nameEditingController = TextEditingController();
-  List<NamedMultiTypeCollectionModel> parts = [];
+  List<MultiTypeRow> parts = [];
   NamedMultiTypeCollectionModel currentPart;
 
   NamedCollectionModel(){
@@ -42,25 +44,3 @@ class NamedCollectionModel extends ChangeNotifier {
   }
 }
 
-class NamedMultiTypeCollectionModel {
-  String name;
-  List<SingleTypeCollectionRow> singleTypeCollections = [];
-  var dismissRow;
-
-  NamedMultiTypeCollectionModel(Function dismiss) {
-    dismissRow = (SingleTypeCollectionRow toBeDismissed) =>
-        dismiss(toBeDismissed, model: this);
-    addSingleTypeCollectionRow();
-  }
-
-  void resetList() {
-    singleTypeCollections = [];
-  }
-
-  void addSingleTypeCollectionRow() {
-    singleTypeCollections.add(SingleTypeCollectionRow(
-      dismissRow,
-      needsCheckbox: false,
-    ));
-  }
-}

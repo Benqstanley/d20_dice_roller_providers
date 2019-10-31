@@ -1,6 +1,6 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
-import 'package:d20_dice_roller/choose_named_collection/ui/choose_named_collection_screen.dart';
-import 'package:d20_dice_roller/create_named_collection/ui/create_named_collection_screen.dart';
+import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/navigation/dice_roller_drawer.dart';
 import 'package:d20_dice_roller/roller/model/roller_screen_model.dart';
 import 'package:d20_dice_roller/roller/ui/roller_screen.dart';
