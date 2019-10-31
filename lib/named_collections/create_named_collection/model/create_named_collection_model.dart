@@ -5,15 +5,27 @@ import 'package:flutter/material.dart';
 
 class NamedCollectionModel extends ChangeNotifier {
   bool isMultiPart = false;
-  TextEditingController nameEditingController = TextEditingController();
+  final TextEditingController nameEditingController = TextEditingController();
+  TextEditingController partEditingController;
   List<MultiTypeRow> parts = [];
   NamedMultiTypeCollectionModel currentPart;
 
-  NamedCollectionModel(){
-    currentPart = NamedMultiTypeCollectionModel(
-        dismissSingleTypeCollectionRow);
+  TextEditingController nameController(bool isPartOfBigger){
+    if(isPartOfBigger){
+      return partEditingController;
+    }else{
+      return nameEditingController;
+    }
   }
 
+  NamedCollectionModel() {
+    currentPart = NamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+  }
+
+  void moveCurrentToList() {
+    parts.add(MultiTypeRow(currentPart));
+    currentPart = NamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+  }
 
   void changeMultiPartStatus(bool newValue) {
     isMultiPart = newValue;
@@ -30,8 +42,7 @@ class NamedCollectionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void dismissSingleTypeCollectionRow(
-      SingleTypeCollectionRow toBeDismissed,
+  void dismissSingleTypeCollectionRow(SingleTypeCollectionRow toBeDismissed,
       {NamedMultiTypeCollectionModel model}) {
     model = model ?? currentPart;
     model.singleTypeCollections.remove(toBeDismissed);
@@ -43,4 +54,3 @@ class NamedCollectionModel extends ChangeNotifier {
     }
   }
 }
-

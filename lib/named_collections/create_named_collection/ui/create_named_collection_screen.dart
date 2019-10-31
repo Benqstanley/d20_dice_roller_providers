@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateNamedCollection extends StatelessWidget {
-  final bool canBeMulti;
+  final bool isPartOfBigger;
 
-  CreateNamedCollection({this.canBeMulti = true});
+  CreateNamedCollection({this.isPartOfBigger = false});
 
   @override
   Widget build(BuildContext context) {
@@ -17,30 +17,29 @@ class CreateNamedCollection extends StatelessWidget {
         return NamedCollectionModel();
       },
       child: CreateNamedCollectionContents(
-        canBeMulti: canBeMulti,
+        isPartOfBigger: isPartOfBigger,
       ),
     );
   }
 }
 
 class CreateNamedCollectionContents extends StatelessWidget {
-  final TextEditingController nameEditingController = TextEditingController();
-  final bool canBeMulti;
+  final bool isPartOfBigger;
 
   CreateNamedCollectionContents({
-    this.canBeMulti = true,
+    this.isPartOfBigger = true,
   });
 
   @override
   Widget build(BuildContext context) {
     NamedCollectionModel namedCollectionModel =
         Provider.of<NamedCollectionModel>(context);
-    bool isMultiPart = canBeMulti && namedCollectionModel.isMultiPart;
+    bool isMultiPart = !isPartOfBigger && namedCollectionModel.isMultiPart;
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
       ),
-      displayDrawer: canBeMulti,
+      displayDrawer: !isPartOfBigger,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -56,7 +55,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
                         context: context,
                       )
                     : buildSinglePartCreator(
-                        namedCollectionModel: namedCollectionModel)),
+                        namedCollectionModel: namedCollectionModel,
+                        context: context,
+                      )),
           ],
         ),
       ),
@@ -71,13 +72,14 @@ class CreateNamedCollectionContents extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: TextField(
-            controller: nameEditingController,
+            controller: namedCollectionModel.nameController(isPartOfBigger),
             decoration: InputDecoration(
-              hintText: canBeMulti ? "Name Your Collection" : "Name This Part",
+              hintText:
+                  !isPartOfBigger ? "Name Your Collection" : "Name This Part",
             ),
           ),
         ),
-        if (canBeMulti)
+        if (!isPartOfBigger)
           Column(
             children: <Widget>[
               Text("Multi"),
@@ -121,11 +123,13 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 RaisedButton(
                   child: Text('Add Part'),
                   onPressed: () {
+                    namedCollectionModel.partEditingController =
+                        TextEditingController();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) => ChangeNotifierProvider.value(
                               value: namedCollectionModel,
                               child: CreateNamedCollectionContents(
-                                canBeMulti: false,
+                                isPartOfBigger: true,
                               ),
                             )));
                   },
@@ -140,13 +144,22 @@ class CreateNamedCollectionContents extends StatelessWidget {
         ));
   }
 
-  Widget buildSinglePartCreator({NamedCollectionModel namedCollectionModel}) {
-    return buildPartCreator(namedCollectionModel: namedCollectionModel);
+  Widget buildSinglePartCreator({
+    NamedCollectionModel namedCollectionModel,
+    BuildContext context,
+  }) {
+    return buildPartCreator(
+      namedCollectionModel: namedCollectionModel,
+      context: context,
+    );
   }
 
   //Will be the main body of buildSinglePartCreator()
   //Will also be used
-  Widget buildPartCreator({NamedCollectionModel namedCollectionModel}) {
+  Widget buildPartCreator({
+    NamedCollectionModel namedCollectionModel,
+    BuildContext context,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -182,7 +195,21 @@ class CreateNamedCollectionContents extends StatelessWidget {
               ),
               RaisedButton(
                 child: Text('Save'),
-                onPressed: () {},
+                onPressed: () {
+                  print('save is pressed $isPartOfBigger');
+                  if(isPartOfBigger) {
+                    namedCollectionModel.currentPart.name =
+                        namedCollectionModel
+                            .nameController(isPartOfBigger)
+                            .text;
+                    namedCollectionModel.currentPart.singleTypeCollections
+                        .removeWhere((element) {
+                      return !element.collectionModel.determineValidity();
+                    });
+                    namedCollectionModel.moveCurrentToList();
+                    Navigator.of(context).pop();
+                  }
+                },
               ),
             ],
           )
