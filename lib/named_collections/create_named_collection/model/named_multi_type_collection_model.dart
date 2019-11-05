@@ -23,4 +23,9 @@ class NamedMultiTypeCollectionModel {
       needsCheckbox: false,
     ));
   }
+
+  @override
+  String toString() {
+    return name;
+  }
 }

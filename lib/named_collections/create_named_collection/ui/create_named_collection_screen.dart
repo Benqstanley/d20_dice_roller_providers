@@ -104,9 +104,10 @@ class CreateNamedCollectionContents extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: namedCollectionModel.parts.isNotEmpty
-                  ? ListView(
+                  ? ListView.builder(
                       shrinkWrap: true,
-                      children: namedCollectionModel.parts,
+                      itemCount: namedCollectionModel.parts.length,
+                      itemBuilder: (ctx, index) => namedCollectionModel.parts[index],
                     )
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
@@ -117,7 +118,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 RaisedButton(
                   child: Text('Clear'),
                   onPressed: () {
-                    namedCollectionModel.resetCurrentList();
+                    namedCollectionModel.resetPartsList();
                   },
                 ),
                 RaisedButton(
@@ -125,13 +126,19 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   onPressed: () {
                     namedCollectionModel.partEditingController =
                         TextEditingController();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => ChangeNotifierProvider.value(
-                              value: namedCollectionModel,
-                              child: CreateNamedCollectionContents(
-                                isPartOfBigger: true,
-                              ),
-                            )));
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (ctx) => ChangeNotifierProvider.value(
+                                  value: namedCollectionModel,
+                                  child: CreateNamedCollectionContents(
+                                    isPartOfBigger: true,
+                                  ),
+                                )))
+                        .then((result) {
+                      if (result is bool && result) {
+                        namedCollectionModel.moveCurrentToList();
+                      }
+                    });
                   },
                 ),
                 RaisedButton(
@@ -196,18 +203,16 @@ class CreateNamedCollectionContents extends StatelessWidget {
               RaisedButton(
                 child: Text('Save'),
                 onPressed: () {
-                  print('save is pressed $isPartOfBigger');
-                  if(isPartOfBigger) {
-                    namedCollectionModel.currentPart.name =
-                        namedCollectionModel
-                            .nameController(isPartOfBigger)
-                            .text;
+                  if (isPartOfBigger) {
+                    namedCollectionModel.currentPart.name = namedCollectionModel
+                        .nameController(isPartOfBigger)
+                        .text;
                     namedCollectionModel.currentPart.singleTypeCollections
                         .removeWhere((element) {
                       return !element.collectionModel.determineValidity();
                     });
-                    namedCollectionModel.moveCurrentToList();
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(namedCollectionModel
+                        .currentPart.singleTypeCollections.isNotEmpty);
                   }
                 },
               ),

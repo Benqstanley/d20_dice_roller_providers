@@ -25,6 +25,7 @@ class NamedCollectionModel extends ChangeNotifier {
   void moveCurrentToList() {
     parts.add(MultiTypeRow(currentPart));
     currentPart = NamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+    notifyListeners();
   }
 
   void changeMultiPartStatus(bool newValue) {
@@ -34,6 +35,11 @@ class NamedCollectionModel extends ChangeNotifier {
 
   void resetCurrentList() {
     currentPart.resetList();
+    notifyListeners();
+  }
+
+  void resetPartsList(){
+    parts.clear();
     notifyListeners();
   }
 
@@ -52,5 +58,9 @@ class NamedCollectionModel extends ChangeNotifier {
     } else {
       notifyListeners();
     }
+  }
+
+  void updateScreen(){
+    notifyListeners();
   }
 }

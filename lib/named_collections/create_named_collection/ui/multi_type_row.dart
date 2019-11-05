@@ -9,7 +9,19 @@ class MultiTypeRow extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(border: Border.all(),
       borderRadius: BorderRadius.circular(5)),
-      child: Text(model.name),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(model.name),
+          Text(model.singleTypeCollections.toString())
+        ],
+      ),
     );
+  }
+
+  @override
+  String toStringShort() {
+    return model.name;
   }
 }
