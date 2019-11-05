@@ -71,5 +71,6 @@ class CreateNamedCollectionModel extends ChangeNotifier {
 
   void saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
+    print(jsonString);
   }
 }
