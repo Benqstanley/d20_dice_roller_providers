@@ -3,12 +3,12 @@ import 'package:d20_dice_roller/named_collections/create_named_collection/ui/mul
 import 'package:d20_dice_roller/roller/ui/single_type_collection_row.dart';
 import 'package:flutter/material.dart';
 
-class NamedCollectionModel extends ChangeNotifier {
+class CreateNamedCollectionModel extends ChangeNotifier {
   bool isMultiPart = false;
   final TextEditingController nameEditingController = TextEditingController();
   TextEditingController partEditingController;
-  List<MultiTypeRow> parts = [];
-  NamedMultiTypeCollectionModel currentPart;
+  List<MultiTypeRowForCreate> parts = [];
+  CreateNamedMultiTypeCollectionModel currentPart;
 
   TextEditingController nameController(bool isPartOfBigger){
     if(isPartOfBigger){
@@ -18,13 +18,13 @@ class NamedCollectionModel extends ChangeNotifier {
     }
   }
 
-  NamedCollectionModel() {
-    currentPart = NamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+  CreateNamedCollectionModel() {
+    currentPart = CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
   }
 
   void moveCurrentToList() {
-    parts.add(MultiTypeRow(currentPart));
-    currentPart = NamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+    parts.add(MultiTypeRowForCreate(currentPart));
+    currentPart = CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
     notifyListeners();
   }
 
@@ -49,7 +49,7 @@ class NamedCollectionModel extends ChangeNotifier {
   }
 
   void dismissSingleTypeCollectionRow(SingleTypeCollectionRow toBeDismissed,
-      {NamedMultiTypeCollectionModel model}) {
+      {CreateNamedMultiTypeCollectionModel model}) {
     model = model ?? currentPart;
     model.singleTypeCollections.remove(toBeDismissed);
     if (model.singleTypeCollections.isEmpty) {

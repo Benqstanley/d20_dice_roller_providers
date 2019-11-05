@@ -14,7 +14,7 @@ class CreateNamedCollection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       builder: (ctx) {
-        return NamedCollectionModel();
+        return CreateNamedCollectionModel();
       },
       child: CreateNamedCollectionContents(
         isPartOfBigger: isPartOfBigger,
@@ -32,8 +32,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NamedCollectionModel namedCollectionModel =
-        Provider.of<NamedCollectionModel>(context);
+    CreateNamedCollectionModel namedCollectionModel =
+        Provider.of<CreateNamedCollectionModel>(context);
     bool isMultiPart = !isPartOfBigger && namedCollectionModel.isMultiPart;
     return PageWrapper(
       appBar: AppBar(
@@ -66,7 +66,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   Widget buildNameAndTypeRow(
     BuildContext context,
-    NamedCollectionModel namedCollectionModel,
+    CreateNamedCollectionModel namedCollectionModel,
   ) {
     return Row(
       children: <Widget>[
@@ -95,7 +95,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   Widget buildMultiPartCreator({
-    NamedCollectionModel namedCollectionModel,
+    CreateNamedCollectionModel namedCollectionModel,
     BuildContext context,
   }) {
     return Padding(
@@ -152,7 +152,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   Widget buildSinglePartCreator({
-    NamedCollectionModel namedCollectionModel,
+    CreateNamedCollectionModel namedCollectionModel,
     BuildContext context,
   }) {
     return buildPartCreator(
@@ -164,7 +164,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   //Will be the main body of buildSinglePartCreator()
   //Will also be used
   Widget buildPartCreator({
-    NamedCollectionModel namedCollectionModel,
+    CreateNamedCollectionModel namedCollectionModel,
     BuildContext context,
   }) {
     return Padding(
