@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_type_collection_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_multi_type_collection_model.dart';
 import 'package:flutter/material.dart';
 
 class MultiTypeRowForCreate extends StatelessWidget {

@@ -1,5 +1,8 @@
-import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_type_collection_model.dart';
+import 'dart:convert';
+
+import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_multi_type_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
+import 'package:d20_dice_roller/named_collections/named_collection_model.dart';
 import 'package:d20_dice_roller/roller/ui/single_type_collection_row.dart';
 import 'package:flutter/material.dart';
 
@@ -10,21 +13,23 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   List<MultiTypeRowForCreate> parts = [];
   CreateNamedMultiTypeCollectionModel currentPart;
 
-  TextEditingController nameController(bool isPartOfBigger){
-    if(isPartOfBigger){
+  TextEditingController nameController(bool isPartOfBigger) {
+    if (isPartOfBigger) {
       return partEditingController;
-    }else{
+    } else {
       return nameEditingController;
     }
   }
 
   CreateNamedCollectionModel() {
-    currentPart = CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+    currentPart =
+        CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
   }
 
   void moveCurrentToList() {
     parts.add(MultiTypeRowForCreate(currentPart));
-    currentPart = CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
+    currentPart =
+        CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
     notifyListeners();
   }
 
@@ -38,7 +43,7 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetPartsList(){
+  void resetPartsList() {
     parts.clear();
     notifyListeners();
   }
@@ -60,7 +65,11 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     }
   }
 
-  void updateScreen(){
+  void updateScreen() {
     notifyListeners();
+  }
+
+  void saveNamedCollection() async {
+    String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
   }
 }

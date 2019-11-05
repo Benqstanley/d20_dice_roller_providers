@@ -107,7 +107,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   ? ListView.builder(
                       shrinkWrap: true,
                       itemCount: namedCollectionModel.parts.length,
-                      itemBuilder: (ctx, index) => namedCollectionModel.parts[index],
+                      itemBuilder: (ctx, index) =>
+                          namedCollectionModel.parts[index],
                     )
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
@@ -143,7 +144,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 ),
                 RaisedButton(
                   child: Text('Save'),
-                  onPressed: () {},
+                  onPressed: () {
+                    namedCollectionModel.saveNamedCollection();
+                  },
                 ),
               ],
             )
