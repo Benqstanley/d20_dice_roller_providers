@@ -5,6 +5,7 @@ import 'package:d20_dice_roller/named_collections/create_named_collection/model/
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
 import 'package:d20_dice_roller/core/named_collection_model.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CreateNamedCollectionModel extends ChangeNotifier {
   bool isMultiPart = false;
@@ -74,9 +75,16 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
   void saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
-    File file = File(nameEditingController.text);
+    String path = await _localPath;
+    File file = File("$path/${nameEditingController.text}.txt");
     if(!(await file.exists())){
       file = await file.create();
       file.writeAsString(jsonString).then((file){
