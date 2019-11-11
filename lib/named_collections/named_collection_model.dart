@@ -14,14 +14,28 @@ class NamedMultiCollectionModel {
   });
 
   factory NamedMultiCollectionModel.fromCreate(
-      CreateNamedCollectionModel model){
-    return NamedMultiCollectionModel(name: model.nameEditingController.text,
+      CreateNamedCollectionModel model) {
+    return NamedMultiCollectionModel(
+      name: model.nameEditingController.text,
       parts: model.parts.map((multiTypeRow) {
-        return NamedCollectionModel(name: multiTypeRow.model.name,
-          singleTypeCollections: multiTypeRow.model.singleTypeCollections.map((
-              item) => item.collectionModel).toList(),);
+        return NamedCollectionModel(
+          name: multiTypeRow.model.name,
+          singleTypeCollections: multiTypeRow.model.singleTypeCollections
+              .map((item) => item.collectionModel)
+              .toList(),
+        );
       }).toList(),
     );
+  }
+
+  factory NamedMultiCollectionModel.fromJson(Map<String, dynamic> json) {
+    List<NamedCollectionModel> partsToReturn = [];
+    partsToReturn = (json["parts"] as List<Map<String, dynamic>>)
+        .map((part) => NamedCollectionModel.fromJson(part))
+        .toList();
+    NamedMultiCollectionModel model =
+        NamedMultiCollectionModel(name: json['name'], parts: partsToReturn);
+    return model;
   }
 
   String toJsonString() {
@@ -30,8 +44,6 @@ class NamedMultiCollectionModel {
     canEncode["parts"] = parts.map((part) => part.toMap()).toList();
     return json.encode(canEncode);
   }
-
-
 }
 
 class NamedCollectionModel {
@@ -46,12 +58,21 @@ class NamedCollectionModel {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> toReturn = {};
     toReturn["name"] = name;
-    toReturn["singleTypeCollections"] =
-        singleTypeCollections.map((collection) => {
-          "numberOfDice":collection.numberOfDice,
-          "diceType":diceTypeStrings[collection.diceType],
-          "modifier": collection.modifier,
-        }).toList();
+    toReturn["singleTypeCollections"] = singleTypeCollections
+        .map((collection) => {
+              "numberOfDice": collection.numberOfDice,
+              "diceType": diceTypeStrings[collection.diceType],
+              "modifier": collection.modifier,
+            })
+        .toList();
     return toReturn;
+  }
+
+  factory NamedCollectionModel.fromJson(Map<String, dynamic> json) {
+    return NamedCollectionModel(
+        name: json["name"],
+        singleTypeCollections:
+            (json["singleTypeCollections"] as List<Map<String, dynamic>>)
+                .map((json) => SingleTypeCollectionModel.fromJson(json)));
   }
 }

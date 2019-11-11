@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_multi_type_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
@@ -76,6 +77,13 @@ class CreateNamedCollectionModel extends ChangeNotifier {
 
   void saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
-    print(jsonString);
+    File file = File(nameEditingController.text);
+    if(!(await file.exists())){
+      file = await file.create();
+      file.writeAsString(jsonString).then((file){
+        print(file.exists());
+      });
+    }
   }
+
 }
