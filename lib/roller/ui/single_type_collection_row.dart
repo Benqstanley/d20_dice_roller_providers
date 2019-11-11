@@ -56,6 +56,7 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
           child: Center(
               child: ListTile(
             trailing: Icon(Icons.delete),
+            leading: Icon(Icons.delete),
           ))),
       child: Padding(
         padding: EdgeInsets.all(2),

@@ -10,7 +10,7 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   bool isMultiPart = false;
   final TextEditingController nameEditingController = TextEditingController();
   TextEditingController partEditingController;
-  List<MultiTypeRowForCreate> parts = [];
+  List<MultiTypeRowForCreateScreen> parts = [];
   CreateNamedMultiTypeCollectionModel currentPart;
 
   TextEditingController nameController(bool isPartOfBigger) {
@@ -26,8 +26,13 @@ class CreateNamedCollectionModel extends ChangeNotifier {
         CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
   }
 
+  void dismissMultiPartRow(MultiTypeRowForCreateScreen row){
+    parts.remove(row);
+    notifyListeners();
+  }
+
   void moveCurrentToList() {
-    parts.add(MultiTypeRowForCreate(currentPart));
+    parts.add(MultiTypeRowForCreateScreen(currentPart, dismissMultiPartRow));
     currentPart =
         CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
     notifyListeners();
