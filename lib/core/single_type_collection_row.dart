@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/roller/model/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/single_type_collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

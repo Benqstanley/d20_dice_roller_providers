@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_collection_model.dart';
-import 'package:d20_dice_roller/roller/model/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/single_type_collection_model.dart';
 import 'package:flutter/material.dart';
 
 class NamedMultiCollectionModel {

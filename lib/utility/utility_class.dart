@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:d20_dice_roller/roller/model/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/single_type_collection_model.dart';
 
 class Utility {
   static Random random = Random();

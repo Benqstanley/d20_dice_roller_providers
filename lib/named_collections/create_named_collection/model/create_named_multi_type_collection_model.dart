@@ -1,5 +1,5 @@
 
-import 'package:d20_dice_roller/roller/ui/single_type_collection_row.dart';
+import 'package:d20_dice_roller/core/single_type_collection_row.dart';
 
 class CreateNamedMultiTypeCollectionModel {
   String name;
