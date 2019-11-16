@@ -216,6 +216,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     });
                     Navigator.of(context).pop(namedCollectionModel
                         .currentPart.singleTypeCollections.isNotEmpty);
+                  }else{
+                    
                   }
                 },
               ),

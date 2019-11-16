@@ -30,11 +30,14 @@ class NamedMultiCollectionModel {
     );
   }
 
-  factory NamedMultiCollectionModel.fromJson(Map<String, dynamic> json, String path) {
+  factory NamedMultiCollectionModel.fromJson(
+      Map<String, dynamic> json, String path) {
     List<NamedCollectionModel> partsToReturn = [];
-    partsToReturn = (json["parts"] as List<Map<String, dynamic>>)
-        .map((part) => NamedCollectionModel.fromJson(part))
-        .toList();
+    json["parts"].forEach((part){
+      partsToReturn.add(NamedCollectionModel.fromJson(part));
+
+    });
+    print("partsToReturn");
     NamedMultiCollectionModel model = NamedMultiCollectionModel(
         name: json['name'], parts: partsToReturn, path: path);
     return model;
@@ -71,10 +74,14 @@ class NamedCollectionModel {
   }
 
   factory NamedCollectionModel.fromJson(Map<String, dynamic> json) {
+    List<SingleTypeCollectionModel> collections = [];
+    json["singleTypeCollections"].forEach((item) {
+      Map<String, dynamic> map = item as Map<String, dynamic>;
+      collections.add(SingleTypeCollectionModel.fromJson(map));
+    });
+    print(collections);
     return NamedCollectionModel(
         name: json["name"],
-        singleTypeCollections:
-            (json["singleTypeCollections"] as List<Map<String, dynamic>>)
-                .map((json) => SingleTypeCollectionModel.fromJson(json)));
+        singleTypeCollections:collections);
   }
 }

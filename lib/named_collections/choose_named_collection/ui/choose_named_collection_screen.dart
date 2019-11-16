@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,11 @@ class ViewNamedCollectionsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     var model = Provider.of<ViewNamedCollectionsModel>(context);
     model.printNamedMultis();
-    return Container();
+    return Center(child: RaisedButton(
+      child: Text("Read Saved Files"),
+      onPressed: () async {
+        print(await model.getSavedFiles());
+    },
+    ),);
   }
 }
-

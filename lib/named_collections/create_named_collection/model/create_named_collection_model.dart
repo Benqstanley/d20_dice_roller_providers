@@ -85,11 +85,11 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   void saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
     String path = await _localPath;
-    File file = File("$path/${nameEditingController.text}.txt");
+    File file = File("$path/MultiCollections/${nameEditingController.text}.txt");
     if(!(await file.exists())){
       file = await file.create();
-      file.writeAsString(jsonString).then((file){
-        print(file.exists());
+      file.writeAsString(jsonString).then((file) async {
+        bool fileSaved = await file.exists();
       });
     }
   }
