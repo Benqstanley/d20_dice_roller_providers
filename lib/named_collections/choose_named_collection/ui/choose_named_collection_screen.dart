@@ -1,15 +1,23 @@
+import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ViewNamedCollections extends StatefulWidget {
-  @override
-  _ViewNamedCollectionsState createState() => _ViewNamedCollectionsState();
-}
-
-class _ViewNamedCollectionsState extends State<ViewNamedCollections> {
+class ViewNamedCollections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: TextField()
+    return ChangeNotifierProvider(
+      builder: (context) => ViewNamedCollectionsModel(),
+      child: ViewNamedCollectionsContent(),
     );
   }
 }
+
+class ViewNamedCollectionsContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var model = Provider.of<ViewNamedCollectionsModel>(context);
+    model.printNamedMultis();
+    return Container();
+  }
+}
+

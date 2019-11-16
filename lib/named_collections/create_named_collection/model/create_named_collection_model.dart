@@ -81,17 +81,6 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     return directory.path;
   }
 
-  Future<List<File>> get savedFiles async {
-    List<File> files = [];
-    final directory = await getApplicationDocumentsDirectory();
-    Stream<FileSystemEntity> entityStream = directory.list();
-    entityStream.listen((entity)async{
-      if(await File(entity.path).exists()) {
-        files.add(File(entity.path));
-      }
-    });
-    return files;
-  }
 
   void saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
