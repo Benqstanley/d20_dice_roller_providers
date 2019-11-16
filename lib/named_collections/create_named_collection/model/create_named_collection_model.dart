@@ -77,7 +77,6 @@ class CreateNamedCollectionModel extends ChangeNotifier {
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
-
     return directory.path;
   }
 
@@ -85,6 +84,10 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   void saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
     String path = await _localPath;
+    Directory directory = Directory("$path/MultiCollections");
+    if(!await directory.exists()){
+      directory.create();
+    }
     File file = File("$path/MultiCollections/${nameEditingController.text}.txt");
     if(!(await file.exists())){
       file = await file.create();

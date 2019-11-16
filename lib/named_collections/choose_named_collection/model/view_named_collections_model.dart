@@ -13,7 +13,12 @@ class ViewNamedCollectionsModel extends ChangeNotifier {
     }}
   Future<bool> getSavedFiles() async {
     final directory = await getApplicationDocumentsDirectory();
-    Stream<FileSystemEntity> entityStream = directory.list();
+    final String path = directory.path;
+    final collectionsDirectory = Directory("$path/MultiCollections");
+    if(!await collectionsDirectory.exists()){
+      return false;
+    }
+    Stream<FileSystemEntity> entityStream = collectionsDirectory.list();
     entityStream.listen((entity) async {
       print('we have $entity');
       if (await File(entity.path).exists()) {
