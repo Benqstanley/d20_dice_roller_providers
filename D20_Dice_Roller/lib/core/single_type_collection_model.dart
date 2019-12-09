@@ -52,6 +52,7 @@ List<DiceType> diceTypes = [
 ];
 
 class SingleTypeCollectionModel extends ChangeNotifier {
+  String name;
   int numberOfDice;
   DiceType diceType;
   int modifier;
@@ -64,7 +65,7 @@ class SingleTypeCollectionModel extends ChangeNotifier {
     SingleTypeCollectionModel toReturn = SingleTypeCollectionModel();
     toReturn.numberOfDice = json["numberOfDice"];
     toReturn.diceType = diceStringTypes[json["diceType"]];
-    toReturn .modifier = json["modifier"];
+    toReturn.modifier = json["modifier"];
     return toReturn;
   }
 

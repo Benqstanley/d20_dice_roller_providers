@@ -144,8 +144,12 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 ),
                 RaisedButton(
                   child: Text('Save'),
-                  onPressed: () {
-                    namedCollectionModel.saveNamedCollection();
+                  onPressed: () async {
+                    bool fileCreated = await namedCollectionModel.saveNamedCollection();
+                    if(fileCreated != null && fileCreated){
+                      Navigator.of(context).pop();
+                      print('fileCreated');
+                    }
                   },
                 ),
               ],

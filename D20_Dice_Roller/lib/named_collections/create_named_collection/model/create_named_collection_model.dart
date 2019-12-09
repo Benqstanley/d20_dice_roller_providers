@@ -81,9 +81,10 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   }
 
 
-  void saveNamedCollection() async {
+  Future<bool> saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
     String path = await _localPath;
+    bool fileSaved;
     Directory directory = Directory("$path/MultiCollections");
     if(!await directory.exists()){
       directory.create();
@@ -92,9 +93,10 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     if(!(await file.exists())){
       file = await file.create();
       file.writeAsString(jsonString).then((file) async {
-        bool fileSaved = await file.exists();
+        fileSaved = await file.exists();
       });
     }
+    return fileSaved;
   }
 
 }
