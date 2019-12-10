@@ -13,21 +13,15 @@ class ViewNamedCollections extends StatelessWidget {
   }
 }
 
-class ViewNamedCollectionsContent extends StatefulWidget {
-  @override
-  _ViewNamedCollectionsContentState createState() =>
-      _ViewNamedCollectionsContentState();
-}
+class ViewNamedCollectionsContent
+    extends StatelessWidget {
 
-class _ViewNamedCollectionsContentState
-    extends State<ViewNamedCollectionsContent> {
-  ViewNamedCollectionsBloc model;
 
   @override
   Widget build(BuildContext context) {
+    ViewNamedCollectionsBloc model;
     if (model == null) {
       model = Provider.of<ViewNamedCollectionsBloc>(context);
-      model.getSavedFiles();
     }
     List<dynamic> itemsToDisplay = [
       Container(
