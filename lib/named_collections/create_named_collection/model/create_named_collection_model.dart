@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:d20_dice_roller/core/single_type_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_multi_type_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
-import 'package:d20_dice_roller/core/named_collection_model.dart';
+import 'package:d20_dice_roller/core/named_multi_collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -81,9 +81,10 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   }
 
 
-  void saveNamedCollection() async {
+  Future<bool> saveNamedCollection() async {
     String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
     String path = await _localPath;
+    bool fileSaved;
     Directory directory = Directory("$path/MultiCollections");
     if(!await directory.exists()){
       directory.create();
@@ -92,9 +93,10 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     if(!(await file.exists())){
       file = await file.create();
       file.writeAsString(jsonString).then((file) async {
-        bool fileSaved = await file.exists();
+        fileSaved = await file.exists();
       });
     }
+    return fileSaved;
   }
 
 }
