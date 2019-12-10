@@ -1,5 +1,4 @@
-import 'package:d20_dice_roller/main.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_model.dart';
+import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,7 @@ class ViewNamedCollections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => ViewNamedCollectionsModel(),
+      builder: (context) => ViewNamedCollectionsBloc(),
       child: ViewNamedCollectionsContent(),
     );
   }
@@ -22,12 +21,12 @@ class ViewNamedCollectionsContent extends StatefulWidget {
 
 class _ViewNamedCollectionsContentState
     extends State<ViewNamedCollectionsContent> {
-  ViewNamedCollectionsModel model;
+  ViewNamedCollectionsBloc model;
 
   @override
   Widget build(BuildContext context) {
-    if(model == null){
-      model = Provider.of<ViewNamedCollectionsModel>(context);
+    if (model == null) {
+      model = Provider.of<ViewNamedCollectionsBloc>(context);
       model.getSavedFiles();
     }
     List<dynamic> itemsToDisplay = [
