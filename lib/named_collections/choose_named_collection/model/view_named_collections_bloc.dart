@@ -10,6 +10,10 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Directory collectionsDirectory;
   List<NamedMultiCollectionModel> namedMultiCollections = [];
 
+  ViewNamedCollectionsBloc(){
+    getSavedFiles();
+  }
+
   Future<bool> deleteFile(ViewNamedCollectionsRowCN row) async {
     NamedMultiCollectionModel model = row.model;
     bool fileDeleted = false;
@@ -40,21 +44,24 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   }
 
   Future<bool> getSavedFiles() async {
-    if(!await getCollectionsDirectory()) return false;
-    Stream<FileSystemEntity> entityStream = collectionsDirectory.list();
-    entityStream.listen((entity) async {
-      if (await File(entity.path).exists()) {
-        String jsonString = await File(entity.path).readAsString();
-        try {
-          namedMultiCollections.add(NamedMultiCollectionModel.fromJson(
-              json.decode(jsonString), entity.path));
-        } catch (error, stackTrace) {
-          print('saved files: ' + error.toString());
-          print('saved files stackTrace: $stackTrace');
+    if (namedMultiCollections.isEmpty) {
+      if (!await getCollectionsDirectory()) return false;
+      Stream<FileSystemEntity> entityStream = collectionsDirectory.list();
+      entityStream.listen((entity) async {
+        if (await File(entity.path).exists()) {
+          String jsonString = await File(entity.path).readAsString();
+          try {
+            namedMultiCollections.add(NamedMultiCollectionModel.fromJson(
+                json.decode(jsonString), entity.path));
+          } catch (error, stackTrace) {
+            print('saved files: ' + error.toString());
+            print('saved files stackTrace: $stackTrace');
+          }
         }
-      }
-    });
-    notifyListeners();
-    return namedMultiCollections?.isNotEmpty ?? false;
+      });
+      notifyListeners();
+      return namedMultiCollections?.isNotEmpty ?? false;
+    }
+    return false;
   }
 }
