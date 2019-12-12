@@ -23,11 +23,10 @@ class RollerScreen extends StatelessWidget {
               itemCount: rollerScreenModel.namedMultiCollections.length +
                   rollerScreenModel.singleTypeCollections.length,
               itemBuilder: (ctx, int) {
-                if (int < rollerScreenModel.namedMultiCollections.length) {
+                if(int < rollerScreenModel.namedMultiCollections.length){
                   return rollerScreenModel.namedMultiCollections[int];
                 }
-                return rollerScreenModel.singleTypeCollections[
-                    int - rollerScreenModel.namedMultiCollections.length];
+                return rollerScreenModel.singleTypeCollections[int - rollerScreenModel.namedMultiCollections.length];
               },
             ),
           ),

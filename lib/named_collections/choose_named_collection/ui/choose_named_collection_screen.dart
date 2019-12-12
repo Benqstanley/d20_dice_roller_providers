@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_row.dart';
 import 'package:d20_dice_roller/roller/model/roller_screen_model.dart';
@@ -6,24 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ViewNamedCollections extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => ViewNamedCollectionsBloc(),
-      child: ViewNamedCollectionsContent(),
-    );
-  }
-}
 
-class ViewNamedCollectionsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewNamedCollectionsBloc model;
     RollerScreenModel rollerScreenModel;
-    if (model == null) {
-      model = Provider.of<ViewNamedCollectionsBloc>(context);
-      rollerScreenModel = Provider.of<RollerScreenModel>(context);
-    }
+    model = Provider.of<ViewNamedCollectionsBloc>(context);
+    rollerScreenModel = Provider.of<RollerScreenModel>(context);
     List<dynamic> itemsToDisplay = [
       Container(
         padding: const EdgeInsets.all(8.0),
@@ -57,6 +47,8 @@ class ViewNamedCollectionsContent extends StatelessWidget {
           onPressed: () {
             rollerScreenModel.namedMultiCollections.addAll(
                 prepareRowsToAdd(savedCollectionRows, rollerScreenModel));
+            Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.rollerScreenPath);
           },
         )
       ],
@@ -70,7 +62,8 @@ class ViewNamedCollectionsContent extends StatelessWidget {
       if (row is ChooseNamedCollectionRow) {
         if (row.changeNotifier.add) {
           for (int i = 0; i < row.changeNotifier.numberToAdd; i++) {
-            toAdd.add(NamedMultiCollectionRollerRow(row.changeNotifier.model,
+            toAdd.add(NamedMultiCollectionRollerRow.factory(
+                row.changeNotifier.model,
                 rollerScreenModel.dismissNamedMultiCollectionRollerRow));
           }
         }

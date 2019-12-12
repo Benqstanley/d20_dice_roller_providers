@@ -13,8 +13,8 @@ class ChooseNamedCollectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => changeNotifier,
+    return ChangeNotifierProvider.value(
+      value: changeNotifier,
       child: ChooseNamedCollectionRowContents(),
     );
   }

@@ -27,7 +27,7 @@ class CreateNamedCollectionModel extends ChangeNotifier {
         CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
   }
 
-  void dismissMultiPartRow(MultiTypeRowForCreateScreen row){
+  void dismissMultiPartRow(MultiTypeRowForCreateScreen row) {
     parts.remove(row);
     notifyListeners();
   }
@@ -82,21 +82,20 @@ class CreateNamedCollectionModel extends ChangeNotifier {
 
 
   Future<bool> saveNamedCollection() async {
-    String jsonString = NamedMultiCollectionModel.fromCreate(this).toJsonString();
+    String jsonString = NamedMultiCollectionModel.fromCreate(this)
+        .toJsonString();
     String path = await _localPath;
-    bool fileSaved;
     Directory directory = Directory("$path/MultiCollections");
-    if(!await directory.exists()){
+    if (!await directory.exists()) {
       directory.create();
     }
-    File file = File("$path/MultiCollections/${nameEditingController.text}.txt");
-    if(!(await file.exists())){
+    File file = File(
+        "$path/MultiCollections/${nameEditingController.text}.txt");
+    if (!(await file.exists())) {
       file = await file.create();
-      file.writeAsString(jsonString).then((file) async {
-        fileSaved = await file.exists();
-      });
+      await file.writeAsString(jsonString);
+      return true;
     }
-    return fileSaved;
+    return false;
   }
-
 }

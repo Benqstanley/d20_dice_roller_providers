@@ -7,6 +7,7 @@ class ViewNamedCollectionsRowCN extends ChangeNotifier{
   bool add = false;
   bool roll = false;
   final Function onDismiss;
+  final Key key = UniqueKey();
 
 
   ViewNamedCollectionsRowCN(this.model, this.onDismiss);

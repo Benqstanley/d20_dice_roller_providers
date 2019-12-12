@@ -4,22 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NamedMultiCollectionRollerRow extends StatelessWidget {
-  final NamedMultiCollectionModel model;
-  final Function onDismiss;
+  final ViewNamedCollectionsRowCN changeNotifier;
+  final Key key = UniqueKey();
 
-  NamedMultiCollectionRollerRow(this.model, this.onDismiss);
+  NamedMultiCollectionRollerRow(this.changeNotifier);
+
+  factory NamedMultiCollectionRollerRow.factory(
+      NamedMultiCollectionModel model, Function onDismiss) {
+    return NamedMultiCollectionRollerRow(
+        ViewNamedCollectionsRowCN(model, onDismiss));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (context) => ViewNamedCollectionsRowCN(model, onDismiss),
+    return ChangeNotifierProvider.value(
+      value: changeNotifier,
       child: ChooseNamedCollectionRowContents(),
     );
   }
 
   @override
   String toStringShort() {
-    return model.name;
+    return changeNotifier.model.name;
   }
 }
 
@@ -31,7 +37,7 @@ class ChooseNamedCollectionRowContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewNamedCollectionsRowCN rowCN =
-    Provider.of<ViewNamedCollectionsRowCN>(context);
+        Provider.of<ViewNamedCollectionsRowCN>(context);
     NamedMultiCollectionModel model = rowCN.model;
     Function onDismiss = rowCN.onDismiss;
     return Dismissible(
@@ -44,9 +50,9 @@ class ChooseNamedCollectionRowContents extends StatelessWidget {
           ),
           child: Center(
               child: ListTile(
-                leading: Icon(Icons.delete),
-                trailing: Icon(Icons.delete),
-              ))),
+            leading: Icon(Icons.delete),
+            trailing: Icon(Icons.delete),
+          ))),
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
@@ -75,9 +81,9 @@ class ChooseNamedCollectionRowContents extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: model.parts
                           .map((singleTypeCollection) => Text(
-                        singleTypeCollection.toString(),
-                        style: TextStyle(fontSize: 16),
-                      ))
+                                singleTypeCollection.toString(),
+                                style: TextStyle(fontSize: 16),
+                              ))
                           .toList(),
                     ),
                   ),
