@@ -23,6 +23,11 @@ class RollerScreenModel extends ChangeNotifier {
     }
   }
 
+  void dismissNamedMultiCollectionRollerRow(NamedMultiCollectionRollerRow toBeDismissed){
+    namedMultiCollections.remove(toBeDismissed);
+    notifyListeners();
+  }
+
   void addSingleTypeCollectionRow() {
     singleTypeCollections.add(SingleTypeCollectionRow(
       dismissSingleTypeCollectionRow,

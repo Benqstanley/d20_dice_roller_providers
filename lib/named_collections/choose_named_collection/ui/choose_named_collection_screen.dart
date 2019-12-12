@@ -1,6 +1,7 @@
 import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_row.dart';
 import 'package:d20_dice_roller/roller/model/roller_screen_model.dart';
+import 'package:d20_dice_roller/roller/ui/named_multi_collection_roller_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,15 +15,14 @@ class ViewNamedCollections extends StatelessWidget {
   }
 }
 
-class ViewNamedCollectionsContent
-    extends StatelessWidget {
-
-
+class ViewNamedCollectionsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewNamedCollectionsBloc model;
+    RollerScreenModel rollerScreenModel;
     if (model == null) {
       model = Provider.of<ViewNamedCollectionsBloc>(context);
+      rollerScreenModel = Provider.of<RollerScreenModel>(context);
     }
     List<dynamic> itemsToDisplay = [
       Container(
@@ -37,7 +37,7 @@ class ViewNamedCollectionsContent
     ];
     List<dynamic> savedCollectionRows =
         model.namedMultiCollections.map((collection) {
-      return ChooseNamedCollectionRow(collection, model.deleteFile);
+      return ChooseNamedCollectionRow.factory(collection, model.deleteFile);
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
     return Column(
@@ -54,11 +54,28 @@ class ViewNamedCollectionsContent
         Divider(),
         RaisedButton(
           child: Text("Add Selection To Roller"),
-          onPressed: (){
-
+          onPressed: () {
+            rollerScreenModel.namedMultiCollections.addAll(
+                prepareRowsToAdd(savedCollectionRows, rollerScreenModel));
           },
         )
       ],
     );
+  }
+
+  List<NamedMultiCollectionRollerRow> prepareRowsToAdd(
+      List<dynamic> list, RollerScreenModel rollerScreenModel) {
+    List<NamedMultiCollectionRollerRow> toAdd = [];
+    list.forEach((row) {
+      if (row is ChooseNamedCollectionRow) {
+        if (row.changeNotifier.add) {
+          for (int i = 0; i < row.changeNotifier.numberToAdd; i++) {
+            toAdd.add(NamedMultiCollectionRollerRow(row.changeNotifier.model,
+                rollerScreenModel.dismissNamedMultiCollectionRollerRow));
+          }
+        }
+      }
+    });
+    return toAdd;
   }
 }

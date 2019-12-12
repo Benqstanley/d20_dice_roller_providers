@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:d20_dice_roller/core/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_row_cn.dart';
+import 'package:d20_dice_roller/roller/ui/named_multi_collection_roller_row.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 

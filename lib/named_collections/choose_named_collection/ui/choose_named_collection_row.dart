@@ -4,22 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChooseNamedCollectionRow extends StatelessWidget {
-  final NamedMultiCollectionModel model;
-  final Function onDismiss;
+  final ViewNamedCollectionsRowCN changeNotifier;
+  ChooseNamedCollectionRow(this.changeNotifier);
 
-  ChooseNamedCollectionRow(this.model, this.onDismiss);
+  factory ChooseNamedCollectionRow.factory(NamedMultiCollectionModel model, Function onDismiss){
+    return ChooseNamedCollectionRow(ViewNamedCollectionsRowCN(model, onDismiss));
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => ViewNamedCollectionsRowCN(model, onDismiss),
+      builder: (context) => changeNotifier,
       child: ChooseNamedCollectionRowContents(),
     );
   }
 
   @override
   String toStringShort() {
-    return model.name;
+    return changeNotifier.model.name;
   }
 }
 
