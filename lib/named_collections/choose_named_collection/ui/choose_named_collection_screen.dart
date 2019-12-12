@@ -1,5 +1,6 @@
 import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_row.dart';
+import 'package:d20_dice_roller/roller/model/roller_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class ViewNamedCollectionsContent extends StatefulWidget {
 class _ViewNamedCollectionsContentState
     extends State<ViewNamedCollectionsContent> {
   ViewNamedCollectionsBloc model;
+  RollerScreenModel rollerModel;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +47,25 @@ class _ViewNamedCollectionsContentState
       return ChooseNamedCollectionRow(collection, model.deleteFile);
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
-    return ListView.builder(
-      itemCount: itemsToDisplay.length,
-      itemBuilder: (BuildContext context, int index) {
-        return itemsToDisplay[index];
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(
+            itemCount: itemsToDisplay.length,
+            itemBuilder: (BuildContext context, int index) {
+              return itemsToDisplay[index];
+            },
+          ),
+        ),
+        Divider(),
+        RaisedButton(
+          child: Text("Add Selection To Roller"),
+          onPressed: (){
+
+          },
+        )
+      ],
     );
   }
 }

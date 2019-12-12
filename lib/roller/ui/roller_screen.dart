@@ -20,9 +20,14 @@ class RollerScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: rollerScreenModel.singleTypeCollections.length,
+              itemCount: rollerScreenModel.namedMultiCollections.length +
+                  rollerScreenModel.singleTypeCollections.length,
               itemBuilder: (ctx, int) {
-                return rollerScreenModel.singleTypeCollections[int];
+                if (int < rollerScreenModel.namedMultiCollections.length) {
+                  return rollerScreenModel.namedMultiCollections[int];
+                }
+                return rollerScreenModel.singleTypeCollections[
+                    int - rollerScreenModel.namedMultiCollections.length];
               },
             ),
           ),

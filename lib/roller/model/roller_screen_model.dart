@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/core/single_type_collection_row.dart';
+import 'package:d20_dice_roller/roller/ui/named_multi_collection_roller_row.dart';
 import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:d20_dice_roller/utility/utility_class.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class RollerScreenModel extends ChangeNotifier {
   bool showExpanded = true;
   List<SingleTypeCollectionRow> singleTypeCollections = [];
+  List<NamedMultiCollectionRollerRow> namedMultiCollections = [];
 
   RollerScreenModel() {
     addSingleTypeCollectionRow();

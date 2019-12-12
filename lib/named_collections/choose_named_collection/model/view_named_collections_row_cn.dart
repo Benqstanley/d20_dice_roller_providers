@@ -5,6 +5,7 @@ class ViewNamedCollectionsRowCN extends ChangeNotifier{
   NamedMultiCollectionModel model;
   int numberToAdd = 0;
   bool add = false;
+  bool roll = false;
   final Function onDismiss;
 
 
@@ -34,6 +35,11 @@ class ViewNamedCollectionsRowCN extends ChangeNotifier{
   void changeAdd(bool value){
     add = value;
     numberToAdd = 1;
+    notifyListeners();
+  }
+
+  void changeRoll(bool value){
+    roll = value;
     notifyListeners();
   }
 }
