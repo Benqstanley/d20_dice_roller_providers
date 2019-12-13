@@ -2,7 +2,6 @@ import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 
 class SingleTypeCollectionModel extends ChangeNotifier {
-  String name;
   int numberOfDice;
   DiceType diceType;
   int modifier;
@@ -53,7 +52,7 @@ class SingleTypeCollectionModel extends ChangeNotifier {
 
   //To Be Overridden by any extending class.
 
-  bool determineValidity(){
-    return name != null && numberOfDice > 0 && diceType != null;
+  bool determineRollability(){
+    return numberOfDice > 0 && diceType != null;
   }
 }

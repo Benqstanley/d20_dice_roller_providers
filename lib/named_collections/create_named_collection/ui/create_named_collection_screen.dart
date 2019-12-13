@@ -1,62 +1,76 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
-import 'package:d20_dice_roller/named_collections/create_named_collection/collection_management/collection_models/named_multi_collection_create_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_collection_create_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateNamedCollectionScreen extends StatelessWidget {
-  final bool isPartOfBigger;
-
-  CreateNamedCollectionScreen({this.isPartOfBigger = false});
+  CreateNamedCollectionScreen();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (ctx) {
-        return NamedMultiCollectionCreateModel();
-      },
-      child: CreateNamedCollectionContents(
-        isPartOfBigger: isPartOfBigger,
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          builder: (ctx) => CreateScreenBloc(),
+        ),
+        ChangeNotifierProvider(
+          builder: (ctx) => NamedMultiCollectionCreateModel(),
+        ),
+        ChangeNotifierProvider(
+          builder: (ctx) => NamedCollectionCreateModel(),
+        )
+      ],
+      child: CreateNamedCollectionContents(),
     );
   }
 }
 
 class CreateNamedCollectionContents extends StatelessWidget {
-  final bool isPartOfBigger;
+  final bool inPart;
 
-  CreateNamedCollectionContents({
-    this.isPartOfBigger = true,
-  });
+  CreateNamedCollectionContents({this.inPart = false});
 
   @override
   Widget build(BuildContext context) {
-    NamedMultiCollectionCreateModel namedCollectionModel =
+    NamedMultiCollectionCreateModel namedMultiCollectionCreateModel =
         Provider.of<NamedMultiCollectionCreateModel>(context);
-    bool isMultiPart = !isPartOfBigger && namedCollectionModel.isMultiPart;
+    NamedCollectionCreateModel namedCollectionCreateModel =
+        Provider.of<NamedCollectionCreateModel>(context);
+    CreateScreenBloc bloc = Provider.of<CreateScreenBloc>(context);
+    bool isMulti = bloc.isMulti;
+    print("rebuilding with isMulti: $isMulti");
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
       ),
-      displayDrawer: !isPartOfBigger,
+      displayDrawer: !inPart,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             buildNameAndTypeRow(
               context,
-              namedCollectionModel,
+              isMulti,
+              createScreenBloc: bloc,
+              namedMultiCollectionCreateModel: namedMultiCollectionCreateModel,
+              namedCollectionCreateModel: namedCollectionCreateModel,
             ),
             Expanded(
-                child: isMultiPart
+                child: isMulti
                     ? buildMultiPartCreator(
-                        namedCollectionModel: namedCollectionModel,
+                        namedMultiCollectionModel:
+                            namedMultiCollectionCreateModel,
+                        namedCollectionCreateModel: namedCollectionCreateModel,
                         context: context,
                       )
                     : buildSinglePartCreator(
-                        namedCollectionModel: namedCollectionModel,
+                        namedCollectionModel: namedCollectionCreateModel,
                         context: context,
                       )),
           ],
@@ -67,27 +81,32 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   Widget buildNameAndTypeRow(
     BuildContext context,
-    NamedMultiCollectionCreateModel namedCollectionModel,
-  ) {
+    bool isMulti, {
+    CreateScreenBloc createScreenBloc,
+    NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
+    NamedCollectionCreateModel namedCollectionCreateModel,
+  }) {
     return Row(
       children: <Widget>[
         Expanded(
           child: TextField(
-            controller: namedCollectionModel.nameController(isPartOfBigger),
+            controller: !isMulti
+                ? namedCollectionCreateModel.nameController
+                : inPart
+                    ? namedCollectionCreateModel.nameController
+                    : namedMultiCollectionCreateModel.nameController,
             decoration: InputDecoration(
-              hintText:
-                  !isPartOfBigger ? "Name Your Collection" : "Name This Part",
+              hintText: !inPart ? "Name Your Collection" : "Name This Part",
             ),
           ),
         ),
-        if (!isPartOfBigger)
+        if (!inPart)
           Column(
             children: <Widget>[
               Text("Multi"),
               Checkbox(
-                value: namedCollectionModel.isMultiPart,
-                onChanged: (newValue) =>
-                    namedCollectionModel.changeMultirowstatus(newValue),
+                value: createScreenBloc.isMulti,
+                onChanged: createScreenBloc.changeMultiStatus,
               )
             ],
           )
@@ -96,7 +115,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   Widget buildMultiPartCreator({
-    NamedMultiCollectionCreateModel namedCollectionModel,
+    NamedMultiCollectionCreateModel namedMultiCollectionModel,
+    NamedCollectionCreateModel namedCollectionCreateModel,
     BuildContext context,
   }) {
     return Padding(
@@ -104,12 +124,12 @@ class CreateNamedCollectionContents extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: namedCollectionModel.parts.isNotEmpty
+              child: namedMultiCollectionModel.rows.isNotEmpty
                   ? ListView.builder(
                       shrinkWrap: true,
-                      itemCount: namedCollectionModel.parts.length,
+                      itemCount: namedMultiCollectionModel.rows.length,
                       itemBuilder: (ctx, index) =>
-                          namedCollectionModel.rows[index],
+                          namedMultiCollectionModel.rows[index],
                     )
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
@@ -120,25 +140,33 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 RaisedButton(
                   child: Text('Clear'),
                   onPressed: () {
-                    namedCollectionModel.resetRowsList();
+                    namedMultiCollectionModel.resetRowsList();
                   },
                 ),
                 RaisedButton(
                   child: Text('Add Part'),
                   onPressed: () {
-                    namedCollectionModel.partEditingController =
-                        TextEditingController();
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (ctx) => ChangeNotifierProvider.value(
-                                  value: namedCollectionModel,
-                                  child: CreateNamedCollectionContents(
-                                    isPartOfBigger: true,
-                                  ),
-                                )))
+                            builder: (ctx) => MultiProvider(
+                                    child: CreateNamedCollectionContents(
+                                      inPart: true,
+                                    ),
+                                    providers: [
+                                      ChangeNotifierProvider(
+                                        builder: (ctx) => CreateScreenBloc(),
+                                      ),
+                                      ChangeNotifierProvider.value(
+                                        value: namedMultiCollectionModel,
+                                      ),
+                                      ChangeNotifierProvider(
+                                        builder: (ctx) =>
+                                            NamedCollectionCreateModel(),
+                                      ),
+                                    ])))
                         .then((result) {
-                      if (result is bool && result) {
-                        namedCollectionModel.moveCurrentToList();
+                      if (result != null) {
+                        namedMultiCollectionModel.absorbNamedCollection(result);
                       }
                     });
                   },
@@ -146,14 +174,17 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 RaisedButton(
                   child: Text('Save'),
                   onPressed: () async {
-                    namedCollectionModel.saveNamedCollection().then((value) async {
-                      if(value){
-                        ViewNamedCollectionsBloc bloc = Provider.of<ViewNamedCollectionsBloc>(context);
+                    namedMultiCollectionModel
+                        .saveNamedCollection()
+                        .then((value) async {
+                      if (value) {
+                        ViewNamedCollectionsBloc bloc =
+                            Provider.of<ViewNamedCollectionsBloc>(context);
                         await bloc.getSavedFiles();
-                        Navigator.of(context).pushReplacementNamed(AppWideStrings.viewNamedCollectionsPath);
+                        Navigator.of(context).pushReplacementNamed(
+                            AppWideStrings.viewNamedCollectionsPath);
                       }
                     });
-
                   },
                 ),
               ],
@@ -163,19 +194,18 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   Widget buildSinglePartCreator({
-    NamedMultiCollectionCreateModel namedCollectionModel,
+    NamedCollectionCreateModel namedCollectionModel,
     BuildContext context,
   }) {
     return buildPartCreator(
-      namedCollectionModel: namedCollectionModel,
+      namedCollectionCreateModel: namedCollectionModel,
       context: context,
     );
   }
 
   //Will be the main body of buildSinglePartCreator()
-  //Will also be used
   Widget buildPartCreator({
-    NamedMultiCollectionCreateModel namedCollectionModel,
+    NamedCollectionCreateModel namedCollectionCreateModel,
     BuildContext context,
   }) {
     return Padding(
@@ -186,11 +216,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount:
-                  namedCollectionModel.currentPart.singleTypeCollections.length,
+              itemCount: namedCollectionCreateModel.singleTypeRows.length,
               itemBuilder: (ctx, int) {
-                return namedCollectionModel
-                    .currentPart.singleTypeCollections[int];
+                return namedCollectionCreateModel.singleTypeRows[int];
               },
             ),
           ),
@@ -201,32 +229,29 @@ class CreateNamedCollectionContents extends StatelessWidget {
               RaisedButton(
                 child: Text('Clear'),
                 onPressed: () {
-                  namedCollectionModel.resetCurrentList();
+                  namedCollectionCreateModel.resetList();
                 },
               ),
               RaisedButton(
                 child: Text('Add Row'),
                 onPressed: () {
-                  namedCollectionModel
-                      .addSingleTypeCollectionRowForCurrentPart();
+                  namedCollectionCreateModel.addSingleTypeCollectionRow();
                 },
               ),
               RaisedButton(
                 child: Text('Save'),
                 onPressed: () {
-                  if (isPartOfBigger) {
-                    namedCollectionModel.currentPart.name = namedCollectionModel
-                        .nameController(isPartOfBigger)
-                        .text;
-                    namedCollectionModel.currentPart.singleTypeCollections
+                  if (inPart) {
+                    namedCollectionCreateModel.singleTypeRows
                         .removeWhere((element) {
-                      return !element.collectionModel.determineValidity();
+                      return !element.collectionModel.determineRollability();
                     });
-                    Navigator.of(context).pop(namedCollectionModel
-                        .currentPart.singleTypeCollections.isNotEmpty);
-                  }else{
-                    
-                  }
+                    NamedCollectionModel partModel;
+                    if (namedCollectionCreateModel.singleTypeRows.isNotEmpty) {
+                      partModel = namedCollectionCreateModel.returnModel();
+                    }
+                    Navigator.of(context).pop(partModel);
+                  } else {}
                 },
               ),
             ],

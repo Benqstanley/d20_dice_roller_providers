@@ -1,7 +1,7 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/named_multi_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
-import 'package:d20_dice_roller/roller/model/roller_screen_bloc.dart';
+import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,9 +10,9 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewNamedCollectionsBloc model;
-    RollerScreenModel rollerScreenModel;
+    RollerScreenBloc rollerScreenModel;
     model = Provider.of<ViewNamedCollectionsBloc>(context);
-    rollerScreenModel = Provider.of<RollerScreenModel>(context);
+    rollerScreenModel = Provider.of<RollerScreenBloc>(context);
     List<dynamic> itemsToDisplay = [
       Container(
         padding: const EdgeInsets.all(8.0),
@@ -55,7 +55,7 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
   }
 
   List<NamedMultiCollectionRow> prepareRowsToAdd(
-      List<dynamic> list, RollerScreenModel rollerScreenModel) {
+      List<dynamic> list, RollerScreenBloc rollerScreenModel) {
     List<NamedMultiCollectionRow> toAdd = [];
     list.forEach((row) {
       if (row is NamedMultiCollectionRow) {

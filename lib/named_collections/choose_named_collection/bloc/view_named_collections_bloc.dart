@@ -1,22 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/collection_management/collection_models/named_multi_collection_choose_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ViewNamedCollectionsBloc extends ChangeNotifier {
   Directory collectionsDirectory;
-  List<NamedMultiCollectionChooseModel> namedMultiCollections = [];
+  List<NamedMultiCollectionModel> namedMultiCollections = [];
   bool requested = false;
 
   ViewNamedCollectionsBloc() {
     getSavedFiles();
   }
 
-  Future<bool> deleteFile(NamedMultiCollectionChooseModel row) async {
-    NamedMultiCollectionModel model = row;
-    bool fileDeleted = false;
+  Future<bool> deleteFile(NamedMultiCollectionModel model) async {
+    bool fileDeleted;
     bool hasDirectory = collectionsDirectory != null;
     if (!hasDirectory) {
       hasDirectory = await getCollectionsDirectory();

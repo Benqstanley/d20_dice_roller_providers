@@ -1,6 +1,4 @@
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/collection_management/collection_models/named_multi_collection_choose_model.dart';
-import 'package:d20_dice_roller/roller/collection_management/collection_models/named_multi_collection_roller_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,13 +51,6 @@ class NamedMultiCollectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TrailingSelector selector;
-    if (collectionModel is NamedMultiCollectionRollerModel) {
-      selector = TrailingSelector.checkbox;
-    }
-    if (collectionModel is NamedMultiCollectionChooseModel) {
-      selector = TrailingSelector.checkboxToCounter;
-    }
     return ChangeNotifierProvider.value(
       value: collectionModel,
       child: NamedMultiCollectionBaseRowContents(

@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/roller/model/roller_screen_bloc.dart';
+import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 class RollerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    RollerScreenModel rollerScreenModel =
-        Provider.of<RollerScreenModel>(context);
+    RollerScreenBloc rollerScreenModel =
+        Provider.of<RollerScreenBloc>(context);
     SessionHistoryModel sessionHistoryModel =
         Provider.of<SessionHistoryModel>(context);
     return Padding(

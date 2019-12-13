@@ -3,7 +3,7 @@ import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/v
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/navigation/dice_roller_drawer.dart';
-import 'package:d20_dice_roller/roller/model/roller_screen_bloc.dart';
+import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:d20_dice_roller/roller/ui/roller_screen.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:d20_dice_roller/session_history/ui/session_history_screen.dart';
@@ -15,7 +15,7 @@ void main() => runApp(DiceRollerMain());
 
 class DiceRollerMain extends StatelessWidget {
   final SessionHistoryModel sessionHistoryModel = SessionHistoryModel();
-  final RollerScreenModel rollerScreenModel = RollerScreenModel();
+  final RollerScreenBloc rollerScreenModel = RollerScreenBloc();
   final ViewNamedCollectionsBloc viewNamedCollectionsBloc = ViewNamedCollectionsBloc();
 
   // This widget is the root of your application.
@@ -23,7 +23,7 @@ class DiceRollerMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<RollerScreenModel>(
+        ChangeNotifierProvider<RollerScreenBloc>(
             builder: (context) => rollerScreenModel),
         ChangeNotifierProvider<SessionHistoryModel>(
             builder: (context) => sessionHistoryModel),

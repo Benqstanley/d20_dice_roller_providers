@@ -1,14 +1,14 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class NamedCollectionModel {
+class NamedCollectionModel extends ChangeNotifier{
   final String name;
   final List<SingleTypeCollectionModel> singleTypeCollections;
 
   NamedCollectionModel({
-    @required this.name,
-    @required this.singleTypeCollections,
+    this.name,
+    this.singleTypeCollections,
   });
 
   Map<String, dynamic> toMap() {

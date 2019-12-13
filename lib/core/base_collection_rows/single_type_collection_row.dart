@@ -16,9 +16,9 @@ class SingleTypeCollectionRow extends StatelessWidget {
   });
 
   factory SingleTypeCollectionRow.forCreate(
-    SingleTypeCollectionModel collectionModel,
     Function onDismissed,
   ) {
+    var collectionModel = SingleTypeCollectionModel();
     return SingleTypeCollectionRow(
       collectionModel,
       onDismissed,
@@ -33,6 +33,7 @@ class SingleTypeCollectionRow extends StatelessWidget {
     return SingleTypeCollectionRow(
       collectionModel,
       onDismissed,
+      handleCheckbox: collectionModel.changeCheckbox,
     );
   }
 

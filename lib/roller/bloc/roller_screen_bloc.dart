@@ -6,12 +6,12 @@ import 'package:d20_dice_roller/session_history/model/session_history_model.dart
 import 'package:d20_dice_roller/utility/utility_class.dart';
 import 'package:flutter/material.dart';
 
-class RollerScreenModel extends ChangeNotifier {
+class RollerScreenBloc extends ChangeNotifier {
   bool showExpanded = true;
   List<SingleTypeCollectionRow> singleTypeCollections = [];
   List<NamedMultiCollectionRow> namedMultiCollections = [];
 
-  RollerScreenModel() {
+  RollerScreenBloc() {
     addSingleTypeCollectionRow();
   }
 
@@ -47,7 +47,7 @@ class RollerScreenModel extends ChangeNotifier {
       BuildContext context, SessionHistoryModel sessionHistoryModel) {
     List<Map<String, dynamic>> results = [];
     for (SingleTypeCollectionRow row in singleTypeCollections) {
-      if (row.collectionModel.determineValidity()) {
+      if (row.collectionModel.determineRollability()) {
         Map result = Utility.rollSingleTypeCollection(row.collectionModel);
         results.add(result);
       }
