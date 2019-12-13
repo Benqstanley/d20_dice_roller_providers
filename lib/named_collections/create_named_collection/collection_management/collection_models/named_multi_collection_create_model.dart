@@ -7,7 +7,7 @@ import 'package:d20_dice_roller/named_collections/create_named_collection/ui/mul
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-class CreateNamedCollectionModel extends NamedMultiCollectionBaseModel {
+class NamedMultiCollectionCreateModel extends NamedMultiCollectionBaseModel {
   bool isMultiPart = false;
   final TextEditingController nameEditingController = TextEditingController();
   TextEditingController partEditingController;
@@ -22,7 +22,7 @@ class CreateNamedCollectionModel extends NamedMultiCollectionBaseModel {
     }
   }
 
-  CreateNamedCollectionModel() {
+  NamedMultiCollectionCreateModel() {
     currentPart =
         CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
   }

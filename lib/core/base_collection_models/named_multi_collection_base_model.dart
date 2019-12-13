@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_base_model.dart';
-import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_collection_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/collection_management/collection_models/named_multi_collection_create_model.dart';
 import 'package:flutter/material.dart';
 
 class NamedMultiCollectionBaseModel extends ChangeNotifier{
@@ -23,7 +23,7 @@ class NamedMultiCollectionBaseModel extends ChangeNotifier{
   });
 
   factory NamedMultiCollectionBaseModel.fromCreate(
-      CreateNamedCollectionModel model) {
+      NamedMultiCollectionCreateModel model) {
     return NamedMultiCollectionBaseModel(
       name: model.nameEditingController.text,
       parts: model.rows.map((multiTypeRow) {

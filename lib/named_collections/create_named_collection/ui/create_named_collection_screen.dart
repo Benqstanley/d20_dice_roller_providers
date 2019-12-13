@@ -1,7 +1,7 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
-import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_collection_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/collection_management/collection_models/named_multi_collection_create_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +15,7 @@ class CreateNamedCollection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       builder: (ctx) {
-        return CreateNamedCollectionModel();
+        return NamedMultiCollectionCreateModel();
       },
       child: CreateNamedCollectionContents(
         isPartOfBigger: isPartOfBigger,
@@ -33,8 +33,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CreateNamedCollectionModel namedCollectionModel =
-        Provider.of<CreateNamedCollectionModel>(context);
+    NamedMultiCollectionCreateModel namedCollectionModel =
+        Provider.of<NamedMultiCollectionCreateModel>(context);
     bool isMultiPart = !isPartOfBigger && namedCollectionModel.isMultiPart;
     return PageWrapper(
       appBar: AppBar(
@@ -67,7 +67,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   Widget buildNameAndTypeRow(
     BuildContext context,
-    CreateNamedCollectionModel namedCollectionModel,
+    NamedMultiCollectionCreateModel namedCollectionModel,
   ) {
     return Row(
       children: <Widget>[
@@ -96,7 +96,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   Widget buildMultiPartCreator({
-    CreateNamedCollectionModel namedCollectionModel,
+    NamedMultiCollectionCreateModel namedCollectionModel,
     BuildContext context,
   }) {
     return Padding(
@@ -163,7 +163,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   Widget buildSinglePartCreator({
-    CreateNamedCollectionModel namedCollectionModel,
+    NamedMultiCollectionCreateModel namedCollectionModel,
     BuildContext context,
   }) {
     return buildPartCreator(
@@ -175,7 +175,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   //Will be the main body of buildSinglePartCreator()
   //Will also be used
   Widget buildPartCreator({
-    CreateNamedCollectionModel namedCollectionModel,
+    NamedMultiCollectionCreateModel namedCollectionModel,
     BuildContext context,
   }) {
     return Padding(

@@ -14,8 +14,6 @@ class SingleTypeCollectionBaseRow extends StatelessWidget {
   Widget build(BuildContext context) {
     //TODO: set needsCheckbox based on the type of collectionModel
     bool needsCheckbox = false;
-    //TODO: Determine if we need to call onDismissed on the Model. Prefer to call it on the Row directly.
-    //collectionModel.onDismissed = () => onDismissed(this);
     return ChangeNotifierProvider.value(
       value: collectionModel,
       key: key,
