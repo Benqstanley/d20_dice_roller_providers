@@ -1,8 +1,8 @@
-import 'package:d20_dice_roller/core/named_multi_collection_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+import 'package:flutter/material.dart';
 
 class ViewNamedCollectionsRowCN extends ChangeNotifier{
-  NamedMultiCollectionModel model;
+  NamedMultiCollectionBaseModel model;
   int numberToAdd = 0;
   bool add = false;
   bool roll = false;

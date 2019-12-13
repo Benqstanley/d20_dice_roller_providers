@@ -1,13 +1,14 @@
 
-import 'package:d20_dice_roller/core/single_type_collection_row.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_base_row.dart';
 
-class CreateNamedMultiTypeCollectionModel {
+class CreateNamedMultiTypeCollectionModel extends NamedMultiCollectionBaseModel{
   String name;
-  List<SingleTypeCollectionRow> singleTypeCollections = [];
+  List<SingleTypeCollectionBaseRow> singleTypeCollections = [];
   var dismissRow;
 
   CreateNamedMultiTypeCollectionModel(Function dismiss) {
-    dismissRow = (SingleTypeCollectionRow toBeDismissed) =>
+    dismissRow = (SingleTypeCollectionBaseRow toBeDismissed) =>
         dismiss(toBeDismissed, model: this);
     addSingleTypeCollectionRow();
   }
@@ -18,9 +19,8 @@ class CreateNamedMultiTypeCollectionModel {
   }
 
   void addSingleTypeCollectionRow() {
-    singleTypeCollections.add(SingleTypeCollectionRow(
+    singleTypeCollections.add(SingleTypeCollectionBaseRow(
       dismissRow,
-      needsCheckbox: false,
     ));
   }
 

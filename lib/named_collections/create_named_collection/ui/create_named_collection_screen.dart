@@ -87,7 +87,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
               Checkbox(
                 value: namedCollectionModel.isMultiPart,
                 onChanged: (newValue) =>
-                    namedCollectionModel.changeMultiPartStatus(newValue),
+                    namedCollectionModel.changeMultirowstatus(newValue),
               )
             ],
           )
@@ -109,7 +109,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: namedCollectionModel.parts.length,
                       itemBuilder: (ctx, index) =>
-                          namedCollectionModel.parts[index],
+                          namedCollectionModel.rows[index],
                     )
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
@@ -120,7 +120,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 RaisedButton(
                   child: Text('Clear'),
                   onPressed: () {
-                    namedCollectionModel.resetPartsList();
+                    namedCollectionModel.resetRowsList();
                   },
                 ),
                 RaisedButton(

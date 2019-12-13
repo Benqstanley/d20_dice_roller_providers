@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/core/named_multi_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_row_cn.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ class NamedMultiCollectionRollerRow extends StatelessWidget {
   NamedMultiCollectionRollerRow(this.changeNotifier);
 
   factory NamedMultiCollectionRollerRow.factory(
-      NamedMultiCollectionModel model, Function onDismiss) {
+      NamedMultiCollectionBaseModel model, Function onDismiss) {
     return NamedMultiCollectionRollerRow(
         ViewNamedCollectionsRowCN(model, onDismiss));
   }
@@ -38,7 +38,7 @@ class ChooseNamedCollectionRowContents extends StatelessWidget {
   Widget build(BuildContext context) {
     ViewNamedCollectionsRowCN rowCN =
         Provider.of<ViewNamedCollectionsRowCN>(context);
-    NamedMultiCollectionModel model = rowCN.model;
+    NamedMultiCollectionBaseModel model = rowCN.model;
     Function onDismiss = rowCN.onDismiss;
     return Dismissible(
       key: key,

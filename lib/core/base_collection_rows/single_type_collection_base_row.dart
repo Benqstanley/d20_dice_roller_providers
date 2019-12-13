@@ -1,38 +1,46 @@
+import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_base_model.dart';
 import 'package:d20_dice_roller/core/single_type_collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SingleTypeCollectionRow extends StatelessWidget {
+class SingleTypeCollectionBaseRow extends StatelessWidget {
   final Function onDismissed;
   final Key key = UniqueKey();
-  final collectionModel = SingleTypeCollectionModel();
-  final bool needsCheckbox;
+  final collectionModel = SingleTypeCollectionBaseModel();
 
-  SingleTypeCollectionRow(this.onDismissed, {this.needsCheckbox = true});
+  SingleTypeCollectionBaseRow(this.onDismissed);
 
   @override
   Widget build(BuildContext context) {
-    collectionModel.onDismissed = () => onDismissed(this);
+    //TODO: set needsCheckbox based on the type of collectionModel
+    bool needsCheckbox = true;
+    //TODO: Determine if we need to call onDismissed on the Model. Prefer to call it on the Row directly.
+    //collectionModel.onDismissed = () => onDismissed(this);
     return ChangeNotifierProvider.value(
       value: collectionModel,
       key: key,
-      child: SingleTypeCollectionRowContents(needsCheckbox),
+      child: SingleTypeCollectionBaseRowContents(
+          needsCheckbox, (_) => onDismissed(this)),
     );
   }
 }
 
-class SingleTypeCollectionRowContents extends StatelessWidget {
+class SingleTypeCollectionBaseRowContents extends StatelessWidget {
   final TextEditingController numberOfDiceController = TextEditingController();
   final TextEditingController modifierController = TextEditingController();
+  final Function onDismissed;
+  final Function handleCheckBoxChange;
   final double spacing = 4;
   final bool needsCheckbox;
 
-  SingleTypeCollectionRowContents(this.needsCheckbox);
+  SingleTypeCollectionBaseRowContents(this.needsCheckbox, this.onDismissed,
+      {this.handleCheckBoxChange})
+      : assert(!needsCheckbox || handleCheckBoxChange != null);
 
   @override
   Widget build(BuildContext context) {
-    SingleTypeCollectionModel collectionModel =
-        Provider.of<SingleTypeCollectionModel>(context);
+    SingleTypeCollectionBaseModel collectionModel =
+        Provider.of<SingleTypeCollectionBaseModel>(context);
     if (collectionModel.numberOfDice != null) {
       numberOfDiceController.text = collectionModel.numberOfDice.toString();
     }
@@ -47,7 +55,7 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
     });
     return Dismissible(
       key: UniqueKey(),
-      onDismissed: (direction) => collectionModel.onDismissed(),
+      onDismissed: onDismissed,
       background: Container(
           decoration: BoxDecoration(
             color: Colors.red,
@@ -116,10 +124,8 @@ class SingleTypeCollectionRowContents extends StatelessWidget {
                     children: <Widget>[
                       Text('Roll'),
                       Checkbox(
-                        value: collectionModel.toRoll,
-                        onChanged: (newValue) {
-                          collectionModel.updateWith(toRoll: newValue);
-                        },
+                        value: collectionModel.checkBox,
+                        onChanged: handleCheckBoxChange,
                       ),
                     ],
                   )

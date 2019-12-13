@@ -1,17 +1,17 @@
 import 'dart:io';
 
-import 'package:d20_dice_roller/core/single_type_collection_row.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_base_row.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_multi_type_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
-import 'package:d20_dice_roller/core/named_multi_collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-class CreateNamedCollectionModel extends ChangeNotifier {
+class CreateNamedCollectionModel extends NamedMultiCollectionBaseModel {
   bool isMultiPart = false;
   final TextEditingController nameEditingController = TextEditingController();
   TextEditingController partEditingController;
-  List<MultiTypeRowForCreateScreen> parts = [];
+  List<MultiTypeRowForCreateScreen> rows = [];
   CreateNamedMultiTypeCollectionModel currentPart;
 
   TextEditingController nameController(bool isPartOfBigger) {
@@ -28,18 +28,18 @@ class CreateNamedCollectionModel extends ChangeNotifier {
   }
 
   void dismissMultiPartRow(MultiTypeRowForCreateScreen row) {
-    parts.remove(row);
+    rows.remove(row);
     notifyListeners();
   }
 
   void moveCurrentToList() {
-    parts.add(MultiTypeRowForCreateScreen(currentPart, dismissMultiPartRow));
+    rows.add(MultiTypeRowForCreateScreen(currentPart, dismissMultiPartRow));
     currentPart =
         CreateNamedMultiTypeCollectionModel(dismissSingleTypeCollectionRow);
     notifyListeners();
   }
 
-  void changeMultiPartStatus(bool newValue) {
+  void changeMultirowstatus(bool newValue) {
     isMultiPart = newValue;
     notifyListeners();
   }
@@ -49,8 +49,8 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetPartsList() {
-    parts.clear();
+  void resetRowsList() {
+    rows.clear();
     notifyListeners();
   }
 
@@ -59,7 +59,7 @@ class CreateNamedCollectionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void dismissSingleTypeCollectionRow(SingleTypeCollectionRow toBeDismissed,
+  void dismissSingleTypeCollectionRow(SingleTypeCollectionBaseRow toBeDismissed,
       {CreateNamedMultiTypeCollectionModel model}) {
     model = model ?? currentPart;
     model.singleTypeCollections.remove(toBeDismissed);
@@ -82,7 +82,7 @@ class CreateNamedCollectionModel extends ChangeNotifier {
 
 
   Future<bool> saveNamedCollection() async {
-    String jsonString = NamedMultiCollectionModel.fromCreate(this)
+    String jsonString = NamedMultiCollectionBaseModel.fromCreate(this)
         .toJsonString();
     String path = await _localPath;
     Directory directory = Directory("$path/MultiCollections");
