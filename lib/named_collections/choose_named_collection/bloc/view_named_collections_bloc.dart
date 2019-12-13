@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/collection_management/collection_models/named_multi_collection_choose_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,7 +15,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   }
 
   Future<bool> deleteFile(NamedMultiCollectionChooseModel row) async {
-    NamedMultiCollectionBaseModel model = row;
+    NamedMultiCollectionModel model = row;
     bool fileDeleted = false;
     bool hasDirectory = collectionsDirectory != null;
     if (!hasDirectory) {
@@ -51,7 +51,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
       if (await File(entity.path).exists()) {
         String jsonString = await File(entity.path).readAsString();
         try {
-          namedMultiCollections.add(NamedMultiCollectionBaseModel.fromJson(
+          namedMultiCollections.add(NamedMultiCollectionModel.fromJson(
               json.decode(jsonString), entity.path));
         } catch (error, stackTrace) {
           print('saved files: ' + error.toString());

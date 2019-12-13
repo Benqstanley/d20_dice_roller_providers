@@ -1,8 +1,7 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/named_multi_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/collection_management/collection_rows/named_multi_collection_choose_row.dart';
 import 'package:d20_dice_roller/roller/model/roller_screen_bloc.dart';
-import 'package:d20_dice_roller/roller/ui/named_multi_collection_roller_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +26,7 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     ];
     List<dynamic> savedCollectionRows =
         model.namedMultiCollections.map((collection) {
-      return NamedMultiCollectionChooseRow(collection, model.deleteFile);
+      return NamedMultiCollectionRow.forChoose(collection, model.deleteFile);
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
     return Column(
@@ -55,14 +54,14 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     );
   }
 
-  List<NamedMultiCollectionRollerRow> prepareRowsToAdd(
+  List<NamedMultiCollectionRow> prepareRowsToAdd(
       List<dynamic> list, RollerScreenModel rollerScreenModel) {
-    List<NamedMultiCollectionRollerRow> toAdd = [];
+    List<NamedMultiCollectionRow> toAdd = [];
     list.forEach((row) {
-      if (row is NamedMultiCollectionChooseRow) {
+      if (row is NamedMultiCollectionRow) {
         if (row.collectionModel.checkBox) {
           for (int i = 0; i < row.collectionModel.counterState; i++) {
-            toAdd.add(NamedMultiCollectionRollerRow(
+            toAdd.add(NamedMultiCollectionRow.forRoller(
                 row.collectionModel,
                 rollerScreenModel.dismissNamedMultiCollectionRollerRow));
           }

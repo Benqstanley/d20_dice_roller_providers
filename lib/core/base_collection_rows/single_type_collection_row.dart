@@ -1,24 +1,44 @@
-import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
-import 'package:d20_dice_roller/roller/collection_management/collection_models/single_type_collection_roller_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SingleTypeCollectionBaseRow extends StatelessWidget {
+class SingleTypeCollectionRow extends StatelessWidget {
   final Function onDismissed;
   final Function handleCheckbox;
   final Key key = UniqueKey();
-  final SingleTypeCollectionBaseModel collectionModel;
+  final SingleTypeCollectionModel collectionModel;
 
-  SingleTypeCollectionBaseRow(
-    this.onDismissed,
-    this.collectionModel, {
+  SingleTypeCollectionRow(
+    this.collectionModel,
+    this.onDismissed, {
     this.handleCheckbox,
   });
 
+  factory SingleTypeCollectionRow.forCreate(
+    SingleTypeCollectionModel collectionModel,
+    Function onDismissed,
+  ) {
+    return SingleTypeCollectionRow(
+      collectionModel,
+      onDismissed,
+      handleCheckbox: collectionModel.changeCheckbox,
+    );
+  }
+
+  factory SingleTypeCollectionRow.forRoller(
+    SingleTypeCollectionModel collectionModel,
+    Function onDismissed,
+  ) {
+    return SingleTypeCollectionRow(
+      collectionModel,
+      onDismissed,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool needsCheckbox = collectionModel is SingleTypeCollectionRollerModel;
+    bool needsCheckbox = handleCheckbox != null;
     return ChangeNotifierProvider.value(
       value: collectionModel,
       key: key,
@@ -45,8 +65,8 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SingleTypeCollectionBaseModel collectionModel =
-        Provider.of<SingleTypeCollectionBaseModel>(context);
+    SingleTypeCollectionModel collectionModel =
+        Provider.of<SingleTypeCollectionModel>(context);
     if (collectionModel.numberOfDice != null) {
       numberOfDiceController.text = collectionModel.numberOfDice.toString();
     }

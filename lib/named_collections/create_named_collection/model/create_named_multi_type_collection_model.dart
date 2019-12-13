@@ -1,15 +1,14 @@
-import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
-import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_base_model.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_base_row.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 
-class CreateNamedMultiTypeCollectionModel
-    extends NamedMultiCollectionBaseModel {
+class CreateNamedMultiTypeCollectionModel extends NamedMultiCollectionModel {
   String name;
-  List<SingleTypeCollectionBaseRow> singleTypeCollections = [];
+  List<SingleTypeCollectionRow> singleTypeCollections = [];
   var dismissRow;
 
   CreateNamedMultiTypeCollectionModel(Function dismiss) {
-    dismissRow = (SingleTypeCollectionBaseRow toBeDismissed) =>
+    dismissRow = (SingleTypeCollectionRow toBeDismissed) =>
         dismiss(toBeDismissed, model: this);
     addSingleTypeCollectionRow();
   }
@@ -20,8 +19,10 @@ class CreateNamedMultiTypeCollectionModel
   }
 
   void addSingleTypeCollectionRow() {
-    singleTypeCollections.add(SingleTypeCollectionBaseRow(
-        dismissRow, SingleTypeCollectionBaseModel()));
+    singleTypeCollections.add(SingleTypeCollectionRow(
+      SingleTypeCollectionModel(),
+      dismissRow,
+    ));
   }
 
   @override

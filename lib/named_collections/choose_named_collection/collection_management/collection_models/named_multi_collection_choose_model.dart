@@ -1,17 +1,17 @@
-import 'package:d20_dice_roller/core/base_collection_models/named_collection_base_model.dart';
-import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:flutter/material.dart';
 
-class NamedMultiCollectionChooseModel extends NamedMultiCollectionBaseModel {
+class NamedMultiCollectionChooseModel extends NamedMultiCollectionModel {
   final Key key = UniqueKey();
 
   factory NamedMultiCollectionChooseModel.fromBaseModel(
-      NamedMultiCollectionBaseModel model) {
+      NamedMultiCollectionModel model) {
     return NamedMultiCollectionChooseModel(model.name, model.parts);
   }
 
   NamedMultiCollectionChooseModel(
-      String name, List<NamedCollectionBaseModel> parts)
+      String name, List<NamedCollectionModel> parts)
       : super(name: name, parts: parts);
 
   void increment() {

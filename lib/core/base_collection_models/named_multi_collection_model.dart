@@ -1,33 +1,48 @@
 import 'dart:convert';
 
-import 'package:d20_dice_roller/core/base_collection_models/named_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/collection_management/collection_models/named_multi_collection_create_model.dart';
 import 'package:flutter/material.dart';
 
-class NamedMultiCollectionBaseModel extends ChangeNotifier{
+class NamedMultiCollectionModel extends ChangeNotifier{
   final String path;
   final String name;
-  final List<NamedCollectionBaseModel> parts;
+  final List<NamedCollectionModel> parts;
   bool checkBox;
-  int counterState;
+  int counterState = 1;
 
   void changeCheckbox(bool newValue){
     checkBox = newValue;
     notifyListeners();
   }
 
-  NamedMultiCollectionBaseModel({
+  void increment(){
+    counterState++;
+    notifyListeners();
+  }
+
+  void decrement(){
+    if(counterState > 1){
+      counterState--;
+    }else{
+      counterState = 1;
+      checkBox = false;
+    }
+    notifyListeners();
+  }
+
+  NamedMultiCollectionModel({
     this.path,
     @required this.name,
     @required this.parts,
   });
 
-  factory NamedMultiCollectionBaseModel.fromCreate(
+  factory NamedMultiCollectionModel.fromCreate(
       NamedMultiCollectionCreateModel model) {
-    return NamedMultiCollectionBaseModel(
+    return NamedMultiCollectionModel(
       name: model.nameEditingController.text,
       parts: model.rows.map((multiTypeRow) {
-        return NamedCollectionBaseModel(
+        return NamedCollectionModel(
           name: multiTypeRow.model.name,
           singleTypeCollections: multiTypeRow.model.singleTypeCollections
               .map((item) => item.collectionModel)
@@ -37,15 +52,15 @@ class NamedMultiCollectionBaseModel extends ChangeNotifier{
     );
   }
 
-  factory NamedMultiCollectionBaseModel.fromJson(
+  factory NamedMultiCollectionModel.fromJson(
       Map<String, dynamic> json, String path) {
-    List<NamedCollectionBaseModel> partsToReturn = [];
+    List<NamedCollectionModel> partsToReturn = [];
     json["parts"].forEach((part){
-      partsToReturn.add(NamedCollectionBaseModel.fromJson(part));
+      partsToReturn.add(NamedCollectionModel.fromJson(part));
 
     });
     print("partsToReturn");
-    NamedMultiCollectionBaseModel model = NamedMultiCollectionBaseModel(
+    NamedMultiCollectionModel model = NamedMultiCollectionModel(
         name: json['name'], parts: partsToReturn, path: path);
     return model;
   }

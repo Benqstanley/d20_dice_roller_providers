@@ -1,12 +1,12 @@
-import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 
-class NamedCollectionBaseModel {
+class NamedCollectionModel {
   final String name;
-  final List<SingleTypeCollectionBaseModel> singleTypeCollections;
+  final List<SingleTypeCollectionModel> singleTypeCollections;
 
-  NamedCollectionBaseModel({
+  NamedCollectionModel({
     @required this.name,
     @required this.singleTypeCollections,
   });
@@ -24,14 +24,14 @@ class NamedCollectionBaseModel {
     return toReturn;
   }
 
-  factory NamedCollectionBaseModel.fromJson(Map<String, dynamic> json) {
-    List<SingleTypeCollectionBaseModel> collections = [];
+  factory NamedCollectionModel.fromJson(Map<String, dynamic> json) {
+    List<SingleTypeCollectionModel> collections = [];
     json["singleTypeCollections"].forEach((item) {
       Map<String, dynamic> map = item as Map<String, dynamic>;
-      collections.add(SingleTypeCollectionBaseModel.fromJson(map));
+      collections.add(SingleTypeCollectionModel.fromJson(map));
     });
     print(collections);
-    return NamedCollectionBaseModel(
+    return NamedCollectionModel(
         name: json["name"],
         singleTypeCollections:collections);
   }

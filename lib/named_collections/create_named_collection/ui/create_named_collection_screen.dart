@@ -6,10 +6,10 @@ import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CreateNamedCollection extends StatelessWidget {
+class CreateNamedCollectionScreen extends StatelessWidget {
   final bool isPartOfBigger;
 
-  CreateNamedCollection({this.isPartOfBigger = false});
+  CreateNamedCollectionScreen({this.isPartOfBigger = false});
 
   @override
   Widget build(BuildContext context) {

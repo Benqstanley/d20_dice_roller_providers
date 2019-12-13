@@ -1,7 +1,7 @@
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 
-class SingleTypeCollectionBaseModel extends ChangeNotifier {
+class SingleTypeCollectionModel extends ChangeNotifier {
   String name;
   int numberOfDice;
   DiceType diceType;
@@ -10,10 +10,15 @@ class SingleTypeCollectionBaseModel extends ChangeNotifier {
   //for managing a checkbox if one is needed on the associated RowType
   bool checkBox = false;
 
-  SingleTypeCollectionBaseModel();
+  void changeCheckbox(bool newValue){
+    checkBox = newValue;
+    notifyListeners();
+  }
 
-  factory SingleTypeCollectionBaseModel.fromJson(Map<String, dynamic> json){
-    SingleTypeCollectionBaseModel toReturn = SingleTypeCollectionBaseModel();
+  SingleTypeCollectionModel();
+
+  factory SingleTypeCollectionModel.fromJson(Map<String, dynamic> json){
+    SingleTypeCollectionModel toReturn = SingleTypeCollectionModel();
     toReturn.numberOfDice = json["numberOfDice"];
     toReturn.diceType = diceStringTypes[json["diceType"]];
     toReturn.modifier = json["modifier"];
@@ -49,6 +54,6 @@ class SingleTypeCollectionBaseModel extends ChangeNotifier {
   //To Be Overridden by any extending class.
 
   bool determineValidity(){
-    return false;
+    return name != null && numberOfDice > 0 && diceType != null;
   }
 }

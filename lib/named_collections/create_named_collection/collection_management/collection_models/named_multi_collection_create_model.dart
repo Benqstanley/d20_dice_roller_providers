@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_base_row.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_multi_type_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/multi_type_row.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-class NamedMultiCollectionCreateModel extends NamedMultiCollectionBaseModel {
+class NamedMultiCollectionCreateModel extends NamedMultiCollectionModel {
   bool isMultiPart = false;
   final TextEditingController nameEditingController = TextEditingController();
   TextEditingController partEditingController;
@@ -59,7 +59,7 @@ class NamedMultiCollectionCreateModel extends NamedMultiCollectionBaseModel {
     notifyListeners();
   }
 
-  void dismissSingleTypeCollectionRow(SingleTypeCollectionBaseRow toBeDismissed,
+  void dismissSingleTypeCollectionRow(SingleTypeCollectionRow toBeDismissed,
       {CreateNamedMultiTypeCollectionModel model}) {
     model = model ?? currentPart;
     model.singleTypeCollections.remove(toBeDismissed);
@@ -82,7 +82,7 @@ class NamedMultiCollectionCreateModel extends NamedMultiCollectionBaseModel {
 
 
   Future<bool> saveNamedCollection() async {
-    String jsonString = NamedMultiCollectionBaseModel.fromCreate(this)
+    String jsonString = NamedMultiCollectionModel.fromCreate(this)
         .toJsonString();
     String path = await _localPath;
     Directory directory = Directory("$path/MultiCollections");

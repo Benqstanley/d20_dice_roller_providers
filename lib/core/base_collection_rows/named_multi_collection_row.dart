@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/collection_management/collection_models/named_multi_collection_choose_model.dart';
 import 'package:d20_dice_roller/roller/collection_management/collection_models/named_multi_collection_roller_model.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +6,46 @@ import 'package:provider/provider.dart';
 
 enum TrailingSelector { checkbox, checkboxToCounter, none }
 
-class NamedMultiCollectionBaseRow extends StatelessWidget {
-  final NamedMultiCollectionBaseModel collectionModel;
+class NamedMultiCollectionRow extends StatelessWidget {
+  final NamedMultiCollectionModel collectionModel;
   final Function onDismissed;
   final Function handleIncrement;
   final Function handleDecrement;
   final Function handleCheckboxChanged;
+  final TrailingSelector selector;
 
-  NamedMultiCollectionBaseRow(
+  factory NamedMultiCollectionRow.forRoller(
+    NamedMultiCollectionModel collectionModel,
+    Function onDismissed,
+  ) {
+    collectionModel.checkBox = true;
+    return NamedMultiCollectionRow(
+      collectionModel,
+      onDismissed,
+      TrailingSelector.checkbox,
+      handleCheckboxChanged: collectionModel.changeCheckbox,
+    );
+  }
+
+  factory NamedMultiCollectionRow.forChoose(
+    NamedMultiCollectionModel collectionModel,
+    Function onDismissed,
+  ) {
+    collectionModel.checkBox = false;
+    return NamedMultiCollectionRow(
+      collectionModel,
+      onDismissed,
+      TrailingSelector.checkboxToCounter,
+      handleCheckboxChanged: collectionModel.changeCheckbox,
+      handleIncrement: collectionModel.increment,
+      handleDecrement: collectionModel.decrement,
+    );
+  }
+
+  NamedMultiCollectionRow(
     this.collectionModel,
-    this.onDismissed, {
+    this.onDismissed,
+    this.selector, {
     this.handleIncrement,
     this.handleDecrement,
     this.handleCheckboxChanged,
@@ -24,10 +54,10 @@ class NamedMultiCollectionBaseRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TrailingSelector selector;
-    if(collectionModel is NamedMultiCollectionRollerModel){
+    if (collectionModel is NamedMultiCollectionRollerModel) {
       selector = TrailingSelector.checkbox;
     }
-    if(collectionModel is NamedMultiCollectionChooseModel){
+    if (collectionModel is NamedMultiCollectionChooseModel) {
       selector = TrailingSelector.checkboxToCounter;
     }
     return ChangeNotifierProvider.value(
@@ -75,8 +105,8 @@ class NamedMultiCollectionBaseRowContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NamedMultiCollectionBaseModel model =
-        Provider.of<NamedMultiCollectionBaseModel>(context);
+    NamedMultiCollectionModel model =
+        Provider.of<NamedMultiCollectionModel>(context);
     String counterState;
     bool checkBox;
     if (selector == TrailingSelector.checkboxToCounter) {

@@ -57,7 +57,7 @@ class DiceRollerMain extends StatelessWidget {
               child: SessionHistoryScreen(),
             );
           },
-          AppWideStrings.createCollectionPath: (ctx) => CreateNamedCollection(),
+          AppWideStrings.createCollectionPath: (ctx) => CreateNamedCollectionScreen(),
           AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
             child: ChooseNamedCollectionsScreen(),
             title: AppWideStrings.viewNamedCollectionTitle,
