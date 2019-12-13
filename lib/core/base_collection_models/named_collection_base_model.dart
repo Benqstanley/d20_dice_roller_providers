@@ -1,5 +1,5 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_base_model.dart';
-import 'package:d20_dice_roller/core/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 
 class NamedCollectionBaseModel {

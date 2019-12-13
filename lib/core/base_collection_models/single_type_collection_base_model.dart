@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/core/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 
 class SingleTypeCollectionBaseModel extends ChangeNotifier {
@@ -6,6 +6,8 @@ class SingleTypeCollectionBaseModel extends ChangeNotifier {
   int numberOfDice;
   DiceType diceType;
   int modifier;
+
+  //for managing a checkbox if one is needed on the associated RowType
   bool checkBox;
 
   SingleTypeCollectionBaseModel();
