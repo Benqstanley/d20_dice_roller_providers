@@ -1,5 +1,4 @@
 import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_base_row.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/collection_management/collection_models/named_multi_collection_choose_model.dart';
 import 'package:d20_dice_roller/roller/ui/named_multi_collection_roller_row.dart';
 import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
@@ -25,10 +24,8 @@ class RollerScreenModel extends ChangeNotifier {
   }
 
   void dismissNamedMultiCollectionRollerRow(
-      NamedMultiCollectionChooseModel toBeDismissed) {
-    namedMultiCollections.removeWhere((row) {
-      return row.changeNotifier == toBeDismissed;
-    });
+      NamedMultiCollectionRollerRow toBeDismissed) {
+    namedMultiCollections.remove(toBeDismissed);
     notifyListeners();
   }
 

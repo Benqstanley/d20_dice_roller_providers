@@ -1,5 +1,5 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_bloc.dart';
+import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/navigation/dice_roller_drawer.dart';
@@ -9,6 +9,7 @@ import 'package:d20_dice_roller/session_history/model/session_history_model.dart
 import 'package:d20_dice_roller/session_history/ui/session_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 void main() => runApp(DiceRollerMain());
 

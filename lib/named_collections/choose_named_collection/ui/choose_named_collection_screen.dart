@@ -62,7 +62,7 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
       if (row is NamedMultiCollectionChooseRow) {
         if (row.collectionModel.checkBox) {
           for (int i = 0; i < row.collectionModel.counterState; i++) {
-            toAdd.add(NamedMultiCollectionRollerRow.factory(
+            toAdd.add(NamedMultiCollectionRollerRow(
                 row.collectionModel,
                 rollerScreenModel.dismissNamedMultiCollectionRollerRow));
           }
