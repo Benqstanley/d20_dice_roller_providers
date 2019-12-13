@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class RollResult extends StatelessWidget {
-  TextStyle rollResultStyle;
-  Map<String, dynamic> result;
+  final TextStyle rollResultStyle;
+  final Map<String, dynamic> result;
 
   RollResult(this.result, this.rollResultStyle);
 
