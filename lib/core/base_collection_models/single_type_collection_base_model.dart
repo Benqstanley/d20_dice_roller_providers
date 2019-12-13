@@ -8,7 +8,7 @@ class SingleTypeCollectionBaseModel extends ChangeNotifier {
   int modifier;
 
   //for managing a checkbox if one is needed on the associated RowType
-  bool checkBox;
+  bool checkBox = false;
 
   SingleTypeCollectionBaseModel();
 
