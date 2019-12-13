@@ -1,4 +1,5 @@
-import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_base_row.dart';
+import 'package:d20_dice_roller/roller/collection_management/collection_models/single_type_collection_roller_model.dart';
+import 'package:d20_dice_roller/roller/collection_management/collection_rows/single_type_collection_roller_row.dart';
 import 'package:d20_dice_roller/roller/ui/named_multi_collection_roller_row.dart';
 import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
@@ -7,14 +8,14 @@ import 'package:flutter/material.dart';
 
 class RollerScreenModel extends ChangeNotifier {
   bool showExpanded = true;
-  List<SingleTypeCollectionBaseRow> singleTypeCollections = [];
+  List<SingleTypeCollectionRollerRow> singleTypeCollections = [];
   List<NamedMultiCollectionRollerRow> namedMultiCollections = [];
 
   RollerScreenModel() {
     addSingleTypeCollectionRow();
   }
 
-  void dismissSingleTypeCollectionRow(SingleTypeCollectionBaseRow toBeDismissed) {
+  void dismissSingleTypeCollectionRow(SingleTypeCollectionRollerRow toBeDismissed) {
     singleTypeCollections.remove(toBeDismissed);
     if (singleTypeCollections.isEmpty) {
       addSingleTypeCollectionRow();
@@ -30,8 +31,9 @@ class RollerScreenModel extends ChangeNotifier {
   }
 
   void addSingleTypeCollectionRow() {
-    singleTypeCollections.add(SingleTypeCollectionBaseRow(
+    singleTypeCollections.add(SingleTypeCollectionRollerRow(
       dismissSingleTypeCollectionRow,
+      SingleTypeCollectionRollerModel()
     ));
     notifyListeners();
   }
@@ -44,7 +46,7 @@ class RollerScreenModel extends ChangeNotifier {
   void rollCollections(
       BuildContext context, SessionHistoryModel sessionHistoryModel) {
     List<Map<String, dynamic>> results = [];
-    for (SingleTypeCollectionBaseRow row in singleTypeCollections) {
+    for (SingleTypeCollectionRollerRow row in singleTypeCollections) {
       if (row.collectionModel.determineValidity()) {
         Map result = Utility.rollSingleTypeCollection(row.collectionModel);
         results.add(result);

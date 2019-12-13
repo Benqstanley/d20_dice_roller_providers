@@ -1,24 +1,32 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_base_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
+import 'package:d20_dice_roller/roller/collection_management/collection_models/single_type_collection_roller_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SingleTypeCollectionBaseRow extends StatelessWidget {
   final Function onDismissed;
+  final Function handleCheckbox;
   final Key key = UniqueKey();
-  final collectionModel = SingleTypeCollectionBaseModel();
+  final SingleTypeCollectionBaseModel collectionModel;
 
-  SingleTypeCollectionBaseRow(this.onDismissed);
+  SingleTypeCollectionBaseRow(
+    this.onDismissed,
+    this.collectionModel, {
+    this.handleCheckbox,
+  });
 
   @override
   Widget build(BuildContext context) {
-    //TODO: set needsCheckbox based on the type of collectionModel
-    bool needsCheckbox = false;
+    bool needsCheckbox = collectionModel is SingleTypeCollectionRollerModel;
     return ChangeNotifierProvider.value(
       value: collectionModel,
       key: key,
       child: SingleTypeCollectionBaseRowContents(
-          needsCheckbox, (_) => onDismissed(this)),
+        needsCheckbox,
+        (_) => onDismissed(this),
+        handleCheckBoxChange: handleCheckbox,
+      ),
     );
   }
 }
