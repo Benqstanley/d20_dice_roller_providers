@@ -1,6 +1,6 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/main.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/model/view_named_collections_bloc.dart';
+import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_named_collection_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';

@@ -3,7 +3,7 @@ import 'package:d20_dice_roller/named_collections/choose_named_collection/model/
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/navigation/dice_roller_drawer.dart';
-import 'package:d20_dice_roller/roller/model/roller_screen_model.dart';
+import 'package:d20_dice_roller/roller/model/roller_screen_bloc.dart';
 import 'package:d20_dice_roller/roller/ui/roller_screen.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:d20_dice_roller/session_history/ui/session_history_screen.dart';
@@ -58,7 +58,7 @@ class DiceRollerMain extends StatelessWidget {
           },
           AppWideStrings.createCollectionPath: (ctx) => CreateNamedCollection(),
           AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
-            child: ViewNamedCollections(),
+            child: ChooseNamedCollectionsScreen(),
             title: AppWideStrings.viewNamedCollectionTitle,
           ),
         },

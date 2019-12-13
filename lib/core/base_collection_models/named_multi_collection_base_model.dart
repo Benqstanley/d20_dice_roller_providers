@@ -8,6 +8,13 @@ class NamedMultiCollectionBaseModel extends ChangeNotifier{
   final String path;
   final String name;
   final List<NamedCollectionBaseModel> parts;
+  bool checkBox;
+  int counterState;
+
+  void changeCheckbox(bool newValue){
+    checkBox = newValue;
+    notifyListeners();
+  }
 
   NamedMultiCollectionBaseModel({
     this.path,

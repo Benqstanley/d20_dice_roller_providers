@@ -1,0 +1,5 @@
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_base_model.dart';
+
+class NamedMultiCollectionRollerModel extends NamedMultiCollectionBaseModel{
+
+}
