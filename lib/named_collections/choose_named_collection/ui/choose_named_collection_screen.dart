@@ -6,29 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChooseNamedCollectionsScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     ViewNamedCollectionsBloc model;
     RollerScreenBloc rollerScreenModel;
     model = Provider.of<ViewNamedCollectionsBloc>(context);
     rollerScreenModel = Provider.of<RollerScreenBloc>(context);
-    List<dynamic> itemsToDisplay = [
-      Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          "Saved Collections",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
-      Divider()
-    ];
-    List<dynamic> savedCollectionRows =
-        model.namedMultiCollections.map((collection) {
-      return NamedMultiCollectionRow.forChoose(collection, model.deleteFile);
-    }).toList();
-    itemsToDisplay.addAll(savedCollectionRows);
+    List<dynamic> itemsToDisplay = prepareChooseScreenRows(model);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -45,13 +29,33 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
           child: Text("Add Selection To Roller"),
           onPressed: () {
             rollerScreenModel.namedMultiCollections.addAll(
-                prepareRowsToAdd(savedCollectionRows, rollerScreenModel));
+                prepareRowsToAdd(itemsToDisplay, rollerScreenModel));
             Navigator.of(context)
                 .pushReplacementNamed(AppWideStrings.rollerScreenPath);
           },
         )
       ],
     );
+  }
+
+  List<dynamic> prepareChooseScreenRows(
+      ViewNamedCollectionsBloc model) {
+    List<dynamic> itemsToDisplay = [
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "Saved Collections",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+      Divider()
+    ];
+    List<dynamic> savedCollectionRows = model.namedMultiCollections.map((collection) {
+      return NamedMultiCollectionRow.forChoose(collection, model.deleteFile);
+    }).toList();
+    itemsToDisplay.addAll(savedCollectionRows);
+    return itemsToDisplay;
   }
 
   List<NamedMultiCollectionRow> prepareRowsToAdd(
@@ -61,8 +65,7 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
       if (row is NamedMultiCollectionRow) {
         if (row.collectionModel.checkBox) {
           for (int i = 0; i < row.collectionModel.counterState; i++) {
-            toAdd.add(NamedMultiCollectionRow.forRoller(
-                row.collectionModel,
+            toAdd.add(NamedMultiCollectionRow.forRoller(row.collectionModel,
                 rollerScreenModel.dismissNamedMultiCollectionRollerRow));
           }
         }
