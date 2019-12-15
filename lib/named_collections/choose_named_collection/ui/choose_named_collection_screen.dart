@@ -6,51 +6,69 @@ import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+class ChooseNamedCollectionsTop extends StatelessWidget {
+  final ViewNamedCollectionsBloc viewNamedCollectionsBloc =
+      ViewNamedCollectionsBloc();
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: viewNamedCollectionsBloc,
+      child: ChooseNamedCollectionsScreen(),
+    );
+  }
+}
+
 class ChooseNamedCollectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ViewNamedCollectionsBloc model;
+    ViewNamedCollectionsBloc bloc;
     RollerScreenBloc rollerScreenModel;
-    model = Provider.of<ViewNamedCollectionsBloc>(context);
     rollerScreenModel = Provider.of<RollerScreenBloc>(context);
+    bloc = Provider.of<ViewNamedCollectionsBloc>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      bloc.requestCollectionsPipe.launch();
+    });
     return StreamBuilder<List<NamedMultiCollectionModel>>(
-      stream: null,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<dynamic> itemsToDisplay = prepareChooseScreenRows(model);
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: ListView.builder(
-                  itemCount: itemsToDisplay.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return itemsToDisplay[index];
-                  },
+        stream: bloc.collectionsPipe.receive,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasData) {
+            List<dynamic> itemsToDisplay = prepareChooseScreenRows(bloc);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: itemsToDisplay.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return itemsToDisplay[index];
+                    },
+                  ),
                 ),
-              ),
-              Divider(),
-              RaisedButton(
-                child: Text("Add Selection To Roller"),
-                onPressed: () {
-                  rollerScreenModel.namedMultiCollections.addAll(
-                      prepareRowsToAdd(itemsToDisplay, rollerScreenModel));
-                  Navigator.of(context)
-                      .pushReplacementNamed(AppWideStrings.rollerScreenPath);
-                },
-              )
-            ],
-          );
-        }else{
-          return Container();
-        }
-
-    }
-    );
+                Divider(),
+                RaisedButton(
+                  child: Text("Add Selection To Roller"),
+                  onPressed: () {
+                    rollerScreenModel.namedMultiCollections.addAll(
+                        prepareRowsToAdd(itemsToDisplay, rollerScreenModel));
+                    Navigator.of(context)
+                        .pushReplacementNamed(AppWideStrings.rollerScreenPath);
+                  },
+                )
+              ],
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 
-  List<dynamic> prepareChooseScreenRows(
-      ViewNamedCollectionsBloc model) {
+  List<dynamic> prepareChooseScreenRows(ViewNamedCollectionsBloc bloc) {
     List<dynamic> itemsToDisplay = [
       Container(
         padding: const EdgeInsets.all(8.0),
@@ -62,8 +80,9 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
       ),
       Divider()
     ];
-    List<dynamic> savedCollectionRows = model.namedMultiCollections.map((collection) {
-      return NamedMultiCollectionRow.forChoose(collection, model.deleteFile);
+    List<dynamic> savedCollectionRows =
+        bloc.namedMultiCollections.map((collection) {
+      return NamedMultiCollectionRow.forChoose(collection, bloc.deleteFile);
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
     return itemsToDisplay;

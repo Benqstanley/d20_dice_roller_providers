@@ -42,7 +42,6 @@ class NamedMultiCollectionModel extends ChangeNotifier {
     json["parts"].forEach((part) {
       partsToReturn.add(NamedCollectionModel.fromJson(part));
     });
-    print("partsToReturn");
     NamedMultiCollectionModel model = NamedMultiCollectionModel(
         name: json['name'], parts: partsToReturn, path: path);
     return model;

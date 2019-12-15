@@ -30,7 +30,6 @@ class NamedCollectionModel extends ChangeNotifier{
       Map<String, dynamic> map = item as Map<String, dynamic>;
       collections.add(SingleTypeCollectionModel.fromJson(map));
     });
-    print(collections);
     return NamedCollectionModel(
         name: json["name"],
         singleTypeCollections:collections);

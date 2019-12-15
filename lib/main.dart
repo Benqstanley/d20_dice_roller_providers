@@ -1,5 +1,4 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/navigation/dice_roller_drawer.dart';
@@ -16,8 +15,6 @@ void main() => runApp(DiceRollerMain());
 class DiceRollerMain extends StatelessWidget {
   final SessionHistoryModel sessionHistoryModel = SessionHistoryModel();
   final RollerScreenBloc rollerScreenModel = RollerScreenBloc();
-  final ViewNamedCollectionsBloc viewNamedCollectionsBloc = ViewNamedCollectionsBloc();
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -27,9 +24,7 @@ class DiceRollerMain extends StatelessWidget {
             builder: (context) => rollerScreenModel),
         ChangeNotifierProvider<SessionHistoryModel>(
             builder: (context) => sessionHistoryModel),
-        ChangeNotifierProvider<ViewNamedCollectionsBloc>(
-          builder: (context) => viewNamedCollectionsBloc,
-        )
+
       ],
       child: MaterialApp(
         title: 'Dice Roller',
@@ -59,7 +54,7 @@ class DiceRollerMain extends StatelessWidget {
           },
           AppWideStrings.createCollectionPath: (ctx) => CreateNamedCollectionScreen(),
           AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
-            child: ChooseNamedCollectionsScreen(),
+            child: ChooseNamedCollectionsTop(),
             title: AppWideStrings.viewNamedCollectionTitle,
           ),
         },
