@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class RollerModalSheet extends StatelessWidget {
   final List<Map<String, dynamic>> results;
   final TextStyle rollerModalSheetStyle = TextStyle(fontSize: 22);
+  final TextStyle rollerSubStyle = TextStyle(fontSize: 18);
 
   RollerModalSheet(this.results);
 
@@ -13,7 +14,7 @@ class RollerModalSheet extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListView(
         children: results.map((result) {
-          return RollResult(result, rollerModalSheetStyle);
+          return RollResult(result, rollerModalSheetStyle, subStyle: rollerSubStyle,);
         }).toList(),
       ),
     );

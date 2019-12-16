@@ -62,8 +62,12 @@ class RollerScreenBloc extends ChangeNotifier {
       sessionHistoryModel.addSessionResult(results);
       showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           builder: (context) {
-            return RollerModalSheet(results);
+            return FractionallySizedBox(
+              child: RollerModalSheet(results),
+              heightFactor: .8,
+            );
           });
     }
   }
