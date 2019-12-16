@@ -6,15 +6,17 @@ import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/cupertino.dart';
 
 class NamedCollectionModel extends NamedCollectionBaseModel {
-
-  final List<SingleTypeCollectionModel> singleTypeCollections;
   bool checkBox;
 
   NamedCollectionModel({
     String path,
     @required String name,
-    @required this.singleTypeCollections,
-  }) : super(name, path: path);
+    @required List<SingleTypeCollectionModel> singleTypeCollections,
+  }) : super(
+          name,
+          path: path,
+          singleTypeCollections: singleTypeCollections,
+        );
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> toReturn = {};

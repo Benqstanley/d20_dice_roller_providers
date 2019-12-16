@@ -5,13 +5,15 @@ import 'package:d20_dice_roller/core/base_collection_models/named_collection_mod
 import 'package:flutter/material.dart';
 
 class NamedMultiCollectionModel extends NamedCollectionBaseModel {
-  final List<NamedCollectionModel> parts;
-
   NamedMultiCollectionModel({
     String path,
     @required String name,
-    @required this.parts,
-  }) : super(name, path: path);
+    @required List<NamedCollectionModel> parts,
+  }) : super(
+          name,
+          path: path,
+          parts: parts,
+        );
 
   factory NamedMultiCollectionModel.fromJson(
       Map<String, dynamic> json, String path) {

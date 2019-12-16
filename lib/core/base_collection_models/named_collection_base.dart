@@ -1,12 +1,19 @@
+import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'named_collection_model.dart';
 
 class NamedCollectionBaseModel extends ChangeNotifier {
   final String path;
   final String name;
+  final List<SingleTypeCollectionModel> singleTypeCollections;
+  final List<NamedCollectionModel> parts;
   bool checkBox;
   int counterState = 1;
 
-  NamedCollectionBaseModel(this.name, {this.path});
+  NamedCollectionBaseModel(this.name,
+      {this.path, this.singleTypeCollections, this.parts})
+      : assert(parts == null || singleTypeCollections == null);
 
   void changeCheckbox(bool newValue) {
     checkBox = newValue;
