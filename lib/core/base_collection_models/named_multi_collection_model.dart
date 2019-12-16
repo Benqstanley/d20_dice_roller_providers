@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:d20_dice_roller/core/base_collection_models/named_collection_base.dart';
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:flutter/material.dart';
 
-class NamedMultiCollectionModel extends NamedCollectionBaseModel {
+class NamedMultiCollectionModel extends CollectionModel {
   NamedMultiCollectionModel({
     String path,
     @required String name,

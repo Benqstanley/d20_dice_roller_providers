@@ -1,10 +1,10 @@
-import 'package:d20_dice_roller/core/base_collection_models/named_collection_base.dart';
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 enum TrailingSelector { checkbox, checkboxToCounter, none }
 
-class CollectionRow<T extends NamedCollectionBaseModel>
+class CollectionRow<T extends CollectionModel>
     extends StatelessWidget {
   final T collectionModel;
   final Function onDismissed;
@@ -23,7 +23,7 @@ class CollectionRow<T extends NamedCollectionBaseModel>
   });
 
   factory CollectionRow.forCreate(
-    NamedCollectionBaseModel collectionModel,
+    CollectionModel collectionModel,
     Function onDismissed,
   ) {
     return CollectionRow(
@@ -34,7 +34,7 @@ class CollectionRow<T extends NamedCollectionBaseModel>
   }
 
   factory CollectionRow.forRoller(
-    NamedCollectionBaseModel collectionModel,
+    CollectionModel collectionModel,
     Function onDismissed,
   ) {
     collectionModel.checkBox = true;
@@ -47,7 +47,7 @@ class CollectionRow<T extends NamedCollectionBaseModel>
   }
 
   factory CollectionRow.forChoose(
-    NamedCollectionBaseModel collectionModel,
+    CollectionModel collectionModel,
     Function onDismissed,
   ) {
     collectionModel.checkBox = false;
@@ -82,7 +82,7 @@ class CollectionRow<T extends NamedCollectionBaseModel>
   }
 }
 
-class CollectionRowContents<T extends NamedCollectionBaseModel>
+class CollectionRowContents<T extends CollectionModel>
     extends StatelessWidget {
   final UniqueKey key = UniqueKey();
   final Function onDismissed;

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'named_collection_model.dart';
 
-class NamedCollectionBaseModel extends ChangeNotifier {
+class CollectionModel extends ChangeNotifier {
   final String path;
   final String name;
   final List<SingleTypeCollectionModel> singleTypeCollections;
@@ -11,7 +11,7 @@ class NamedCollectionBaseModel extends ChangeNotifier {
   bool checkBox;
   int counterState = 1;
 
-  NamedCollectionBaseModel(this.name,
+  CollectionModel(this.name,
       {this.path, this.singleTypeCollections, this.parts})
       : assert(parts == null || singleTypeCollections == null);
 

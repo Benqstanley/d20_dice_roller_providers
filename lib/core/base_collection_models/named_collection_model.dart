@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:d20_dice_roller/core/base_collection_models/named_collection_base.dart';
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/cupertino.dart';
 
-class NamedCollectionModel extends NamedCollectionBaseModel {
+class NamedCollectionModel extends CollectionModel {
   bool checkBox;
 
   NamedCollectionModel({

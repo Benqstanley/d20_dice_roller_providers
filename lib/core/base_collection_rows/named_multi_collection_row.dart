@@ -1,4 +1,4 @@
-import 'package:d20_dice_roller/core/base_collection_models/named_collection_base.dart';
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:flutter/material.dart';
