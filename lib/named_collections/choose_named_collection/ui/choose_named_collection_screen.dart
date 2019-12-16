@@ -82,7 +82,12 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     ];
     List<dynamic> savedCollectionRows =
         bloc.namedMultiCollections.map((collection) {
-      return NamedMultiCollectionRow.forChoose(collection, bloc.deleteFile);
+          if(collection is NamedMultiCollectionModel) {
+            return NamedMultiCollectionRow.forChoose(
+                collection, bloc.deleteFile);
+          }else {
+            return Container();
+          }
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
     return itemsToDisplay;

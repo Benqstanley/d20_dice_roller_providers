@@ -1,7 +1,6 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/main.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_collection_create_model.dart';
@@ -175,12 +174,11 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   child: Text('Save'),
                   onPressed: () async {
                     namedMultiCollectionModel
-                        .saveNamedCollection()
+                        .saveCollection()
                         .then((value) async {
                       if (value) {
-                        ViewNamedCollectionsBloc bloc =
-                            Provider.of<ViewNamedCollectionsBloc>(context);
-                        await bloc.getSavedFiles();
+                        //TODO: show snackbar to redirect to saved collections
+                        //TODO: and refresh create screen
                         Navigator.of(context).pushReplacementNamed(
                             AppWideStrings.viewNamedCollectionsPath);
                       }
@@ -251,7 +249,19 @@ class CreateNamedCollectionContents extends StatelessWidget {
                       partModel = namedCollectionCreateModel.returnModel();
                     }
                     Navigator.of(context).pop(partModel);
-                  } else {}
+                  } else {
+                    namedCollectionCreateModel
+                          .saveCollection()
+                          .then((value) async {
+                        if (value) {
+                          //TODO: show snackbar to redirect to saved collections
+                          //TODO: and refresh create screen
+                          Navigator.of(context).pushReplacementNamed(
+                              AppWideStrings.viewNamedCollectionsPath);
+                        }
+                      });
+                    }
+
                 },
               ),
             ],
