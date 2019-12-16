@@ -6,8 +6,15 @@ class RollResult extends StatelessWidget {
 
   RollResult(this.result, this.rollResultStyle);
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildNamedResult(){
+    return Container(child: Text("Named"));
+  }
+
+  Widget buildNamedMultiResult(){
+    return Container(child: Text("multi"));
+  }
+
+  Widget buildSingleResult(){
     return Container(
       decoration: BoxDecoration(border: Border(bottom: BorderSide())),
       child: Row(
@@ -31,5 +38,17 @@ class RollResult extends StatelessWidget {
         ],
       ),
     );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    if(result.containsKey("expandedResult")) {
+      return buildSingleResult();
+    }else if(result.containsKey("singleResults")){
+      return buildNamedResult();
+    }else{
+      return buildNamedMultiResult();
+    }
   }
 }

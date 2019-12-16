@@ -1,8 +1,7 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/named_collection_row.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/named_multi_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:flutter/material.dart';
@@ -84,9 +83,11 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     ];
     List<dynamic> savedCollectionRows = bloc.collections.map((collection) {
       if (collection is NamedMultiCollectionModel) {
-        return NamedMultiCollectionRow.forChoose(collection, bloc.deleteFile);
+        return CollectionRow<NamedMultiCollectionModel>.forChoose(
+            collection, bloc.deleteFile);
       } else {
-        return NamedCollectionRow.forChoose(collection, bloc.deleteFile);
+        return CollectionRow<NamedCollectionModel>.forChoose(
+            collection, bloc.deleteFile);
       }
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
@@ -99,14 +100,14 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     list.forEach((row) {
       if (row is CollectionRow) {
         if (row.collectionModel.checkBox) {
-          if (row is NamedMultiCollectionRow) {
+          if (row.collectionModel is NamedMultiCollectionModel) {
             for (int i = 0; i < row.collectionModel.counterState; i++) {
-              toAdd.add(NamedMultiCollectionRow.forRoller(
+              toAdd.add(CollectionRow<NamedMultiCollectionModel>.forRoller(
                   row.collectionModel, rollerScreenModel.dismissCollectionRow));
             }
           } else {
             for (int i = 0; i < row.collectionModel.counterState; i++) {
-              toAdd.add(NamedCollectionRow.forRoller(
+              toAdd.add(CollectionRow<NamedCollectionModel>.forRoller(
                   row.collectionModel, rollerScreenModel.dismissCollectionRow));
             }
           }

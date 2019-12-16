@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 
 enum TrailingSelector { checkbox, checkboxToCounter, none }
 
-class CollectionRow<T extends CollectionModel>
-    extends StatelessWidget {
+class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   final T collectionModel;
   final Function onDismissed;
   final Function handleIncrement;
@@ -23,7 +22,7 @@ class CollectionRow<T extends CollectionModel>
   });
 
   factory CollectionRow.forCreate(
-    CollectionModel collectionModel,
+    T collectionModel,
     Function onDismissed,
   ) {
     return CollectionRow(
@@ -34,7 +33,7 @@ class CollectionRow<T extends CollectionModel>
   }
 
   factory CollectionRow.forRoller(
-    CollectionModel collectionModel,
+    T collectionModel,
     Function onDismissed,
   ) {
     collectionModel.checkBox = true;
@@ -47,7 +46,7 @@ class CollectionRow<T extends CollectionModel>
   }
 
   factory CollectionRow.forChoose(
-    CollectionModel collectionModel,
+    T collectionModel,
     Function onDismissed,
   ) {
     collectionModel.checkBox = false;
@@ -61,12 +60,11 @@ class CollectionRow<T extends CollectionModel>
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: collectionModel,
-      child: CollectionRowContents(
+      child: CollectionRowContents<T>(
         (_) => onDismissed(this),
         selector,
         handleCheckboxChanged: handleCheckboxChanged,
@@ -82,8 +80,7 @@ class CollectionRow<T extends CollectionModel>
   }
 }
 
-class CollectionRowContents<T extends CollectionModel>
-    extends StatelessWidget {
+class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
   final UniqueKey key = UniqueKey();
   final Function onDismissed;
   final Function handleCheckboxChanged;
@@ -158,12 +155,19 @@ class CollectionRowContents<T extends CollectionModel>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: model.singleTypeCollections
-                          .map((singleTypeCollection) => Text(
-                                singleTypeCollection.toString(),
-                                style: TextStyle(fontSize: 16),
-                              ))
-                          .toList(),
+                      children: model.singleTypeCollections != null
+                          ? model.singleTypeCollections
+                              .map((singleTypeCollection) => Text(
+                                    singleTypeCollection.toString(),
+                                    style: TextStyle(fontSize: 16),
+                                  ))
+                              .toList()
+                          : model.parts
+                              .map((part) => Text(
+                                    part.toString(),
+                                    style: TextStyle(fontSize: 16),
+                                  ))
+                              .toList(),
                     ),
                   ),
                   selector == TrailingSelector.none

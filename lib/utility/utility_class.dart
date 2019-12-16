@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 
@@ -26,5 +29,48 @@ class Utility {
     result['expandedResult'] = expandedResult;
     result['rollValue'] = rollValue;
     return result;
+  }
+  static Map<String, dynamic> rollNamedCollection(NamedCollectionModel model) {
+    Map<String, dynamic> result = Map();
+    List<Map<String, dynamic>> singleTypeResults = [];
+    for(SingleTypeCollectionModel singleModel in model.singleTypeCollections){
+      singleTypeResults.add(rollSingleTypeCollection(singleModel));
+    }
+    result["name"] = model.name;
+    result["singleResults"] = singleTypeResults;
+    return result;
+  }
+
+  static Map<String, dynamic> rollNamedMultiCollection(NamedMultiCollectionModel model) {
+    Map<String, dynamic> result = Map();
+    List<Map<String, dynamic>> namedResults = [];
+    for(NamedCollectionModel namedModel in model.parts){
+      namedResults.add(rollNamedCollection(namedModel));
+    }
+    result["name"] = model.name;
+    result["namedResults"] = namedResults;
+    return result;
+  }
+
+  static Map<String, dynamic> rollCollection(CollectionModel model) {
+    Map<String, dynamic> result = Map();
+    if(model is NamedCollectionModel) {
+      List<Map<String, dynamic>> singleTypeResults = [];
+      for (SingleTypeCollectionModel singleModel in model
+          .singleTypeCollections) {
+        singleTypeResults.add(rollSingleTypeCollection(singleModel));
+      }
+      result["name"] = model.name;
+      result["singleResults"] = singleTypeResults;
+      return result;
+    }else{
+      List<Map<String, dynamic>> namedResults = [];
+      for(NamedCollectionModel namedModel in model.parts){
+        namedResults.add(rollCollection(namedModel));
+      }
+      result["name"] = model.name;
+      result["namedResults"] = namedResults;
+      return result;
+    }
   }
 }

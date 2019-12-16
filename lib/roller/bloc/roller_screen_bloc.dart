@@ -1,6 +1,5 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/named_multi_collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
@@ -25,8 +24,7 @@ class RollerScreenBloc extends ChangeNotifier {
     }
   }
 
-  void dismissCollectionRow(
-      CollectionRow toBeDismissed) {
+  void dismissCollectionRow(CollectionRow toBeDismissed) {
     collectionRows.remove(toBeDismissed);
     notifyListeners();
   }
@@ -47,9 +45,16 @@ class RollerScreenBloc extends ChangeNotifier {
   void rollCollections(
       BuildContext context, SessionHistoryModel sessionHistoryModel) {
     List<Map<String, dynamic>> results = [];
+    print(singleTypeCollections);
     for (SingleTypeCollectionRow row in singleTypeCollections) {
       if (row.collectionModel.determineRollability()) {
         Map result = Utility.rollSingleTypeCollection(row.collectionModel);
+        results.add(result);
+      }
+    }
+    for (CollectionRow row in collectionRows) {
+      if (row.collectionModel.checkBox) {
+        Map result = Utility.rollCollection(row.collectionModel);
         results.add(result);
       }
     }

@@ -52,6 +52,6 @@ class SingleTypeCollectionModel extends ChangeNotifier {
   //To Be Overridden by any extending class.
 
   bool determineRollability(){
-    return numberOfDice > 0 && diceType != null;
+    return checkBox && numberOfDice != null && numberOfDice > 0 && diceType != null;
   }
 }
