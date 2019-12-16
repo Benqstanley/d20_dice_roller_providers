@@ -1,5 +1,7 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/named_collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/named_multi_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
@@ -23,13 +25,13 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewNamedCollectionsBloc bloc;
-    RollerScreenBloc rollerScreenModel;
-    rollerScreenModel = Provider.of<RollerScreenBloc>(context);
+    RollerScreenBloc rollerScreenBloc;
+    rollerScreenBloc = Provider.of<RollerScreenBloc>(context);
     bloc = Provider.of<ViewNamedCollectionsBloc>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       bloc.requestCollectionsPipe.launch();
     });
-    return StreamBuilder<List<NamedMultiCollectionModel>>(
+    return StreamBuilder<List<ChangeNotifier>>(
         stream: bloc.collectionsPipe.receive,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,8 +56,8 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
                 RaisedButton(
                   child: Text("Add Selection To Roller"),
                   onPressed: () {
-                    rollerScreenModel.namedMultiCollections.addAll(
-                        prepareRowsToAdd(itemsToDisplay, rollerScreenModel));
+                    rollerScreenBloc.collectionRows.addAll(
+                        prepareRowsToAdd(itemsToDisplay, rollerScreenBloc));
                     Navigator.of(context)
                         .pushReplacementNamed(AppWideStrings.rollerScreenPath);
                   },
@@ -80,28 +82,33 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
       ),
       Divider()
     ];
-    List<dynamic> savedCollectionRows =
-        bloc.namedMultiCollections.map((collection) {
-          if(collection is NamedMultiCollectionModel) {
-            return NamedMultiCollectionRow.forChoose(
-                collection, bloc.deleteFile);
-          }else {
-            return Container();
-          }
+    List<dynamic> savedCollectionRows = bloc.collections.map((collection) {
+      if (collection is NamedMultiCollectionModel) {
+        return NamedMultiCollectionRow.forChoose(collection, bloc.deleteFile);
+      } else {
+        return NamedCollectionRow.forChoose(collection, bloc.deleteFile);
+      }
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
     return itemsToDisplay;
   }
 
-  List<NamedMultiCollectionRow> prepareRowsToAdd(
+  List<CollectionRow> prepareRowsToAdd(
       List<dynamic> list, RollerScreenBloc rollerScreenModel) {
-    List<NamedMultiCollectionRow> toAdd = [];
+    List<CollectionRow> toAdd = [];
     list.forEach((row) {
-      if (row is NamedMultiCollectionRow) {
+      if (row is CollectionRow) {
         if (row.collectionModel.checkBox) {
-          for (int i = 0; i < row.collectionModel.counterState; i++) {
-            toAdd.add(NamedMultiCollectionRow.forRoller(row.collectionModel,
-                rollerScreenModel.dismissNamedMultiCollectionRollerRow));
+          if (row is NamedMultiCollectionRow) {
+            for (int i = 0; i < row.collectionModel.counterState; i++) {
+              toAdd.add(NamedMultiCollectionRow.forRoller(
+                  row.collectionModel, rollerScreenModel.dismissCollectionRow));
+            }
+          } else {
+            for (int i = 0; i < row.collectionModel.counterState; i++) {
+              toAdd.add(NamedCollectionRow.forRoller(
+                  row.collectionModel, rollerScreenModel.dismissCollectionRow));
+            }
           }
         }
       }

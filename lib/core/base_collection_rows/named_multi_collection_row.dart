@@ -1,11 +1,10 @@
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_base.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum TrailingSelector { checkbox, checkboxToCounter, none }
-
-class NamedMultiCollectionRow extends StatelessWidget {
-  final NamedMultiCollectionModel collectionModel;
+class NamedMultiCollectionRow extends CollectionRow {
   final Function onDismissed;
   final Function handleIncrement;
   final Function handleDecrement;
@@ -41,19 +40,19 @@ class NamedMultiCollectionRow extends StatelessWidget {
   }
 
   NamedMultiCollectionRow(
-    this.collectionModel,
+    NamedCollectionBaseModel collectionBaseModel,
     this.onDismissed,
     this.selector, {
     this.handleIncrement,
     this.handleDecrement,
     this.handleCheckboxChanged,
-  });
+  }) : super(collectionBaseModel);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: collectionModel,
-      child: NamedMultiCollectionBaseRowContents(
+      child: NamedMultiCollectionRowContents(
         (_) => onDismissed(this),
         selector,
         handleCheckboxChanged: handleCheckboxChanged,
@@ -69,7 +68,7 @@ class NamedMultiCollectionRow extends StatelessWidget {
   }
 }
 
-class NamedMultiCollectionBaseRowContents extends StatelessWidget {
+class NamedMultiCollectionRowContents extends StatelessWidget {
   final UniqueKey key = UniqueKey();
   final Function onDismissed;
   final Function handleCheckboxChanged;
@@ -77,7 +76,7 @@ class NamedMultiCollectionBaseRowContents extends StatelessWidget {
   final Function handleDecrement;
   final TrailingSelector selector;
 
-  NamedMultiCollectionBaseRowContents(
+  NamedMultiCollectionRowContents(
     this.onDismissed,
     this.selector, {
     this.handleCheckboxChanged,
@@ -97,7 +96,8 @@ class NamedMultiCollectionBaseRowContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NamedMultiCollectionModel model =
-        Provider.of<NamedMultiCollectionModel>(context);
+        Provider.of<NamedCollectionBaseModel>(context)
+            as NamedMultiCollectionModel;
     String counterState;
     bool checkBox;
     if (selector == TrailingSelector.checkboxToCounter) {
@@ -146,8 +146,8 @@ class NamedMultiCollectionBaseRowContents extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: model.parts
-                          .map((singleTypeCollection) => Text(
-                                singleTypeCollection.toString(),
+                          .map((namedCollection) => Text(
+                                namedCollection.toString(),
                                 style: TextStyle(fontSize: 16),
                               ))
                           .toList(),

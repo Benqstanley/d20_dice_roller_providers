@@ -6,7 +6,6 @@ import 'package:d20_dice_roller/core/base_collection_rows/named_collection_row.d
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_model.dart';
 import 'package:flutter/material.dart';
 
-
 class NamedMultiCollectionCreateModel extends CreateModel {
   bool isMultiPart = false;
   final TextEditingController nameController = TextEditingController();
@@ -20,8 +19,10 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   }
 
   void absorbNamedCollection(NamedCollectionModel currentPart) {
-    rows.add(
-        NamedCollectionRow(currentPart, dismissMultiPartRow));
+    rows.add(NamedCollectionRow.forCreate(
+      currentPart,
+      dismissMultiPartRow,
+    ));
     notifyListeners();
   }
 
@@ -39,38 +40,34 @@ class NamedMultiCollectionCreateModel extends CreateModel {
     notifyListeners();
   }
 
-  NamedMultiCollectionModel returnModel(){
+  NamedMultiCollectionModel returnModel() {
     return NamedMultiCollectionModel(
       name: nameController.text,
       parts: rows.map((multiTypeRow) {
+        NamedCollectionModel model =
+            multiTypeRow.collectionModel as NamedCollectionModel;
         return NamedCollectionModel(
-          name: multiTypeRow.collectionModel.name,
+          name: model.name,
           singleTypeCollections:
-          multiTypeRow.collectionModel.singleTypeCollections,
+              model.singleTypeCollections,
         );
       }).toList(),
     );
   }
 
-  Future<bool> saveNamedCollection() async {
-
-  }
-
   @override
   Future<bool> saveCollection() async {
-    String jsonString =
-    returnModel().toJsonString();
+    String jsonString = returnModel().toJsonString();
     String path = await localPath();
     Directory directory = Directory("$path/MultiCollections");
     if (!await directory.exists()) {
-    directory.create();
+      directory.create();
     }
-    File file =
-    File("$path/MultiCollections/${nameController.text}.txt");
+    File file = File("$path/MultiCollections/${nameController.text}.txt");
     if (!(await file.exists())) {
-    file = await file.create();
-    await file.writeAsString(jsonString);
-    return true;
+      file = await file.create();
+      await file.writeAsString(jsonString);
+      return true;
     }
     return false;
   }

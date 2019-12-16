@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/named_multi_collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 class RollerScreenBloc extends ChangeNotifier {
   bool showExpanded = true;
   List<SingleTypeCollectionRow> singleTypeCollections = [];
-  List<NamedMultiCollectionRow> namedMultiCollections = [];
+  List<CollectionRow> collectionRows = [];
 
   RollerScreenBloc() {
     addSingleTypeCollectionRow();
@@ -24,9 +25,9 @@ class RollerScreenBloc extends ChangeNotifier {
     }
   }
 
-  void dismissNamedMultiCollectionRollerRow(
-      NamedMultiCollectionRow toBeDismissed) {
-    namedMultiCollections.remove(toBeDismissed);
+  void dismissCollectionRow(
+      CollectionRow toBeDismissed) {
+    collectionRows.remove(toBeDismissed);
     notifyListeners();
   }
 

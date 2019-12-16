@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class RollerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    RollerScreenBloc rollerScreenModel =
+    RollerScreenBloc rollerScreenBloc =
         Provider.of<RollerScreenBloc>(context);
     SessionHistoryModel sessionHistoryModel =
         Provider.of<SessionHistoryModel>(context);
@@ -20,13 +20,13 @@ class RollerScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: rollerScreenModel.namedMultiCollections.length +
-                  rollerScreenModel.singleTypeCollections.length,
+              itemCount: rollerScreenBloc.collectionRows.length +
+                  rollerScreenBloc.singleTypeCollections.length,
               itemBuilder: (ctx, int) {
-                if(int < rollerScreenModel.namedMultiCollections.length){
-                  return rollerScreenModel.namedMultiCollections[int];
+                if(int < rollerScreenBloc.collectionRows.length){
+                  return rollerScreenBloc.collectionRows[int];
                 }
-                return rollerScreenModel.singleTypeCollections[int - rollerScreenModel.namedMultiCollections.length];
+                return rollerScreenBloc.singleTypeCollections[int - rollerScreenBloc.collectionRows.length];
               },
             ),
           ),
@@ -37,19 +37,19 @@ class RollerScreen extends StatelessWidget {
               RaisedButton(
                 child: Text('Clear'),
                 onPressed: () {
-                  rollerScreenModel.resetScreen();
+                  rollerScreenBloc.resetScreen();
                 },
               ),
               RaisedButton(
                 child: Text('Add Row'),
                 onPressed: () {
-                  rollerScreenModel.addSingleTypeCollectionRow();
+                  rollerScreenBloc.addSingleTypeCollectionRow();
                 },
               ),
               RaisedButton(
                 child: Text('Roll'),
                 onPressed: () {
-                  rollerScreenModel.rollCollections(
+                  rollerScreenBloc.rollCollections(
                     context,
                     sessionHistoryModel,
                   );

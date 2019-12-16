@@ -1,19 +1,20 @@
 import 'dart:convert';
 
+import 'package:d20_dice_roller/core/base_collection_models/named_collection_base.dart';
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/cupertino.dart';
 
-class NamedCollectionModel extends ChangeNotifier {
-  final String path;
-  final String name;
+class NamedCollectionModel extends NamedCollectionBaseModel {
+
   final List<SingleTypeCollectionModel> singleTypeCollections;
+  bool checkBox;
 
   NamedCollectionModel({
-    this.path,
-    @required this.name,
+    String path,
+    @required String name,
     @required this.singleTypeCollections,
-  });
+  }) : super(name, path: path);
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> toReturn = {};
@@ -46,9 +47,12 @@ class NamedCollectionModel extends ChangeNotifier {
   String toString() {
     StringBuffer toReturn = StringBuffer(name);
     toReturn.write(": ");
-    singleTypeCollections
-        .forEach((element) => toReturn.write(element.toString()));
-    return toReturn.toString();
+    singleTypeCollections.forEach((element) {
+      toReturn.write(element.toString());
+      toReturn.write(", ");
+    });
+    String returnString = toReturn.toString();
+    return returnString.substring(0, returnString.length - 2);
   }
 
   String toJsonString() {

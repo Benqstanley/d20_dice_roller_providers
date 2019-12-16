@@ -12,11 +12,10 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Directory namedCollectionsDirectory;
   List<NamedMultiCollectionModel> namedMultiCollections = [];
   List<NamedCollectionModel> namedCollections = [];
-  List<ChangeNotifier> collections;
+  List<ChangeNotifier> collections= [];
 
   bool requested = false;
-  BroadcastPipe<List<ChangeNotifier>> collectionsPipe =
-      BroadcastPipe();
+  BroadcastPipe<List<ChangeNotifier>> collectionsPipe = BroadcastPipe();
   EventPipe requestCollectionsPipe = EventPipe();
 
   ViewNamedCollectionsBloc() {
@@ -36,7 +35,8 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
     if (!hasDirectory) {
       return false;
     }
-    File fileToDelete = File("${multiCollectionsDirectory.path}/${model.name}.txt");
+    File fileToDelete =
+        File("${multiCollectionsDirectory.path}/${model.name}.txt");
     if (await fileToDelete.exists()) {
       fileToDelete.delete().then((file) async {
         fileDeleted = !await file.exists();
@@ -50,30 +50,41 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Future<bool> getCollectionsDirectory() async {
     final directory = await getApplicationDocumentsDirectory();
     final String path = directory.path;
-    multiCollectionsDirectory = Directory("$path/MultiCollections");
-    namedCollectionsDirectory = Directory("$path/NamedCollections");
-    return multiCollectionsDirectory != null || namedCollectionsDirectory != null;
+    try {
+      multiCollectionsDirectory = Directory("$path/MultiCollections");
+      namedCollectionsDirectory = Directory("$path/NamedCollections");
+    } catch (error) {}
+    return multiCollectionsDirectory != null ||
+        namedCollectionsDirectory != null;
   }
 
   Future<bool> getSavedFiles() async {
     namedMultiCollections = [];
     namedCollections = [];
     if (!await getCollectionsDirectory()) return false;
-    List<FileSystemEntity> multiEntitites = multiCollectionsDirectory.listSync();
-    List<FileSystemEntity> namedEntitites = namedCollectionsDirectory.listSync();
-    await decodeMultiFiles(multiEntitites);
-    await decodeNamedFiles(namedEntitites);
+    if (await multiCollectionsDirectory.exists()) {
+      List<FileSystemEntity> multiEntitites =
+          multiCollectionsDirectory?.listSync();
+      if (multiEntitites.isNotEmpty) await decodeMultiFiles(multiEntitites);
+    }
+    if (await namedCollectionsDirectory.exists()) {
+      List<FileSystemEntity> namedEntitites =
+          namedCollectionsDirectory?.listSync();
+      if (namedEntitites.isNotEmpty) await decodeNamedFiles(namedEntitites);
+    }
+    collections.addAll(namedCollections);
+    collections.addAll(namedMultiCollections);
     return namedMultiCollections.isNotEmpty || namedCollections.isNotEmpty;
   }
 
   Future<void> decodeMultiFiles(List<FileSystemEntity> entities) async {
-    for(FileSystemEntity entity in entities){
+    for (FileSystemEntity entity in entities) {
       await decodeMultiFile(entity);
     }
   }
 
   Future<void> decodeNamedFiles(List<FileSystemEntity> entities) async {
-    for(FileSystemEntity entity in entities){
+    for (FileSystemEntity entity in entities) {
       await decodeNamedFile(entity);
     }
   }
@@ -97,7 +108,8 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
       String jsonString = await File(entity.path).readAsString();
       try {
         namedCollections.add(NamedCollectionModel.fromJson(
-            json.decode(jsonString), path: entity.path));
+            json.decode(jsonString),
+            path: entity.path));
         return true;
       } catch (error) {
         return false;
