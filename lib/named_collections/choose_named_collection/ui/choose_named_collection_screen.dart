@@ -103,12 +103,12 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
           if (row.collectionModel is NamedMultiCollectionModel) {
             for (int i = 0; i < row.collectionModel.counterState; i++) {
               toAdd.add(CollectionRow<NamedMultiCollectionModel>.forRoller(
-                  row.collectionModel, rollerScreenModel.dismissCollectionRow));
+                  row.collectionModel.copy(), rollerScreenModel.dismissCollectionRow));
             }
           } else {
             for (int i = 0; i < row.collectionModel.counterState; i++) {
               toAdd.add(CollectionRow<NamedCollectionModel>.forRoller(
-                  row.collectionModel, rollerScreenModel.dismissCollectionRow));
+                  row.collectionModel.copy(), rollerScreenModel.dismissCollectionRow));
             }
           }
         }

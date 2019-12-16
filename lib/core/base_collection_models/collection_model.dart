@@ -34,4 +34,13 @@ class CollectionModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  CollectionModel copy() {
+    return CollectionModel(
+      name,
+      path: path,
+      parts: parts,
+      singleTypeCollections: singleTypeCollections,
+    );
+  }
 }

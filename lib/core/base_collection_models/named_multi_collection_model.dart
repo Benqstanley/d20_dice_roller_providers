@@ -32,4 +32,13 @@ class NamedMultiCollectionModel extends CollectionModel {
     canEncode["parts"] = parts.map((part) => part.toMap()).toList();
     return json.encode(canEncode);
   }
+
+  @override
+  NamedMultiCollectionModel copy() {
+    return NamedMultiCollectionModel(
+      name: name,
+      path: path,
+      parts: parts,
+    );
+  }
 }

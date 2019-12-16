@@ -60,4 +60,13 @@ class NamedCollectionModel extends CollectionModel {
   String toJsonString() {
     return json.encode(toMap());
   }
+
+  @override
+  NamedCollectionModel copy() {
+    return NamedCollectionModel(
+      name: name,
+      path: path,
+      singleTypeCollections: singleTypeCollections,
+    );
+  }
 }
