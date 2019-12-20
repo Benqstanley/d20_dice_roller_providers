@@ -64,6 +64,16 @@ class DiceRollerDrawer extends StatelessWidget {
                 .pushReplacementNamed(AppWideStrings.sessionHistoryScreenPath);
           }),
       Divider(),
+      ListTile(
+        leading: Icon(Icons.settings),
+        title: Text("Preferences", style: TextStyle(fontSize: 20)),
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.of(context)
+              .pushReplacementNamed(AppWideStrings.preferencesScreenPath);
+        },
+      ),
+      Divider(),
     ];
     return Drawer(
       child: Container(

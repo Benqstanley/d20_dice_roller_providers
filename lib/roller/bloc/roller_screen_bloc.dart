@@ -5,6 +5,7 @@ import 'package:d20_dice_roller/roller/ui/roller_modal_sheet.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:d20_dice_roller/utility/utility_class.dart';
 import 'package:flutter/material.dart';
+import 'package:preferences/preferences.dart';
 
 class RollerScreenBloc extends ChangeNotifier {
   bool showExpanded = true;
@@ -44,6 +45,7 @@ class RollerScreenBloc extends ChangeNotifier {
 
   void rollCollections(
       BuildContext context, SessionHistoryModel sessionHistoryModel) {
+    showExpanded = PrefService.getBool('roll_detail');
     List<Map<String, dynamic>> results = [];
     for (SingleTypeCollectionRow row in singleTypeCollections) {
       if (row.collectionModel.determineRollability()) {
@@ -64,7 +66,10 @@ class RollerScreenBloc extends ChangeNotifier {
           isScrollControlled: true,
           builder: (context) {
             return FractionallySizedBox(
-              child: RollerModalSheet(results),
+              child: RollerModalSheet(
+                results,
+                showExpanded,
+              ),
               heightFactor: .8,
             );
           });

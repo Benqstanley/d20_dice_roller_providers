@@ -27,7 +27,7 @@ class Utility {
     String expandedResult = expandedResultBuffer.toString().substring(3);
     result['collectionDescription'] = model.toString();
     result['expandedResult'] = expandedResult;
-    result['rollValue'] = rollValue;
+    result['shortResult'] = rollValue;
     return result;
   }
   static Map<String, dynamic> rollNamedCollection(NamedCollectionModel model) {

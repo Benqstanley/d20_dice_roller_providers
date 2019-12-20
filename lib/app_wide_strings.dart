@@ -10,4 +10,7 @@ class AppWideStrings{
 
   static String sessionHistoryScreenTitle = "Session History";
   static String sessionHistoryScreenPath = "/sessionHistory";
+
+  static String preferencesScreenTitle = "App Preferences";
+  static String preferencesScreenPath = "/preferencesScreen";
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RollResult extends StatelessWidget {
+  final bool expandedResult;
   final TextStyle rollResultStyle;
   final Map<String, dynamic> result;
   final TextStyle subStyle;
@@ -16,6 +17,7 @@ class RollResult extends StatelessWidget {
     this.subStyle,
     this.subPart = false,
     this.partOfMulti = false,
+    this.expandedResult = true,
   });
 
   Widget buildNamedResult(
@@ -41,6 +43,7 @@ class RollResult extends StatelessWidget {
         subStyle,
         subPart: true,
         partOfMulti: partOfMulti,
+        expandedResult: expandedResult,
       ));
     }
     if (!subPart) singleResults.add(spacer);
@@ -69,6 +72,7 @@ class RollResult extends StatelessWidget {
         subStyle: subStyle,
         subPart: true,
         partOfMulti: true,
+        expandedResult: expandedResult,
       ));
     }
     namedResults.add(spacer);
@@ -94,7 +98,9 @@ class RollResult extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Text(
-                result['expandedResult'],
+                expandedResult
+                    ? result['expandedResult']
+                    : result['shortResult'].toString(),
                 style: rollResultStyle,
               ),
             ),
