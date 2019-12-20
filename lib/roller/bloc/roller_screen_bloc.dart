@@ -45,7 +45,6 @@ class RollerScreenBloc extends ChangeNotifier {
   void rollCollections(
       BuildContext context, SessionHistoryModel sessionHistoryModel) {
     List<Map<String, dynamic>> results = [];
-    print(singleTypeCollections);
     for (SingleTypeCollectionRow row in singleTypeCollections) {
       if (row.collectionModel.determineRollability()) {
         Map result = Utility.rollSingleTypeCollection(row.collectionModel);
