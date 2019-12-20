@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/streams/pipes.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ViewNamedCollectionsBloc extends ChangeNotifier {
@@ -12,7 +14,9 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Directory namedCollectionsDirectory;
   List<NamedMultiCollectionModel> namedMultiCollections = [];
   List<NamedCollectionModel> namedCollections = [];
-  List<ChangeNotifier> collections= [];
+  List<ChangeNotifier> collections = [];
+  bool filesLoaded = false;
+  BuildContext context;
 
   bool requested = false;
   BroadcastPipe<List<ChangeNotifier>> collectionsPipe = BroadcastPipe();
@@ -21,29 +25,62 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   ViewNamedCollectionsBloc() {
     requestCollectionsPipe.listen(() => getSavedFiles().then((result) {
           if (result) {
+            filesLoaded = true;
             collectionsPipe.send(collections);
           }
         }));
   }
 
-  Future<bool> deleteFile(NamedMultiCollectionModel model) async {
+  void setContext(BuildContext context) {
+    this.context = context;
+  }
+
+  Future<bool> pendingDelete(CollectionModel model) async {
     bool fileDeleted;
     bool hasDirectory = multiCollectionsDirectory != null;
-    if (!hasDirectory) {
-      hasDirectory = await getCollectionsDirectory();
-    }
-    if (!hasDirectory) {
-      return false;
-    }
-    File fileToDelete =
-        File("${multiCollectionsDirectory.path}/${model.name}.txt");
-    if (await fileToDelete.exists()) {
-      fileToDelete.delete().then((file) async {
-        fileDeleted = !await file.exists();
-      });
-    }
-    namedMultiCollections.remove(model);
+    int indexOfModel = collections.indexOf(model);
+    collections.remove(model);
     notifyListeners();
+    Scaffold.of(context)
+        .showSnackBar(
+          SnackBar(
+            content: Text("File Deleted"),
+            action: SnackBarAction(
+              label: "Undo",
+              onPressed: () {
+                collections.insert(indexOfModel, model);
+                notifyListeners();
+              },
+            ),
+          ),
+        )
+        .closed
+        .then((reason) async {
+      if (reason != SnackBarClosedReason.action) {
+        print(hasDirectory);
+        if (!hasDirectory) {
+          hasDirectory = await getCollectionsDirectory();
+        }
+        if (!hasDirectory) {
+          return false;
+        }
+        String collectionType;
+        if(model is NamedCollectionModel){
+          collectionType = "NamedCollections";
+        }else if(model is NamedMultiCollectionModel){
+          collectionType = "MultiCollections";
+        }
+        File fileToDelete =
+            File("${multiCollectionsDirectory.path}/$collectionType/${model.name}.txt");
+        if (await fileToDelete.exists()) {
+          fileToDelete.delete().then((file) async {
+            fileDeleted = !await file.exists();
+          });
+        }
+      }
+      return fileDeleted;
+    });
+
     return fileDeleted;
   }
 
@@ -61,6 +98,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Future<bool> getSavedFiles() async {
     namedMultiCollections = [];
     namedCollections = [];
+    if(filesLoaded) return false;
     if (!await getCollectionsDirectory()) return false;
     if (await multiCollectionsDirectory.exists()) {
       List<FileSystemEntity> multiEntitites =

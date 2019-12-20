@@ -65,7 +65,7 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: collectionModel,
       child: CollectionRowContents<T>(
-        (_) => onDismissed(this),
+        (_) => onDismissed(collectionModel),
         selector,
         handleCheckboxChanged: handleCheckboxChanged,
         handleDecrement: handleDecrement,

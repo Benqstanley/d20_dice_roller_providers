@@ -30,6 +30,7 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       bloc.requestCollectionsPipe.launch();
     });
+    bloc.setContext(context);
     return StreamBuilder<List<ChangeNotifier>>(
         stream: bloc.collectionsPipe.receive,
         builder: (context, snapshot) {
@@ -84,10 +85,10 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     List<dynamic> savedCollectionRows = bloc.collections.map((collection) {
       if (collection is NamedMultiCollectionModel) {
         return CollectionRow<NamedMultiCollectionModel>.forChoose(
-            collection, bloc.deleteFile);
+            collection, bloc.pendingDelete);
       } else {
         return CollectionRow<NamedCollectionModel>.forChoose(
-            collection, bloc.deleteFile);
+            collection, bloc.pendingDelete);
       }
     }).toList();
     itemsToDisplay.addAll(savedCollectionRows);
