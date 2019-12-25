@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
+import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
@@ -60,8 +61,11 @@ class RollerScreen extends StatelessWidget {
                 child: Text('change'),
                 onPressed: () {
                   Provider.of<AppThemeBloc>(context).requestThemeUpdate(
-                      primarySwatch: Colors.blueGrey,
-                      scaffoldColor: Colors.blueGrey[100]);
+                    AppTheme(
+                        primarySwatch: Colors.blueGrey,
+                        scaffoldColor: Colors.blueGrey[100],
+                        drawerHeaderColor: Colors.black),
+                  );
                 },
               )
             ],

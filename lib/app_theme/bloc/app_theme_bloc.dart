@@ -11,54 +11,58 @@ enum ThemeColors {
 }
 
 class AppThemeBloc extends ChangeNotifier {
-  ThemeData themeData = ThemeData(
-      textTheme: TextTheme(
-          headline: TextStyle(fontSize: 26),
-          button: TextStyle(
-            fontSize: 18,
-          ),
-          display1: TextStyle(
-            fontSize: 22,
-            color: AppTheme.fontColor,
-          )),
-      primarySwatch: AppTheme.colorSwatch,
-      dividerColor: AppTheme.dividerColor,
-      scaffoldBackgroundColor: AppTheme.quantityBoxBackground,
-      errorColor: AppTheme.dismissBackground);
+  AppTheme appTheme;
+  ThemeData themeData;
 
-  void requestThemeUpdate({
-    Color dividerColor,
-    Color scaffoldColor,
-    Color errorColor,
-    MaterialColor primarySwatch,
-    Color fontColor,
-  }) {
-    if(primarySwatch == null && fontColor == null) {
-      themeData = themeData.copyWith(
-        errorColor: errorColor,
+  AppThemeBloc({this.appTheme}){
+    appTheme = appTheme ?? AppTheme.defaultTheme();
+    themeData = themeData = ThemeData(
+        textTheme: TextTheme(
+            headline: TextStyle(fontSize: 26),
+            title: TextStyle(color: appTheme.appBarTitle),
+            button: TextStyle(
+              fontSize: 18,
+            ),
+            display1: TextStyle(
+              fontSize: 22,
+              color: defaultFontColor,
+            )),
+        primarySwatch: defaultColorSwatch,
+        dividerColor: defaultDividerColor,
+        scaffoldBackgroundColor: defaultColorSwatch[100],
+        errorColor: defaultErrorColor);
+  }
+
+  void requestThemeUpdate(AppTheme appTheme) {
+    Color dividerColor;
+    Color errorColor;
+    Color scaffoldColor;
+    Color fontColor;
+    MaterialColor colorSwatch;
+    if (appTheme.primarySwatch == null) {
+      appTheme.primarySwatch = this.appTheme.primarySwatch;
+    }
+    this.appTheme = appTheme;
+    dividerColor = appTheme.dividerColor ?? themeData.dividerColor;
+    errorColor = appTheme.errorColor ?? themeData.errorColor;
+    scaffoldColor = appTheme.scaffoldColor ?? themeData.scaffoldBackgroundColor;
+    fontColor = appTheme.fontColor ?? themeData.textTheme.display1.color;
+    colorSwatch = appTheme.primarySwatch;
+    themeData = ThemeData(
+        textTheme: TextTheme(
+            headline: TextStyle(fontSize: 26),
+            button: TextStyle(
+              fontSize: 18,
+            ),
+            display1: TextStyle(
+              fontSize: 22,
+              color: fontColor,
+            )),
+        primarySwatch: colorSwatch,
         dividerColor: dividerColor,
         scaffoldBackgroundColor: scaffoldColor,
-      );
-    }else{
-      dividerColor = dividerColor ?? themeData.dividerColor;
-      errorColor = errorColor ?? themeData.errorColor;
-      scaffoldColor = scaffoldColor ?? themeData.scaffoldBackgroundColor;
-      fontColor = fontColor ?? themeData.textTheme.display1.color;
-      themeData = ThemeData(
-          textTheme: TextTheme(
-              headline: TextStyle(fontSize: 26),
-              button: TextStyle(
-                fontSize: 18,
-              ),
-              display1: TextStyle(
-                fontSize: 22,
-                color: fontColor,
-              )),
-          primarySwatch: primarySwatch,
-          dividerColor: dividerColor,
-          scaffoldBackgroundColor: scaffoldColor,
-          errorColor: errorColor);
-    }
+        errorColor: errorColor);
     notifyListeners();
   }
+
 }
