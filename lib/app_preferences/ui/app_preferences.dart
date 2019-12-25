@@ -60,7 +60,6 @@ class ThemePickerState extends PreferenceDialogState {
 
   void initState() {
     super.initState();
-
     if (widget.onlySaveOnSubmit) {
       PrefService.clearCache();
       PrefService.enableCaching();
@@ -82,7 +81,6 @@ class ThemePickerState extends PreferenceDialogState {
         future: PrefService.init(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Container();
-
           return Container(
             width: double.maxFinite,
             child: GridView.builder(
@@ -111,6 +109,7 @@ class ThemePickerState extends PreferenceDialogState {
                 FlatButton(
                   child: Text(widget.cancelText),
                   onPressed: () {
+                    Provider.of<AppThemeBloc>(context).undoTemp();
                     Navigator.of(context).pop();
                   },
                 )
@@ -149,14 +148,11 @@ class _ColorTileState extends State<ColorTile> {
 
   @override
   Widget build(BuildContext context) {
-    print("Widget ${widget.index} is Selected $isSelected");
-    print("selected index is ${widget.selectedIndex}");
     isSelected = widget.selectedIndex == widget.index;
     return InkWell(
       onTap: () {
         setState(() {
           widget.setIndex();
-          isSelected = true;
         });
       },
       child: Container(

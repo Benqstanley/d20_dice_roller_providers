@@ -62,8 +62,8 @@ class AppThemeBloc extends ChangeNotifier {
   }
 
   void updateFromPreferences() {
+    PrefService.disableCaching();
     int themeNumber = PrefService.getInt('app_theme');
-    print(themeNumber);
     appTheme = AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
     requestThemeUpdate(appTheme);
   }
