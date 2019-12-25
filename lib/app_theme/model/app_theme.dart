@@ -22,8 +22,12 @@ class AppTheme {
     this.primarySwatch,
     this.fontColor,
     this.drawerHeaderColor = Colors.white,
-    this.appBarTitle,
-  });
+    this.appBarTitle = Colors.white,
+  }) {
+    if (this.scaffoldColor == null) {
+      this.scaffoldColor = primarySwatch[100];
+    }
+  }
 
   factory AppTheme.defaultTheme() {
     return AppTheme(

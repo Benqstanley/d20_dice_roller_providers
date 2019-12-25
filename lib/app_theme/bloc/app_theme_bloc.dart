@@ -10,11 +10,35 @@ enum ThemeColors {
   bluegrey,
 }
 
+List<AppTheme> appThemes = [
+  AppTheme(primarySwatch: Colors.cyan),
+  AppTheme(primarySwatch: Colors.purple),
+  AppTheme(primarySwatch: Colors.blueGrey),
+  AppTheme(primarySwatch: Colors.blue),
+  AppTheme(primarySwatch: Colors.green),
+  AppTheme(primarySwatch: Colors.deepOrange),
+  AppTheme(primarySwatch: Colors.pink),
+  AppTheme(primarySwatch: Colors.teal),
+  AppTheme(primarySwatch: Colors.lightBlue),
+  AppTheme(primarySwatch: Colors.lime)
+];
+
+int currentTheme = -1;
+
+AppTheme nextTheme(){
+  if(currentTheme < appThemes.length - 1){
+    currentTheme++;
+  }else{
+    currentTheme = 0;
+  }
+  return appThemes[currentTheme];
+}
+
 class AppThemeBloc extends ChangeNotifier {
   AppTheme appTheme;
   ThemeData themeData;
 
-  AppThemeBloc({this.appTheme}){
+  AppThemeBloc({this.appTheme}) {
     appTheme = appTheme ?? AppTheme.defaultTheme();
     themeData = themeData = ThemeData(
         textTheme: TextTheme(
@@ -50,6 +74,7 @@ class AppThemeBloc extends ChangeNotifier {
     colorSwatch = appTheme.primarySwatch;
     themeData = ThemeData(
         textTheme: TextTheme(
+            title: TextStyle(color: appTheme.appBarTitle),
             headline: TextStyle(fontSize: 26),
             button: TextStyle(
               fontSize: 18,
@@ -64,5 +89,4 @@ class AppThemeBloc extends ChangeNotifier {
         errorColor: errorColor);
     notifyListeners();
   }
-
 }

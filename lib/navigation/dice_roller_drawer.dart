@@ -1,8 +1,5 @@
-import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
-import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DiceRollerDrawer extends StatelessWidget {
   @override
@@ -13,9 +10,7 @@ class DiceRollerDrawer extends StatelessWidget {
         child: Text(
           'Dice Roller',
           style: TextStyle(
-            fontSize: 26,
-            color: Provider.of<AppThemeBloc>(context).appTheme.drawerHeaderColor,
-          ),
+              fontSize: 26, color: Theme.of(context).primaryTextTheme.title.color),
         ),
         decoration: BoxDecoration(color: appColor.primary),
       ),

@@ -91,7 +91,9 @@ class PageWrapper extends StatelessWidget {
       body: child,
       appBar: appBar ??
           AppBar(
-            title: Text(title),
+            title: Text(
+              title,
+            ),
           ),
     );
   }
