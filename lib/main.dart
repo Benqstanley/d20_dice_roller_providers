@@ -28,6 +28,9 @@ class DiceRollerMain extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      appThemeBloc.updateFromPreferences();
+    });
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<RollerScreenBloc>(

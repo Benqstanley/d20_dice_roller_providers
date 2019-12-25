@@ -34,6 +34,7 @@ class AppThemeBloc extends ChangeNotifier {
 
   AppThemeBloc({this.appTheme}) {
     int themeNumber = PrefService.getInt('app_theme');
+    print(themeNumber);
     appTheme = AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
     appTheme = appTheme ?? AppTheme.defaultTheme();
     themeData = themeData = ThemeData(
