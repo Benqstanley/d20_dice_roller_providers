@@ -16,13 +16,13 @@ class CreateNamedCollectionScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (ctx) => CreateScreenBloc(),
+          create: (ctx) => CreateScreenBloc(),
         ),
         ChangeNotifierProvider(
-          builder: (ctx) => NamedMultiCollectionCreateModel(),
+          create: (ctx) => NamedMultiCollectionCreateModel(),
         ),
         ChangeNotifierProvider(
-          builder: (ctx) => NamedCollectionCreateModel(),
+          create: (ctx) => NamedCollectionCreateModel(),
         )
       ],
       child: CreateNamedCollectionContents(),
@@ -153,13 +153,13 @@ class CreateNamedCollectionContents extends StatelessWidget {
                                     ),
                                     providers: [
                                       ChangeNotifierProvider(
-                                        builder: (ctx) => CreateScreenBloc(),
+                                        create: (ctx) => CreateScreenBloc(),
                                       ),
                                       ChangeNotifierProvider.value(
                                         value: namedMultiCollectionModel,
                                       ),
                                       ChangeNotifierProvider(
-                                        builder: (ctx) =>
+                                        create: (ctx) =>
                                             NamedCollectionCreateModel(),
                                       ),
                                     ])))

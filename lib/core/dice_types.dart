@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 enum DiceType {
   d4,
   d6,

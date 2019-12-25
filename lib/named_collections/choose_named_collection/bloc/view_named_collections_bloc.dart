@@ -27,6 +27,8 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
           if (result) {
             filesLoaded = true;
             collectionsPipe.send(collections);
+          } else{
+            collectionsPipe.send(null);
           }
         }));
   }

@@ -1,5 +1,5 @@
 import 'package:d20_dice_roller/app_preferences/ui/app_preferences.dart';
-import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
+import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
@@ -15,10 +15,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PrefService.init(prefix: 'pref_');
-  PrefService.setDefaultValues({
-    'roll_detail': true,
-    'theme_color': 'green'
-  });
+  PrefService.setDefaultValues({'roll_detail': true, 'theme_color': 'green'});
 
   runApp(DiceRollerMain());
 }
@@ -26,56 +23,48 @@ void main() async {
 class DiceRollerMain extends StatelessWidget {
   final SessionHistoryModel sessionHistoryModel = SessionHistoryModel();
   final RollerScreenBloc rollerScreenModel = RollerScreenBloc();
+  final AppThemeBloc appThemeBloc = AppThemeBloc();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<RollerScreenBloc>(
-            builder: (context) => rollerScreenModel),
-        ChangeNotifierProvider<SessionHistoryModel>(
-            builder: (context) => sessionHistoryModel),
-      ],
-      child: MaterialApp(
-        title: 'Dice Roller',
-        theme: ThemeData(
-            textTheme: TextTheme(
-                headline: TextStyle(fontSize: 26),
-                button: TextStyle(
-                  fontSize: 18,
-                ),
-                display1: TextStyle(
-                  fontSize: 22,
-                  color: AppTheme.fontColor,
-                )),
-            primarySwatch: AppTheme.colorSwatch,
-            dividerColor: AppTheme.dividerColor,
-            scaffoldBackgroundColor: AppTheme.colorSwatch[100]),
-        home: PageWrapper(
-          title: AppWideStrings.rollerScreenTitle,
-          child: RollerScreen(),
-        ),
-        routes: {
-          AppWideStrings.sessionHistoryScreenPath: (ctx) {
-            return PageWrapper(
-              title: AppWideStrings.sessionHistoryScreenTitle,
-              child: SessionHistoryScreen(),
-            );
-          },
-          AppWideStrings.createCollectionPath: (ctx) =>
-              CreateNamedCollectionScreen(),
-          AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
-                child: ChooseNamedCollectionsTop(),
-                title: AppWideStrings.viewNamedCollectionTitle,
-              ),
-          AppWideStrings.preferencesScreenPath: (ctx) => PageWrapper(
-            child: AppPreferences(),
-            title: AppWideStrings.preferencesScreenTitle,
+        providers: [
+          ChangeNotifierProvider<RollerScreenBloc>(
+              create: (context) => rollerScreenModel),
+          ChangeNotifierProvider<SessionHistoryModel>(
+              create: (context) => sessionHistoryModel),
+          ChangeNotifierProvider<AppThemeBloc>(
+              create: (context) => appThemeBloc)
+        ],
+        child: Builder(
+          builder: (context) => MaterialApp(
+            title: 'Dice Roller',
+            theme: Provider.of<AppThemeBloc>(context).themeData,
+            home: PageWrapper(
+              title: AppWideStrings.rollerScreenTitle,
+              child: RollerScreen(),
+            ),
+            routes: {
+              AppWideStrings.sessionHistoryScreenPath: (ctx) {
+                return PageWrapper(
+                  title: AppWideStrings.sessionHistoryScreenTitle,
+                  child: SessionHistoryScreen(),
+                );
+              },
+              AppWideStrings.createCollectionPath: (ctx) =>
+                  CreateNamedCollectionScreen(),
+              AppWideStrings.viewNamedCollectionsPath: (ctx) => PageWrapper(
+                    child: ChooseNamedCollectionsTop(),
+                    title: AppWideStrings.viewNamedCollectionTitle,
+                  ),
+              AppWideStrings.preferencesScreenPath: (ctx) => PageWrapper(
+                    child: AppPreferences(),
+                    title: AppWideStrings.preferencesScreenTitle,
+                  ),
+            },
           ),
-        },
-      ),
-    );
+        ));
   }
 }
 

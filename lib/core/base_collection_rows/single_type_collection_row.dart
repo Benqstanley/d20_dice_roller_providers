@@ -86,7 +86,7 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
       onDismissed: onDismissed,
       background: Container(
           decoration: BoxDecoration(
-            color: AppTheme.dismissBackground,
+            color: Theme.of(context).errorColor,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(

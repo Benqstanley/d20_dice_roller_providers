@@ -78,7 +78,7 @@ class DiceRollerDrawer extends StatelessWidget {
     ];
     return Drawer(
       child: Container(
-        color: AppTheme.colorSwatch[100],
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: ListView.builder(
           padding: EdgeInsets.zero,
           itemCount: drawerItems.length,

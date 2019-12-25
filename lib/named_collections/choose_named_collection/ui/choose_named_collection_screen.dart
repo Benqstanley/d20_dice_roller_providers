@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class ChooseNamedCollectionsTop extends StatelessWidget {
   final ViewNamedCollectionsBloc viewNamedCollectionsBloc =
-      ViewNamedCollectionsBloc();
+  ViewNamedCollectionsBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,11 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.connectionState != ConnectionState.waiting &&
+              !snapshot.hasData) {
+            return Center(
+              child: Text("There is nothing here!"),
             );
           }
           if (snapshot.hasData) {
@@ -95,8 +100,8 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     return itemsToDisplay;
   }
 
-  List<CollectionRow> prepareRowsToAdd(
-      List<dynamic> list, RollerScreenBloc rollerScreenModel) {
+  List<CollectionRow> prepareRowsToAdd(List<dynamic> list,
+      RollerScreenBloc rollerScreenModel) {
     List<CollectionRow> toAdd = [];
     list.forEach((row) {
       if (row is CollectionRow) {
@@ -104,12 +109,14 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
           if (row.collectionModel is NamedMultiCollectionModel) {
             for (int i = 0; i < row.collectionModel.counterState; i++) {
               toAdd.add(CollectionRow<NamedMultiCollectionModel>.forRoller(
-                  row.collectionModel.copy(), rollerScreenModel.dismissCollectionRow));
+                  row.collectionModel.copy(),
+                  rollerScreenModel.dismissCollectionRow));
             }
           } else {
             for (int i = 0; i < row.collectionModel.counterState; i++) {
               toAdd.add(CollectionRow<NamedCollectionModel>.forRoller(
-                  row.collectionModel.copy(), rollerScreenModel.dismissCollectionRow));
+                  row.collectionModel.copy(),
+                  rollerScreenModel.dismissCollectionRow));
             }
           }
         }

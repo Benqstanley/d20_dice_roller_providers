@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AppTheme{
-  static MaterialColor colorSwatch = Colors.green;
-  static MaterialColor fontColor = Colors.black;
-  static MaterialColor dividerColor = Colors.black;
-  static MaterialColor drawerHeaderColor = Colors.white;
-  static MaterialColor dismissBackground = Colors.red;
-  static MaterialColor quantityBoxBackground = colorSwatch[100];
+  static Color colorSwatch = Colors.green;
+  static Color fontColor = Colors.black;
+  static Color dividerColor = Colors.black;
+  static Color drawerHeaderColor = Colors.white;
+  static Color dismissBackground = Colors.red;
+  static Color quantityBoxBackground = Colors.green[100];
 }
