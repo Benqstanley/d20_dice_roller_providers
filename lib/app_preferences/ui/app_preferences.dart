@@ -1,5 +1,7 @@
+import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:preferences/preferences.dart';
+import 'package:provider/provider.dart';
 
 class AppPreferences extends StatefulWidget {
   @override
@@ -17,6 +19,18 @@ class _AppPreferencesState extends State<AppPreferences> {
         defaultVal: true,
       ),
       PreferenceTitle('App Theme'),
+      PreferenceDialogLink(
+        "Theme",
+        onPop: () {
+          Provider.of<AppThemeBloc>(context).updateFromPreferences();
+        },
+        dialog: ThemePicker(
+          null,
+          cancelText: "Cancel",
+          submitText: "Ok",
+          onlySaveOnSubmit: true,
+        ),
+      )
     ]);
   }
 }
@@ -42,6 +56,8 @@ class ThemePicker extends PreferenceDialog {
 }
 
 class ThemePickerState extends PreferenceDialogState {
+  int selectedWidget = PrefService.getInt('app_theme');
+
   void initState() {
     super.initState();
 
@@ -67,9 +83,24 @@ class ThemePickerState extends PreferenceDialogState {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Container();
 
-          return GridView(
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          return Container(
+            width: double.maxFinite,
+            child: GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              shrinkWrap: true,
+              itemCount: themeColors.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ColorTile(themeColors[index], index, selectedWidget, () {
+                  PrefService.setInt("app_theme", index);
+                  Provider.of<AppThemeBloc>(context).tempUpdate(index);
+                  setState(() {
+                    selectedWidget = index;
+                  });
+                }),
+              ),
+            ),
           );
         },
       ),
@@ -97,6 +128,51 @@ class ThemePickerState extends PreferenceDialogState {
                   },
                 )
               ]),
+    );
+  }
+}
+
+class ColorTile extends StatefulWidget {
+  final MaterialColor color;
+  final int index;
+  final int selectedIndex;
+  final Function setIndex;
+
+  ColorTile(this.color, this.index, this.selectedIndex, this.setIndex);
+
+  @override
+  _ColorTileState createState() => _ColorTileState();
+}
+
+class _ColorTileState extends State<ColorTile> {
+  bool isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    print("Widget ${widget.index} is Selected $isSelected");
+    print("selected index is ${widget.selectedIndex}");
+    isSelected = widget.selectedIndex == widget.index;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          widget.setIndex();
+          isSelected = true;
+        });
+      },
+      child: Container(
+        child: Stack(
+          children: isSelected
+              ? [
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Icon(Icons.check),
+                  )
+                ]
+              : <Widget>[],
+        ),
+        color: widget.color,
+      ),
     );
   }
 }

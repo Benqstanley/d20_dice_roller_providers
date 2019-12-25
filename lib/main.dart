@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PrefService.init(prefix: 'pref_');
-  PrefService.setDefaultValues({'roll_detail': true, 'theme_color': 'green'});
+  PrefService.setDefaultValues({'roll_detail': true, 'app_theme': 0});
 
   runApp(DiceRollerMain());
 }

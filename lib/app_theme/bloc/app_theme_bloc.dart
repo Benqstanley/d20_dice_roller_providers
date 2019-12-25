@@ -1,6 +1,7 @@
 import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:preferences/preference_service.dart';
 
 enum ThemeColors {
   green,
@@ -10,28 +11,29 @@ enum ThemeColors {
   bluegrey,
 }
 
-List<AppTheme> appThemes = [
-  AppTheme(primarySwatch: Colors.cyan),
-  AppTheme(primarySwatch: Colors.purple),
-  AppTheme(primarySwatch: Colors.blueGrey),
-  AppTheme(primarySwatch: Colors.blue),
-  AppTheme(primarySwatch: Colors.green),
-  AppTheme(primarySwatch: Colors.deepOrange),
-  AppTheme(primarySwatch: Colors.pink),
-  AppTheme(primarySwatch: Colors.teal),
-  AppTheme(primarySwatch: Colors.lightBlue),
-  AppTheme(primarySwatch: Colors.lime)
+List<MaterialColor> themeColors = [
+  Colors.green,
+  Colors.blue,
+  Colors.lime,
+  Colors.lightBlue,
+  Colors.teal,
+  Colors.cyan,
+  Colors.blueGrey,
+  Colors.purple,
+  Colors.deepOrange,
+  Colors.deepPurple,
+  Colors.pink
 ];
 
 int currentTheme = -1;
 
-AppTheme nextTheme(){
-  if(currentTheme < appThemes.length - 1){
+AppTheme nextTheme() {
+  if (currentTheme < themeColors.length - 1) {
     currentTheme++;
-  }else{
+  } else {
     currentTheme = 0;
   }
-  return appThemes[currentTheme];
+  return AppTheme(primarySwatch: themeColors[currentTheme]);
 }
 
 class AppThemeBloc extends ChangeNotifier {
@@ -39,6 +41,8 @@ class AppThemeBloc extends ChangeNotifier {
   ThemeData themeData;
 
   AppThemeBloc({this.appTheme}) {
+    int themeNumber = PrefService.getInt('app_theme');
+    appTheme = AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
     appTheme = appTheme ?? AppTheme.defaultTheme();
     themeData = themeData = ThemeData(
         textTheme: TextTheme(
@@ -55,6 +59,23 @@ class AppThemeBloc extends ChangeNotifier {
         dividerColor: defaultDividerColor,
         scaffoldBackgroundColor: defaultColorSwatch[100],
         errorColor: defaultErrorColor);
+  }
+
+  void updateFromPreferences() {
+    int themeNumber = PrefService.getInt('app_theme');
+    print(themeNumber);
+    appTheme = AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
+    requestThemeUpdate(appTheme);
+  }
+
+  void tempUpdate(int index) {
+    int themeNumber = index;
+    AppTheme tempAppTheme = AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
+    requestThemeUpdate(tempAppTheme);
+  }
+
+  void undoTemp(){
+    requestThemeUpdate(appTheme);
   }
 
   void requestThemeUpdate(AppTheme appTheme) {
