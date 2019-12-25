@@ -150,12 +150,15 @@ class _ColorTileState extends State<ColorTile> {
   Widget build(BuildContext context) {
     isSelected = widget.selectedIndex == widget.index;
     return InkWell(
+      borderRadius: BorderRadius.circular(5.0),
       onTap: () {
         setState(() {
           widget.setIndex();
         });
       },
       child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0),
+        color: widget.color),
         child: Stack(
           children: isSelected
               ? [
@@ -167,7 +170,6 @@ class _ColorTileState extends State<ColorTile> {
                 ]
               : <Widget>[],
         ),
-        color: widget.color,
       ),
     );
   }
