@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class DiceRollerDrawer extends StatelessWidget {
           'Dice Roller',
           style: TextStyle(
             fontSize: 26,
-            color: Colors.white,
+            color: AppTheme.drawerHeaderColor,
           ),
         ),
         decoration: BoxDecoration(color: appColor.primary),
@@ -77,7 +78,7 @@ class DiceRollerDrawer extends StatelessWidget {
     ];
     return Drawer(
       child: Container(
-        color: Colors.green[100],
+        color: AppTheme.colorSwatch[100],
         child: ListView.builder(
           padding: EdgeInsets.zero,
           itemCount: drawerItems.length,

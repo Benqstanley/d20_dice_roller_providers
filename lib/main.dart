@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/app_preferences/ui/app_preferences.dart';
+import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
@@ -46,11 +47,11 @@ class DiceRollerMain extends StatelessWidget {
                 ),
                 display1: TextStyle(
                   fontSize: 22,
-                  color: Colors.black,
+                  color: AppTheme.fontColor,
                 )),
-            primarySwatch: Colors.green,
-            dividerColor: Colors.black,
-            scaffoldBackgroundColor: Colors.green[100]),
+            primarySwatch: AppTheme.colorSwatch,
+            dividerColor: AppTheme.dividerColor,
+            scaffoldBackgroundColor: AppTheme.colorSwatch[100]),
         home: PageWrapper(
           title: AppWideStrings.rollerScreenTitle,
           child: RollerScreen(),

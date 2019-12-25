@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +122,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
       onDismissed: onDismissed,
       background: Container(
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: AppTheme.dismissBackground,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(
@@ -208,7 +209,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                 alignment: AlignmentDirectional.centerEnd,
                 padding: const EdgeInsets.all(4),
                 decoration:
-                    BoxDecoration(border: Border.all(), color: Colors.white),
+                    BoxDecoration(border: Border.all(), color: AppTheme.quantityBoxBackground),
                 child: Text(counterState),
               ),
             ),

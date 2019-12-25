@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/app_theme/model/app_theme.dart';
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
       onDismissed: onDismissed,
       background: Container(
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: AppTheme.dismissBackground,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(
