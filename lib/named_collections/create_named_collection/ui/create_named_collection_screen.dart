@@ -164,6 +164,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                                       ),
                                     ])))
                         .then((result) {
+                      print(result);
                       if (result != null) {
                         namedMultiCollectionModel.absorbNamedCollection(result);
                       }
@@ -242,6 +243,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   if (inPart) {
                     namedCollectionCreateModel.singleTypeRows
                         .removeWhere((element) {
+                          print(element.collectionModel.determineRollability());
                       return !element.collectionModel.determineRollability();
                     });
                     NamedCollectionModel partModel;
@@ -251,17 +253,16 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     Navigator.of(context).pop(partModel);
                   } else {
                     namedCollectionCreateModel
-                          .saveCollection()
-                          .then((value) async {
-                        if (value) {
-                          //TODO: show snackbar to redirect to saved collections
-                          //TODO: and refresh create screen
-                          Navigator.of(context).pushReplacementNamed(
-                              AppWideStrings.viewNamedCollectionsPath);
-                        }
-                      });
-                    }
-
+                        .saveCollection()
+                        .then((value) async {
+                      if (value) {
+                        //TODO: show snackbar to redirect to saved collections
+                        //TODO: and refresh create screen
+                        Navigator.of(context).pushReplacementNamed(
+                            AppWideStrings.viewNamedCollectionsPath);
+                      }
+                    });
+                  }
                 },
               ),
             ],
