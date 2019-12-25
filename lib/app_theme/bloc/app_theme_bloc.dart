@@ -3,26 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:preferences/preference_service.dart';
 
-enum ThemeColors {
-  green,
-  blue,
-  cyan,
-  purple,
-  bluegrey,
-}
-
 List<MaterialColor> themeColors = [
-  Colors.green,
-  Colors.blue,
-  Colors.lime,
-  Colors.lightBlue,
-  Colors.teal,
-  Colors.cyan,
-  Colors.blueGrey,
-  Colors.purple,
   Colors.deepOrange,
+  Colors.pink,
+  Colors.purple,
   Colors.deepPurple,
-  Colors.pink
+  Colors.blueGrey,
+  Colors.blue,
+  Colors.lightBlue,
+  Colors.cyan,
+  Colors.teal,
+  Colors.green,
+  Colors.lime,
 ];
 
 int currentTheme = -1;
@@ -70,11 +62,12 @@ class AppThemeBloc extends ChangeNotifier {
 
   void tempUpdate(int index) {
     int themeNumber = index;
-    AppTheme tempAppTheme = AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
+    AppTheme tempAppTheme =
+        AppTheme(primarySwatch: themeColors[themeNumber ?? 0]);
     requestThemeUpdate(tempAppTheme);
   }
 
-  void undoTemp(){
+  void undoTemp() {
     requestThemeUpdate(appTheme);
   }
 
