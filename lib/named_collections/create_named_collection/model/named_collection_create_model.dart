@@ -10,8 +10,18 @@ class NamedCollectionCreateModel extends CreateModel {
   TextEditingController nameController = TextEditingController();
   List<SingleTypeCollectionRow> singleTypeRows = [];
 
-  NamedCollectionCreateModel() {
-    addSingleTypeCollectionRow();
+  NamedCollectionCreateModel({NamedCollectionModel model}) {
+    List<SingleTypeCollectionModel> models = model?.singleTypeCollections;
+    if(model?.name != null){
+      nameController.text = model.name;
+    }
+    if (models == null) {
+      addSingleTypeCollectionRow();
+    } else {
+      models.forEach((model) {
+        addSingleTypeCollectionRow(singleTypeCollectionModel: model);
+      });
+    }
   }
 
   void dismissRow(SingleTypeCollectionRow toDismiss) {
@@ -27,10 +37,11 @@ class NamedCollectionCreateModel extends CreateModel {
     addSingleTypeCollectionRow();
   }
 
-  void addSingleTypeCollectionRow() {
+  void addSingleTypeCollectionRow(
+      {SingleTypeCollectionModel singleTypeCollectionModel}) {
     singleTypeRows.add(
       SingleTypeCollectionRow(
-        SingleTypeCollectionModel(),
+        singleTypeCollectionModel ?? SingleTypeCollectionModel(),
         dismissRow,
       ),
     );
@@ -40,6 +51,13 @@ class NamedCollectionCreateModel extends CreateModel {
   @override
   String toString() {
     return nameController.text;
+  }
+
+  factory NamedCollectionCreateModel.fromCollectionModel(
+      NamedCollectionModel model) {
+    var namedCollectionCreateModel = NamedCollectionCreateModel(model: model);
+    namedCollectionCreateModel.nameController.text = model.name;
+    return namedCollectionCreateModel;
   }
 
   NamedCollectionModel returnModel() {

@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class ChooseNamedCollectionsTop extends StatelessWidget {
   final ViewNamedCollectionsBloc viewNamedCollectionsBloc =
-  ViewNamedCollectionsBloc();
+      ViewNamedCollectionsBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +21,37 @@ class ChooseNamedCollectionsTop extends StatelessWidget {
   }
 }
 
-class ChooseNamedCollectionsScreen extends StatelessWidget {
+class ChooseNamedCollectionsScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    ViewNamedCollectionsBloc bloc;
-    RollerScreenBloc rollerScreenBloc;
+  _ChooseNamedCollectionsScreenState createState() =>
+      _ChooseNamedCollectionsScreenState();
+}
+
+class _ChooseNamedCollectionsScreenState
+    extends State<ChooseNamedCollectionsScreen> {
+  ViewNamedCollectionsBloc bloc;
+  RollerScreenBloc rollerScreenBloc;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     rollerScreenBloc = Provider.of<RollerScreenBloc>(context);
     bloc = Provider.of<ViewNamedCollectionsBloc>(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      bloc.requestCollectionsPipe.launch();
-    });
+    bloc.requestCollectionsPipe.launch();
     bloc.setContext(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder<List<ChangeNotifier>>(
         stream: bloc.collectionsPipe.receive,
         builder: (context, snapshot) {
+          print("Stream receiving");
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -56,8 +73,9 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       if (index <= 1) {
                         return itemsToDisplay[index];
-                      }else{
-                        return mapCollectionToRow(bloc.collections[index - 2], bloc);
+                      } else {
+                        return mapCollectionToRow(
+                            bloc.collections[index - 2], bloc);
                       }
                     },
                   ),
@@ -95,7 +113,8 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     return itemsToDisplay;
   }
 
-  CollectionRow mapCollectionToRow(CollectionModel collection, ViewNamedCollectionsBloc bloc){
+  CollectionRow mapCollectionToRow(
+      CollectionModel collection, ViewNamedCollectionsBloc bloc) {
     if (collection is NamedMultiCollectionModel) {
       return CollectionRow<NamedMultiCollectionModel>.forChoose(
           collection, bloc.pendingDelete);
@@ -105,8 +124,8 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
     }
   }
 
-  List<CollectionRow> prepareRowsToAdd(List<dynamic> list,
-      RollerScreenBloc rollerScreenModel) {
+  List<CollectionRow> prepareRowsToAdd(
+      List<dynamic> list, RollerScreenBloc rollerScreenModel) {
     List<CollectionRow> toAdd = [];
     list.forEach((row) {
       if (row is CollectionRow) {

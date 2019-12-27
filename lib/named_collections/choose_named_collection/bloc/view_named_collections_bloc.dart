@@ -24,6 +24,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
 
   ViewNamedCollectionsBloc() {
     requestCollectionsPipe.listen(() => getSavedFiles().then((result) {
+      print('getSavedFiles + $result');
           if (result) {
             filesLoaded = true;
             collectionsPipe.send(collections);
@@ -96,9 +97,9 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   }
 
   Future<bool> getSavedFiles() async {
+    if(filesLoaded) return true;
     namedMultiCollections = [];
     namedCollections = [];
-    if(filesLoaded) return false;
     if (!await getCollectionsDirectory()) return false;
     if (await multiCollectionsDirectory.exists()) {
       List<FileSystemEntity> multiEntitites =

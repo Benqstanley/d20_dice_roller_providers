@@ -1,5 +1,7 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
@@ -9,7 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateNamedCollectionScreen extends StatelessWidget {
-  CreateNamedCollectionScreen();
+  final CollectionModel modelToEdit;
+
+  CreateNamedCollectionScreen({this.modelToEdit});
+
+  factory CreateNamedCollectionScreen.forEdit(CollectionModel modelToEdit) {
+    var screen = CreateNamedCollectionScreen(
+      modelToEdit: modelToEdit,
+    );
+
+    return screen;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +30,29 @@ class CreateNamedCollectionScreen extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => CreateScreenBloc(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => NamedMultiCollectionCreateModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => NamedCollectionCreateModel(),
-        )
+        ChangeNotifierProvider(create: (ctx) {
+          return modelToEdit is NamedMultiCollectionModel
+              ? NamedMultiCollectionCreateModel()
+              : NamedMultiCollectionCreateModel();
+        }),
+        ChangeNotifierProvider(create: (ctx) {
+          return modelToEdit is NamedCollectionModel
+              ? NamedCollectionCreateModel(model: modelToEdit)
+              : NamedCollectionCreateModel();
+        })
       ],
-      child: CreateNamedCollectionContents(),
+      child: CreateNamedCollectionContents(
+        forEditing: modelToEdit != null,
+      ),
     );
   }
 }
 
 class CreateNamedCollectionContents extends StatelessWidget {
   final bool inPart;
+  final bool forEditing;
 
-  CreateNamedCollectionContents({this.inPart = false});
+  CreateNamedCollectionContents({this.inPart = false, this.forEditing = false});
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +62,11 @@ class CreateNamedCollectionContents extends StatelessWidget {
         Provider.of<NamedCollectionCreateModel>(context);
     CreateScreenBloc bloc = Provider.of<CreateScreenBloc>(context);
     bool isMulti = bloc.isMulti;
-    print("rebuilding with isMulti: $isMulti");
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
       ),
-      displayDrawer: !inPart,
+      displayDrawer: !inPart && !forEditing,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -89,6 +107,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: TextField(
+            enabled: !forEditing,
             controller: !isMulti
                 ? namedCollectionCreateModel.nameController
                 : inPart
@@ -99,7 +118,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
             ),
           ),
         ),
-        if (!inPart)
+        if (!inPart && !forEditing)
           Column(
             children: <Widget>[
               Text("Multi"),
@@ -243,7 +262,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   if (inPart) {
                     namedCollectionCreateModel.singleTypeRows
                         .removeWhere((element) {
-                          print(element.collectionModel.determineRollability());
+                      print(element.collectionModel.determineRollability());
                       return !element.collectionModel.determineRollability();
                     });
                     NamedCollectionModel partModel;
