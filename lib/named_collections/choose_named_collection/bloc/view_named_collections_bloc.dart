@@ -51,7 +51,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
               label: "Undo",
               onPressed: () {
                 collections.insert(indexOfModel, model);
-                notifyListeners();
+                collectionsPipe.send(collections);
               },
             ),
           ),
@@ -59,21 +59,20 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
         .closed
         .then((reason) async {
       if (reason != SnackBarClosedReason.action) {
-        print(hasDirectory);
         if (!hasDirectory) {
           hasDirectory = await getCollectionsDirectory();
         }
         if (!hasDirectory) {
           return false;
         }
-        String collectionType;
+        Directory directory;
         if(model is NamedCollectionModel){
-          collectionType = "NamedCollections";
+          directory = namedCollectionsDirectory;
         }else if(model is NamedMultiCollectionModel){
-          collectionType = "MultiCollections";
+          directory = multiCollectionsDirectory;
         }
         File fileToDelete =
-            File("${multiCollectionsDirectory.path}/$collectionType/${model.name}.txt");
+            File("${directory.path}/${model.name}.txt");
         if (await fileToDelete.exists()) {
           fileToDelete.delete().then((file) async {
             fileDeleted = !await file.exists();
@@ -82,7 +81,6 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
       }
       return fileDeleted;
     });
-
     return fileDeleted;
   }
 

@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/app_wide_strings.dart';
+import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
@@ -51,9 +52,13 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: ListView.builder(
-                    itemCount: itemsToDisplay.length,
+                    itemCount: itemsToDisplay.length + bloc.collections.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return itemsToDisplay[index];
+                      if (index <= 1) {
+                        return itemsToDisplay[index];
+                      }else{
+                        return mapCollectionToRow(bloc.collections[index - 2], bloc);
+                      }
                     },
                   ),
                 ),
@@ -87,17 +92,17 @@ class ChooseNamedCollectionsScreen extends StatelessWidget {
       ),
       Divider()
     ];
-    List<dynamic> savedCollectionRows = bloc.collections.map((collection) {
-      if (collection is NamedMultiCollectionModel) {
-        return CollectionRow<NamedMultiCollectionModel>.forChoose(
-            collection, bloc.pendingDelete);
-      } else {
-        return CollectionRow<NamedCollectionModel>.forChoose(
-            collection, bloc.pendingDelete);
-      }
-    }).toList();
-    itemsToDisplay.addAll(savedCollectionRows);
     return itemsToDisplay;
+  }
+
+  CollectionRow mapCollectionToRow(CollectionModel collection, ViewNamedCollectionsBloc bloc){
+    if (collection is NamedMultiCollectionModel) {
+      return CollectionRow<NamedMultiCollectionModel>.forChoose(
+          collection, bloc.pendingDelete);
+    } else {
+      return CollectionRow<NamedCollectionModel>.forChoose(
+          collection, bloc.pendingDelete);
+    }
   }
 
   List<CollectionRow> prepareRowsToAdd(List<dynamic> list,
