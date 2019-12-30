@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:d20_dice_roller/app_preferences/ui/app_preferences.dart';
 import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
@@ -12,8 +15,11 @@ import 'package:flutter/material.dart';
 import 'package:preferences/preferences.dart';
 import 'package:provider/provider.dart';
 
+import 'ads/bloc/ad_mob_bloc.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize(AdInfo.appId);
   await PrefService.init(prefix: 'pref_');
   PrefService.setDefaultValues({'roll_detail': true, 'app_theme': 0});
 

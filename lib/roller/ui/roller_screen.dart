@@ -1,3 +1,5 @@
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:d20_dice_roller/ads/bloc/ad_mob_bloc.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
@@ -16,13 +18,13 @@ class RollerScreen extends StatelessWidget {
     RollerScreenBloc rollerScreenBloc = Provider.of<RollerScreenBloc>(context);
     SessionHistoryModel sessionHistoryModel =
         Provider.of<SessionHistoryModel>(context);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text("Dice to Roll"),
-          Expanded(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text("Dice to Roll"),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.all(4.0),
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: rollerScreenBloc.collectionModels.length +
@@ -54,8 +56,14 @@ class RollerScreen extends StatelessWidget {
               },
             ),
           ),
-          ScreenDivider(),
-          Row(
+        ),
+        Container(
+          height: 1,
+          color: Theme.of(context).dividerColor,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               RaisedButton(
@@ -80,9 +88,12 @@ class RollerScreen extends StatelessWidget {
                 },
               )
             ],
-          )
-        ],
-      ),
+          ),
+        ),
+        AdmobBanner(adUnitId: AdInfo.adId,
+          adSize: AdmobBannerSize.FULL_BANNER,),
+        SizedBox(height: 32,)
+      ],
     );
   }
 }

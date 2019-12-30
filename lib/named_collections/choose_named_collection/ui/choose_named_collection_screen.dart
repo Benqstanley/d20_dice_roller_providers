@@ -1,3 +1,5 @@
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:d20_dice_roller/ads/bloc/ad_mob_bloc.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
@@ -71,24 +73,38 @@ class _ChooseNamedCollectionsScreenState
                   child: ListView.builder(
                     itemCount: itemsToDisplay.length + bloc.collections.length,
                     itemBuilder: (BuildContext context, int index) {
-                      if (index <= 1) {
+                      if (index < itemsToDisplay.length) {
                         return itemsToDisplay[index];
                       } else {
                         return mapCollectionToRow(
-                            bloc.collections[index - 2], bloc);
+                            bloc.collections[index - itemsToDisplay.length],
+                            bloc);
                       }
                     },
                   ),
                 ),
-                Divider(),
-                RaisedButton(
-                  child: Text("Add Selection To Roller"),
-                  onPressed: () {
-                    rollerScreenBloc.collectionModels
-                        .addAll(prepareRowsToAdd());
-                    Navigator.of(context)
-                        .pushReplacementNamed(AppWideStrings.rollerScreenPath);
-                  },
+                Container(
+                  height: 1,
+                  color: Theme.of(context).dividerColor,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: RaisedButton(
+                    child: Text("Add Selection To Roller"),
+                    onPressed: () {
+                      rollerScreenBloc.collectionModels
+                          .addAll(prepareRowsToAdd());
+                      Navigator.of(context).pushReplacementNamed(
+                          AppWideStrings.rollerScreenPath);
+                    },
+                  ),
+                ),
+                AdmobBanner(
+                  adUnitId: AdInfo.adId,
+                  adSize: AdmobBannerSize.FULL_BANNER,
+                ),
+                SizedBox(
+                  height: 32,
                 )
               ],
             );

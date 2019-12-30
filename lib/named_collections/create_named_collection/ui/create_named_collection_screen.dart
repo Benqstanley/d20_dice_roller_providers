@@ -1,3 +1,5 @@
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:d20_dice_roller/ads/bloc/ad_mob_bloc.dart';
 import 'package:d20_dice_roller/app_wide_keys.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
@@ -9,7 +11,6 @@ import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_collection_create_model.dart';
-import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -79,19 +80,19 @@ class CreateNamedCollectionContents extends StatelessWidget {
         ],
       ),
       displayDrawer: !inPart && !forEditing,
-      child: Padding(
+      child: Column(
         key: AppWideKeys.createScreenKey,
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            buildNameAndTypeRow(
-              context,
-              isMulti,
-              createScreenBloc: bloc,
-              namedMultiCollectionCreateModel: namedMultiCollectionCreateModel,
-              namedCollectionCreateModel: namedCollectionCreateModel,
-            ),
-            Expanded(
+        children: <Widget>[
+          buildNameAndTypeRow(
+            context,
+            isMulti,
+            createScreenBloc: bloc,
+            namedMultiCollectionCreateModel: namedMultiCollectionCreateModel,
+            namedCollectionCreateModel: namedCollectionCreateModel,
+          ),
+          Expanded(
+            child: Padding(
+                padding: EdgeInsets.all(4.0),
                 child: isMulti
                     ? buildMultiPartCreator(
                         namedMultiCollectionModel:
@@ -103,8 +104,15 @@ class CreateNamedCollectionContents extends StatelessWidget {
                         namedCollectionModel: namedCollectionCreateModel,
                         context: context,
                       )),
-          ],
-        ),
+          ),
+          AdmobBanner(
+            adUnitId: AdInfo.adId,
+            adSize: AdmobBannerSize.FULL_BANNER,
+          ),
+          SizedBox(
+            height: 32,
+          )
+        ],
       ),
     );
   }
@@ -116,32 +124,35 @@ class CreateNamedCollectionContents extends StatelessWidget {
     NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
     NamedCollectionCreateModel namedCollectionCreateModel,
   }) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            enabled: !forEditing,
-            controller: !isMulti
-                ? namedCollectionCreateModel.nameController
-                : inPart
-                    ? namedCollectionCreateModel.nameController
-                    : namedMultiCollectionCreateModel.nameController,
-            decoration: InputDecoration(
-              hintText: !inPart ? "Name Your Collection" : "Name This Part",
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: TextField(
+              enabled: !forEditing,
+              controller: !isMulti
+                  ? namedCollectionCreateModel.nameController
+                  : inPart
+                      ? namedCollectionCreateModel.nameController
+                      : namedMultiCollectionCreateModel.nameController,
+              decoration: InputDecoration(
+                hintText: !inPart ? "Name Your Collection" : "Name This Part",
+              ),
             ),
           ),
-        ),
-        if (!inPart && !forEditing)
-          Column(
-            children: <Widget>[
-              Text("Multi"),
-              Checkbox(
-                value: createScreenBloc.isMulti,
-                onChanged: createScreenBloc.changeMultiStatus,
-              )
-            ],
-          )
-      ],
+          if (!inPart && !forEditing)
+            Column(
+              children: <Widget>[
+                Text("Multi"),
+                Checkbox(
+                  value: createScreenBloc.isMulti,
+                  onChanged: createScreenBloc.changeMultiStatus,
+                )
+              ],
+            )
+        ],
+      ),
     );
   }
 
@@ -150,59 +161,59 @@ class CreateNamedCollectionContents extends StatelessWidget {
     NamedCollectionCreateModel namedCollectionCreateModel,
     BuildContext context,
   }) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: namedMultiCollectionModel.namedModels.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: namedMultiCollectionModel.namedModels.length,
+                  itemBuilder: (ctx, index) {
+                    NamedCollectionModel model =
+                        namedMultiCollectionModel.namedModels[index];
+                    return CollectionRow<NamedCollectionModel>.forCreate(
+                        model,
+                        namedMultiCollectionModel.dismissMultiPartRow,
+                        passParameters(context, namedMultiCollectionModel,
+                            index: index));
+                  })
+              : Center(child: Text("There's Nothing Here Yet")),
+        ),
+        Container(
+          height: 1,
+          color: Theme.of(context).dividerColor,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Expanded(
-              child: namedMultiCollectionModel.namedModels.isNotEmpty
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: namedMultiCollectionModel.namedModels.length,
-                      itemBuilder: (ctx, index) {
-                        NamedCollectionModel model =
-                            namedMultiCollectionModel.namedModels[index];
-                        return CollectionRow<NamedCollectionModel>.forCreate(
-                            model,
-                            namedMultiCollectionModel.dismissMultiPartRow,
-                            passParameters(context, namedMultiCollectionModel,
-                                index: index));
-                      })
-                  : Center(child: Text("There's Nothing Here Yet")),
+            RaisedButton(
+              child: Text('Clear'),
+              onPressed: () {
+                namedMultiCollectionModel.resetRowsList();
+              },
             ),
-            ScreenDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text('Clear'),
-                  onPressed: () {
-                    namedMultiCollectionModel.resetRowsList();
-                  },
-                ),
-                RaisedButton(
-                    child: Text('Add Part'),
-                    onPressed:
-                        passParameters(context, namedMultiCollectionModel)),
-                RaisedButton(
-                  child: Text('Save'),
-                  onPressed: () async {
-                    namedMultiCollectionModel
-                        .saveCollection(forEditing: forEditing)
-                        .then((value) async {
-                      if (value) {
-                        //TODO: show snackbar to redirect to saved collections
-                        //TODO: and refresh create screen
-                        Navigator.of(context).pushReplacementNamed(
-                            AppWideStrings.viewNamedCollectionsPath);
-                      }
-                    });
-                  },
-                ),
-              ],
-            )
+            RaisedButton(
+                child: Text('Add Part'),
+                onPressed: passParameters(context, namedMultiCollectionModel)),
+            RaisedButton(
+              child: Text('Save'),
+              onPressed: () async {
+                namedMultiCollectionModel
+                    .saveCollection(forEditing: forEditing)
+                    .then((value) async {
+                  if (value) {
+                    //TODO: show snackbar to redirect to saved collections
+                    //TODO: and refresh create screen
+                    Navigator.of(context).pushReplacementNamed(
+                        AppWideStrings.viewNamedCollectionsPath);
+                  }
+                });
+              },
+            ),
           ],
-        ));
+        )
+      ],
+    );
   }
 
   Function passParameters(BuildContext context,
@@ -234,10 +245,11 @@ class CreateNamedCollectionContents extends StatelessWidget {
         ),
       )
           .then((result) {
+        if (result == null) return;
         if (index != null) {
           namedMultiCollectionCreateModel.namedModels.removeAt(index);
           namedMultiCollectionCreateModel.namedModels.insert(index, result);
-        }else{
+        } else {
           namedMultiCollectionCreateModel.absorbNamedCollection(result);
         }
       });
@@ -261,72 +273,71 @@ class CreateNamedCollectionContents extends StatelessWidget {
     NamedCollectionCreateModel namedCollectionCreateModel,
     BuildContext context,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount:
-                  namedCollectionCreateModel.singleTypeCollections.length,
-              itemBuilder: (ctx, index) {
-                return SingleTypeCollectionRow(
-                  namedCollectionCreateModel.singleTypeCollections[index],
-                  namedCollectionCreateModel.dismissRow,
-                );
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: namedCollectionCreateModel.singleTypeCollections.length,
+            itemBuilder: (ctx, index) {
+              return SingleTypeCollectionRow(
+                namedCollectionCreateModel.singleTypeCollections[index],
+                namedCollectionCreateModel.dismissRow,
+              );
+            },
+          ),
+        ),
+        Container(
+          height: 1,
+          color: Theme.of(context).dividerColor,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Clear'),
+              onPressed: () {
+                namedCollectionCreateModel.resetList();
               },
             ),
-          ),
-          ScreenDivider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              RaisedButton(
-                child: Text('Clear'),
-                onPressed: () {
-                  namedCollectionCreateModel.resetList();
-                },
-              ),
-              RaisedButton(
-                child: Text('Add Row'),
-                onPressed: () {
-                  namedCollectionCreateModel.addSingleTypeCollectionModel();
-                },
-              ),
-              RaisedButton(
-                child: Text('Save'),
-                onPressed: () {
-                  if (inPart) {
-                    namedCollectionCreateModel.singleTypeCollections
-                        .removeWhere((collectionModel) {
-                      return !collectionModel.determineRollability();
-                    });
-                    NamedCollectionModel partModel;
-                    if (namedCollectionCreateModel
-                        .singleTypeCollections.isNotEmpty) {
-                      partModel = namedCollectionCreateModel.returnModel();
-                    }
-                    Navigator.of(context).pop(partModel);
-                  } else {
-                    namedCollectionCreateModel
-                        .saveCollection(forEditing: forEditing)
-                        .then((value) async {
-                      if (value) {
-                        //TODO: show snackbar to redirect to saved collections
-                        //TODO: and refresh create screen
-                        Navigator.of(context).pushReplacementNamed(
-                            AppWideStrings.viewNamedCollectionsPath);
-                      }
-                    });
+            RaisedButton(
+              child: Text('Add Row'),
+              onPressed: () {
+                namedCollectionCreateModel.addSingleTypeCollectionModel();
+              },
+            ),
+            RaisedButton(
+              child: Text('Save'),
+              onPressed: () {
+                if (inPart) {
+                  namedCollectionCreateModel.singleTypeCollections
+                      .removeWhere((collectionModel) {
+                    return !collectionModel.determineRollability();
+                  });
+                  NamedCollectionModel partModel;
+                  if (namedCollectionCreateModel
+                      .singleTypeCollections.isNotEmpty) {
+                    partModel = namedCollectionCreateModel.returnModel();
                   }
-                },
-              ),
-            ],
-          )
-        ],
-      ),
+                  Navigator.of(context).pop(partModel);
+                } else {
+                  namedCollectionCreateModel
+                      .saveCollection(forEditing: forEditing)
+                      .then((value) async {
+                    if (value) {
+                      //TODO: show snackbar to redirect to saved collections
+                      //TODO: and refresh create screen
+                      Navigator.of(context).pushReplacementNamed(
+                          AppWideStrings.viewNamedCollectionsPath);
+                    }
+                  });
+                }
+              },
+            ),
+          ],
+        )
+      ],
     );
   }
 }
