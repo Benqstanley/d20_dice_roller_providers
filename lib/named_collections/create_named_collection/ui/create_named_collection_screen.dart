@@ -34,7 +34,7 @@ class CreateNamedCollectionScreen extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (ctx) {
           return modelToEdit is NamedMultiCollectionModel
-              ? NamedMultiCollectionCreateModel()
+              ? NamedMultiCollectionCreateModel(model: modelToEdit)
               : NamedMultiCollectionCreateModel();
         }),
         ChangeNotifierProvider(create: (ctx) {
@@ -63,7 +63,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
     NamedCollectionCreateModel namedCollectionCreateModel =
         Provider.of<NamedCollectionCreateModel>(context);
     CreateScreenBloc bloc = Provider.of<CreateScreenBloc>(context);
-    bool isMulti = bloc.isMulti;
+    bool isMulti =
+        namedMultiCollectionCreateModel.namedModels.isNotEmpty && !inPart ||
+            bloc.isMulti;
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
@@ -149,12 +151,14 @@ class CreateNamedCollectionContents extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: namedMultiCollectionModel.namedModels.length,
                       itemBuilder: (ctx, index) {
+                        NamedCollectionModel model =
+                            namedMultiCollectionModel.namedModels[index];
                         return CollectionRow<NamedCollectionModel>.forCreate(
-                          namedMultiCollectionModel.namedModels[index],
-                          namedMultiCollectionModel.dismissMultiPartRow,
-                        );
-                      }
-                    )
+                            model,
+                            namedMultiCollectionModel.dismissMultiPartRow,
+                            passParameters(context, namedMultiCollectionModel,
+                                namedCollectionModel: model));
+                      })
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
             ScreenDivider(),
@@ -168,39 +172,14 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   },
                 ),
                 RaisedButton(
-                  child: Text('Add Part'),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                            builder: (ctx) => MultiProvider(
-                                    child: CreateNamedCollectionContents(
-                                      inPart: true,
-                                    ),
-                                    providers: [
-                                      ChangeNotifierProvider(
-                                        create: (ctx) => CreateScreenBloc(),
-                                      ),
-                                      ChangeNotifierProvider.value(
-                                        value: namedMultiCollectionModel,
-                                      ),
-                                      ChangeNotifierProvider(
-                                        create: (ctx) =>
-                                            NamedCollectionCreateModel(),
-                                      ),
-                                    ])))
-                        .then((result) {
-                      print(result);
-                      if (result != null) {
-                        namedMultiCollectionModel.absorbNamedCollection(result);
-                      }
-                    });
-                  },
-                ),
+                    child: Text('Add Part'),
+                    onPressed:
+                        passParameters(context, namedMultiCollectionModel)),
                 RaisedButton(
                   child: Text('Save'),
                   onPressed: () async {
                     namedMultiCollectionModel
-                        .saveCollection()
+                        .saveCollection(forEditing: forEditing)
                         .then((value) async {
                       if (value) {
                         //TODO: show snackbar to redirect to saved collections
@@ -215,6 +194,38 @@ class CreateNamedCollectionContents extends StatelessWidget {
             )
           ],
         ));
+  }
+
+  Function passParameters(BuildContext context,
+      NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
+      {NamedCollectionModel namedCollectionModel}) {
+    var navigator = () {
+      Navigator.of(context)
+          .push(MaterialPageRoute(
+              builder: (ctx) => MultiProvider(
+                      child: CreateNamedCollectionContents(
+                        inPart: true,
+                      ),
+                      providers: [
+                        ChangeNotifierProvider(
+                          create: (ctx) => CreateScreenBloc(),
+                        ),
+                        ChangeNotifierProvider.value(
+                          value: namedMultiCollectionCreateModel,
+                        ),
+                        ChangeNotifierProvider(
+                          create: (context) => NamedCollectionCreateModel(
+                              model: namedCollectionModel),
+                        ),
+                      ])))
+          .then((result) {
+        print(result);
+        if (result != null) {
+          namedMultiCollectionCreateModel.absorbNamedCollection(result);
+        }
+      });
+    };
+    return navigator;
   }
 
   Widget buildSinglePartCreator({
@@ -240,7 +251,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: namedCollectionCreateModel.singleTypeCollections.length,
+              itemCount:
+                  namedCollectionCreateModel.singleTypeCollections.length,
               itemBuilder: (ctx, index) {
                 return SingleTypeCollectionRow(
                   namedCollectionCreateModel.singleTypeCollections[index],
@@ -274,7 +286,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
                       return !collectionModel.determineRollability();
                     });
                     NamedCollectionModel partModel;
-                    if (namedCollectionCreateModel.singleTypeCollections.isNotEmpty) {
+                    if (namedCollectionCreateModel
+                        .singleTypeCollections.isNotEmpty) {
                       partModel = namedCollectionCreateModel.returnModel();
                     }
                     Navigator.of(context).pop(partModel);

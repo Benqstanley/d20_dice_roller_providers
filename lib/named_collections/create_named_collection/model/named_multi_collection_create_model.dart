@@ -10,7 +10,12 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   final TextEditingController nameController = TextEditingController();
   List<NamedCollectionModel> namedModels = [];
 
-  NamedMultiCollectionCreateModel();
+  NamedMultiCollectionCreateModel({NamedMultiCollectionModel model}){
+    if(model != null){
+      namedModels = model.parts;
+      nameController.text = model.name;
+    }
+  }
 
   void dismissMultiPartRow(NamedCollectionModel modelToRemove) {
     namedModels.remove(modelToRemove);
@@ -43,7 +48,7 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   }
 
   @override
-  Future<bool> saveCollection() async {
+  Future<bool> saveCollection({bool forEditing = false}) async {
     String jsonString = returnModel().toJsonString();
     String path = await localPath();
     Directory directory = Directory("$path/MultiCollections");
@@ -52,7 +57,9 @@ class NamedMultiCollectionCreateModel extends CreateModel {
     }
     File file = File("$path/MultiCollections/${nameController.text}.txt");
     if (!(await file.exists())) {
-      file = await file.create();
+      await file.writeAsString(jsonString);
+      return true;
+    }else if(forEditing){
       await file.writeAsString(jsonString);
       return true;
     }

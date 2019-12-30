@@ -1,5 +1,4 @@
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
-import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +10,7 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   final Function handleIncrement;
   final Function handleDecrement;
   final Function handleCheckboxChanged;
+  final Function handleEdit;
   final ScreenSelector selector;
 
   CollectionRow(
@@ -20,16 +20,16 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
     this.handleCheckboxChanged,
     this.handleDecrement,
     this.handleIncrement,
+    this.handleEdit,
   });
 
   factory CollectionRow.forCreate(
-    T collectionModel,
-    Function onDismissed,
-  ) {
+      T collectionModel, Function onDismissed, Function handleEdit) {
     return CollectionRow(
       collectionModel,
       onDismissed,
       ScreenSelector.createScreen,
+      handleEdit: handleEdit,
     );
   }
 
@@ -47,9 +47,7 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   }
 
   factory CollectionRow.forChoose(
-    T collectionModel,
-    Function onDismissed,
-  ) {
+      T collectionModel, Function onDismissed, Function handleEdit) {
     collectionModel.checkBox = false;
     return CollectionRow(
       collectionModel,
@@ -58,6 +56,7 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
       handleCheckboxChanged: collectionModel.changeCheckbox,
       handleIncrement: collectionModel.increment,
       handleDecrement: collectionModel.decrement,
+      handleEdit: handleEdit,
     );
   }
 
@@ -71,6 +70,7 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
         handleCheckboxChanged: handleCheckboxChanged,
         handleDecrement: handleDecrement,
         handleIncrement: handleIncrement,
+        handleEdit: handleEdit,
       ),
     );
   }
@@ -87,6 +87,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
   final Function handleCheckboxChanged;
   final Function handleIncrement;
   final Function handleDecrement;
+  final Function handleEdit;
   final ScreenSelector selector;
 
   CollectionRowContents(
@@ -95,6 +96,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
     this.handleCheckboxChanged,
     this.handleIncrement,
     this.handleDecrement,
+    this.handleEdit,
   })  : assert(selector == ScreenSelector.createScreen ||
             handleCheckboxChanged != null ||
             handleIncrement != null ||
@@ -104,7 +106,8 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
         assert(selector != ScreenSelector.chooseCollections ||
             (handleIncrement != null &&
                 handleDecrement != null &&
-                handleCheckboxChanged != null));
+                handleCheckboxChanged != null)),
+        assert(handleEdit != null || selector == ScreenSelector.rollerScreen);
 
   @override
   Widget build(BuildContext context) {
@@ -142,17 +145,15 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
               border: Border.all(), borderRadius: BorderRadius.circular(5)),
           child: Row(
             children: <Widget>[
-              selector == ScreenSelector.chooseCollections
+              selector == ScreenSelector.chooseCollections ||
+                      selector == ScreenSelector.createScreen
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         child: Icon(Icons.edit),
                         onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                            builder: (context) =>
-                                CreateNamedCollectionScreen.forEdit(model),
-                          ));
+                          handleEdit();
+                          print('tapped');
                         },
                       ),
                     )

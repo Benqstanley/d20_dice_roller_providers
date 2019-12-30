@@ -4,6 +4,7 @@ import 'package:d20_dice_roller/core/base_collection_models/named_collection_mod
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -113,14 +114,23 @@ class _ChooseNamedCollectionsScreenState
     return itemsToDisplay;
   }
 
+  Function editHandler(CollectionModel model) {
+    Function handleEdit = () {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CreateNamedCollectionScreen.forEdit(model),
+      ));
+    };
+    return handleEdit;
+  }
+
   CollectionRow mapCollectionToRow(
       CollectionModel collection, ViewNamedCollectionsBloc bloc) {
     if (collection is NamedMultiCollectionModel) {
       return CollectionRow<NamedMultiCollectionModel>.forChoose(
-          collection, bloc.pendingDelete);
+          collection, bloc.pendingDelete, editHandler(collection));
     } else {
       return CollectionRow<NamedCollectionModel>.forChoose(
-          collection, bloc.pendingDelete);
+          collection, bloc.pendingDelete, editHandler(collection));
     }
   }
 
