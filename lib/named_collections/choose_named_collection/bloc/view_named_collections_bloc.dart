@@ -24,7 +24,6 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
 
   ViewNamedCollectionsBloc() {
     requestCollectionsPipe.listen(() => getSavedFiles().then((result) {
-      print('getSavedFiles + $result');
           if (result) {
             filesLoaded = true;
             collectionsPipe.send(collections);

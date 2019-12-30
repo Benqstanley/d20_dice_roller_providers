@@ -1,3 +1,4 @@
+import 'package:d20_dice_roller/app_wide_keys.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
@@ -9,7 +10,6 @@ import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/c
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_collection_create_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
-import 'package:d20_dice_roller/app_wide_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -70,11 +70,13 @@ class CreateNamedCollectionContents extends StatelessWidget {
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
-        actions: <Widget>[IconButton(
-          icon: Icon(Icons.collections),
-          onPressed: () => Navigator.of(context)
-              .pushReplacementNamed(AppWideStrings.viewNamedCollectionsPath),
-        )],
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.collections),
+            onPressed: () => Navigator.of(context)
+                .pushReplacementNamed(AppWideStrings.viewNamedCollectionsPath),
+          )
+        ],
       ),
       displayDrawer: !inPart && !forEditing,
       child: Padding(
@@ -164,7 +166,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                             model,
                             namedMultiCollectionModel.dismissMultiPartRow,
                             passParameters(context, namedMultiCollectionModel,
-                                namedCollectionModel: model));
+                                index: index));
                       })
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
@@ -205,29 +207,37 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   Function passParameters(BuildContext context,
       NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
-      {NamedCollectionModel namedCollectionModel}) {
+      {int index}) {
     var navigator = () {
       Navigator.of(context)
-          .push(MaterialPageRoute(
-              builder: (ctx) => MultiProvider(
-                      child: CreateNamedCollectionContents(
-                        inPart: true,
-                      ),
-                      providers: [
-                        ChangeNotifierProvider(
-                          create: (ctx) => CreateScreenBloc(),
-                        ),
-                        ChangeNotifierProvider.value(
-                          value: namedMultiCollectionCreateModel,
-                        ),
-                        ChangeNotifierProvider(
-                          create: (context) => NamedCollectionCreateModel(
-                              model: namedCollectionModel),
-                        ),
-                      ])))
+          .push(
+        MaterialPageRoute(
+          builder: (ctx) => MultiProvider(
+            child: CreateNamedCollectionContents(
+              inPart: true,
+            ),
+            providers: [
+              ChangeNotifierProvider(
+                create: (ctx) => CreateScreenBloc(),
+              ),
+              ChangeNotifierProvider.value(
+                value: namedMultiCollectionCreateModel,
+              ),
+              ChangeNotifierProvider(
+                create: (context) => NamedCollectionCreateModel(
+                    model: index != null
+                        ? namedMultiCollectionCreateModel.namedModels[index]
+                        : null),
+              ),
+            ],
+          ),
+        ),
+      )
           .then((result) {
-        print(result);
-        if (result != null) {
+        if (index != null) {
+          namedMultiCollectionCreateModel.namedModels.removeAt(index);
+          namedMultiCollectionCreateModel.namedModels.insert(index, result);
+        }else{
           namedMultiCollectionCreateModel.absorbNamedCollection(result);
         }
       });
@@ -247,6 +257,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
 
   //Will be the main body of buildSinglePartCreator()
   Widget buildPartCreator({
+    NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
     NamedCollectionCreateModel namedCollectionCreateModel,
     BuildContext context,
   }) {

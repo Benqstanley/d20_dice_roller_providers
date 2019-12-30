@@ -153,7 +153,6 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                         child: Icon(Icons.edit),
                         onTap: () {
                           handleEdit();
-                          print('tapped');
                         },
                       ),
                     )

@@ -52,7 +52,6 @@ class _ChooseNamedCollectionsScreenState
     return StreamBuilder<List<ChangeNotifier>>(
         stream: bloc.collectionsPipe.receive,
         builder: (context, snapshot) {
-          print("Stream receiving");
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -149,7 +148,6 @@ class _ChooseNamedCollectionsScreenState
         }
       }
     });
-    print(toAdd.length);
     return toAdd;
   }
 }

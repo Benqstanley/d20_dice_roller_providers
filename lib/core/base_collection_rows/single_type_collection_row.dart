@@ -68,7 +68,6 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
   Widget build(BuildContext context) {
     SingleTypeCollectionModel collectionModel =
         Provider.of<SingleTypeCollectionModel>(context);
-    print(collectionModel);
     if (collectionModel.numberOfDice != null) {
       numberOfDiceController.text = collectionModel.numberOfDice.toString();
     }
