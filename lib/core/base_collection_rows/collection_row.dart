@@ -120,7 +120,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
     }
     return Dismissible(
       key: key,
-      onDismissed: onDismissed,
+      onDismissed: (_) => onDismissed(model),
       background: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).errorColor,

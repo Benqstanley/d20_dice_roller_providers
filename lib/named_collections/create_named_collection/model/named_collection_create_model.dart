@@ -2,13 +2,12 @@ import 'dart:io';
 
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class NamedCollectionCreateModel extends CreateModel {
   TextEditingController nameController = TextEditingController();
-  List<SingleTypeCollectionRow> singleTypeRows = [];
+  List<SingleTypeCollectionModel> singleTypeCollections = [];
 
   NamedCollectionCreateModel({NamedCollectionModel model}) {
     List<SingleTypeCollectionModel> models = model?.singleTypeCollections;
@@ -16,35 +15,30 @@ class NamedCollectionCreateModel extends CreateModel {
       nameController.text = model.name;
     }
     if (models == null) {
-      addSingleTypeCollectionRow();
+      addSingleTypeCollectionModel();
     } else {
       models.forEach((model) {
-        addSingleTypeCollectionRow(singleTypeCollectionModel: model);
+        addSingleTypeCollectionModel(singleTypeCollectionModel: model);
       });
     }
   }
 
-  void dismissRow(SingleTypeCollectionRow toDismiss) {
-    singleTypeRows.remove(toDismiss);
-    if (singleTypeRows.isEmpty) {
-      addSingleTypeCollectionRow();
+  void dismissRow(SingleTypeCollectionModel toDismiss) {
+    singleTypeCollections.remove(toDismiss);
+    if (singleTypeCollections.isEmpty) {
+      addSingleTypeCollectionModel();
     }
     notifyListeners();
   }
 
   void resetList() {
-    singleTypeRows = [];
-    addSingleTypeCollectionRow();
+    singleTypeCollections = [];
+    addSingleTypeCollectionModel();
   }
 
-  void addSingleTypeCollectionRow(
+  void addSingleTypeCollectionModel(
       {SingleTypeCollectionModel singleTypeCollectionModel}) {
-    singleTypeRows.add(
-      SingleTypeCollectionRow(
-        singleTypeCollectionModel ?? SingleTypeCollectionModel(),
-        dismissRow,
-      ),
-    );
+    singleTypeCollections.add(SingleTypeCollectionModel());
     notifyListeners();
   }
 
@@ -64,7 +58,7 @@ class NamedCollectionCreateModel extends CreateModel {
     var collectionModel = NamedCollectionModel(
         name: nameController.text,
         singleTypeCollections:
-            singleTypeRows.map((row) => row.collectionModel).toList());
+            singleTypeCollections);
     return collectionModel;
   }
 

@@ -45,7 +45,7 @@ class SingleTypeCollectionRow extends StatelessWidget {
       key: key,
       child: SingleTypeCollectionBaseRowContents(
         needsCheckbox,
-        (_) => onDismissed(this),
+        (_) => onDismissed(collectionModel),
         handleCheckBoxChange: handleCheckbox,
       ),
     );

@@ -2,27 +2,23 @@ import 'dart:io';
 
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_model.dart';
 import 'package:flutter/material.dart';
 
 class NamedMultiCollectionCreateModel extends CreateModel {
   bool isMultiPart = false;
   final TextEditingController nameController = TextEditingController();
-  List<CollectionRow> rows = [];
+  List<NamedCollectionModel> namedModels = [];
 
   NamedMultiCollectionCreateModel();
 
-  void dismissMultiPartRow(CollectionRow<NamedCollectionModel> row) {
-    rows.remove(row);
+  void dismissMultiPartRow(NamedCollectionModel modelToRemove) {
+    namedModels.remove(modelToRemove);
     notifyListeners();
   }
 
   void absorbNamedCollection(NamedCollectionModel currentPart) {
-    rows.add(CollectionRow<NamedCollectionModel>.forCreate(
-      currentPart,
-      dismissMultiPartRow,
-    ));
+    namedModels.add(currentPart);
     notifyListeners();
   }
 
@@ -32,7 +28,7 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   }
 
   void resetRowsList() {
-    rows.clear();
+    namedModels.clear();
     notifyListeners();
   }
 
@@ -43,15 +39,7 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   NamedMultiCollectionModel returnModel() {
     return NamedMultiCollectionModel(
       name: nameController.text,
-      parts: rows.map((multiTypeRow) {
-        NamedCollectionModel model =
-            multiTypeRow.collectionModel as NamedCollectionModel;
-        return NamedCollectionModel(
-          name: model.name,
-          singleTypeCollections: model.singleTypeCollections,
-        );
-      }).toList(),
-    );
+      parts: namedModels);
   }
 
   @override

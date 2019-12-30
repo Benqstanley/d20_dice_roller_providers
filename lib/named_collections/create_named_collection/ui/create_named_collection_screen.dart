@@ -2,6 +2,8 @@ import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
@@ -142,12 +144,16 @@ class CreateNamedCollectionContents extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: namedMultiCollectionModel.rows.isNotEmpty
+              child: namedMultiCollectionModel.namedModels.isNotEmpty
                   ? ListView.builder(
                       shrinkWrap: true,
-                      itemCount: namedMultiCollectionModel.rows.length,
-                      itemBuilder: (ctx, index) =>
-                          namedMultiCollectionModel.rows[index],
+                      itemCount: namedMultiCollectionModel.namedModels.length,
+                      itemBuilder: (ctx, index) {
+                        return CollectionRow<NamedCollectionModel>.forCreate(
+                          namedMultiCollectionModel.namedModels[index],
+                          namedMultiCollectionModel.dismissMultiPartRow,
+                        );
+                      }
                     )
                   : Center(child: Text("There's Nothing Here Yet")),
             ),
@@ -234,9 +240,12 @@ class CreateNamedCollectionContents extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: namedCollectionCreateModel.singleTypeRows.length,
-              itemBuilder: (ctx, int) {
-                return namedCollectionCreateModel.singleTypeRows[int];
+              itemCount: namedCollectionCreateModel.singleTypeCollections.length,
+              itemBuilder: (ctx, index) {
+                return SingleTypeCollectionRow(
+                  namedCollectionCreateModel.singleTypeCollections[index],
+                  namedCollectionCreateModel.dismissRow,
+                );
               },
             ),
           ),
@@ -253,20 +262,19 @@ class CreateNamedCollectionContents extends StatelessWidget {
               RaisedButton(
                 child: Text('Add Row'),
                 onPressed: () {
-                  namedCollectionCreateModel.addSingleTypeCollectionRow();
+                  namedCollectionCreateModel.addSingleTypeCollectionModel();
                 },
               ),
               RaisedButton(
                 child: Text('Save'),
                 onPressed: () {
                   if (inPart) {
-                    namedCollectionCreateModel.singleTypeRows
-                        .removeWhere((element) {
-                      print(element.collectionModel.determineRollability());
-                      return !element.collectionModel.determineRollability();
+                    namedCollectionCreateModel.singleTypeCollections
+                        .removeWhere((collectionModel) {
+                      return !collectionModel.determineRollability();
                     });
                     NamedCollectionModel partModel;
-                    if (namedCollectionCreateModel.singleTypeRows.isNotEmpty) {
+                    if (namedCollectionCreateModel.singleTypeCollections.isNotEmpty) {
                       partModel = namedCollectionCreateModel.returnModel();
                     }
                     Navigator.of(context).pop(partModel);
