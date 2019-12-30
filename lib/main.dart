@@ -1,5 +1,6 @@
 import 'package:d20_dice_roller/app_preferences/ui/app_preferences.dart';
 import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
+import 'package:d20_dice_roller/app_wide_keys.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
 import 'package:d20_dice_roller/named_collections/choose_named_collection/ui/choose_named_collection_screen.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
@@ -28,7 +29,7 @@ class DiceRollerMain extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       appThemeBloc.updateFromPreferences();
     });
     return MultiProvider(
@@ -88,6 +89,19 @@ class PageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    IconButton action;
+    List<Widget> actions;
+    if (child is ChooseNamedCollectionsTop) {
+      action = IconButton(
+        icon: Icon(Icons.create),
+        onPressed: () => Navigator.of(context)
+            .pushReplacementNamed(AppWideStrings.createCollectionPath),
+      );
+    }
+    if(action != null){
+      actions = [];
+      actions.add(action);
+    }
     return Scaffold(
       key: keyed ? UniqueKey() : null,
       drawer: displayDrawer ? DiceRollerDrawer() : null,
@@ -97,6 +111,7 @@ class PageWrapper extends StatelessWidget {
             title: Text(
               title,
             ),
+            actions: actions,
           ),
     );
   }

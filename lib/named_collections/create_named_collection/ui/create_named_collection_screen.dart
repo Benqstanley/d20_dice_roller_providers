@@ -9,6 +9,7 @@ import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/c
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_collection_create_model.dart';
 import 'package:d20_dice_roller/uikit/screen_divider.dart';
+import 'package:d20_dice_roller/app_wide_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,9 +70,15 @@ class CreateNamedCollectionContents extends StatelessWidget {
     return PageWrapper(
       appBar: AppBar(
         title: Text(AppWideStrings.createCollectionTitle),
+        actions: <Widget>[IconButton(
+          icon: Icon(Icons.collections),
+          onPressed: () => Navigator.of(context)
+              .pushReplacementNamed(AppWideStrings.viewNamedCollectionsPath),
+        )],
       ),
       displayDrawer: !inPart && !forEditing,
       child: Padding(
+        key: AppWideKeys.createScreenKey,
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
