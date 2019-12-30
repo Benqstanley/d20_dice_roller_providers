@@ -11,7 +11,7 @@ class NamedCollectionCreateModel extends CreateModel {
 
   NamedCollectionCreateModel({NamedCollectionModel model}) {
     List<SingleTypeCollectionModel> models = model?.singleTypeCollections;
-    if(model?.name != null){
+    if (model?.name != null) {
       nameController.text = model.name;
     }
     if (models == null) {
@@ -38,7 +38,8 @@ class NamedCollectionCreateModel extends CreateModel {
 
   void addSingleTypeCollectionModel(
       {SingleTypeCollectionModel singleTypeCollectionModel}) {
-    singleTypeCollections.add(SingleTypeCollectionModel());
+    singleTypeCollections
+        .add(singleTypeCollectionModel ?? SingleTypeCollectionModel());
     notifyListeners();
   }
 
@@ -57,13 +58,12 @@ class NamedCollectionCreateModel extends CreateModel {
   NamedCollectionModel returnModel() {
     var collectionModel = NamedCollectionModel(
         name: nameController.text,
-        singleTypeCollections:
-            singleTypeCollections);
+        singleTypeCollections: singleTypeCollections);
     return collectionModel;
   }
 
   @override
-  Future<bool> saveCollection() async {
+  Future<bool> saveCollection({bool forEditing = false}) async {
     String jsonString = returnModel().toJsonString();
     String path = await localPath();
     Directory directory = Directory("$path/NamedCollections");
@@ -73,6 +73,9 @@ class NamedCollectionCreateModel extends CreateModel {
     File file = File("$path/NamedCollections/${nameController.text}.txt");
     if (!(await file.exists())) {
       file = await file.create();
+      await file.writeAsString(jsonString);
+      return true;
+    }else if(forEditing){
       await file.writeAsString(jsonString);
       return true;
     }

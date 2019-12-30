@@ -36,6 +36,7 @@ class RollerScreenBloc extends ChangeNotifier {
 
   void resetScreen() {
     singleTypeModels.clear();
+    collectionModels.clear();
     addSingleTypeCollectionModel();
   }
 

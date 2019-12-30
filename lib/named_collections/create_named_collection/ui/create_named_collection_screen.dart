@@ -280,7 +280,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     Navigator.of(context).pop(partModel);
                   } else {
                     namedCollectionCreateModel
-                        .saveCollection()
+                        .saveCollection(forEditing: forEditing)
                         .then((value) async {
                       if (value) {
                         //TODO: show snackbar to redirect to saved collections
