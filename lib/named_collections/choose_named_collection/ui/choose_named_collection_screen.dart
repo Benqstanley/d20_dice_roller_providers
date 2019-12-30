@@ -84,7 +84,7 @@ class _ChooseNamedCollectionsScreenState
                 RaisedButton(
                   child: Text("Add Selection To Roller"),
                   onPressed: () {
-                    rollerScreenBloc.collectionRows.addAll(
+                    rollerScreenBloc.collectionModels.addAll(
                         prepareRowsToAdd(itemsToDisplay, rollerScreenBloc));
                     Navigator.of(context)
                         .pushReplacementNamed(AppWideStrings.rollerScreenPath);
@@ -124,28 +124,21 @@ class _ChooseNamedCollectionsScreenState
     }
   }
 
-  List<CollectionRow> prepareRowsToAdd(
+  List<CollectionModel> prepareRowsToAdd(
       List<dynamic> list, RollerScreenBloc rollerScreenModel) {
-    List<CollectionRow> toAdd = [];
-    list.forEach((row) {
-      if (row is CollectionRow) {
-        if (row.collectionModel.checkBox) {
-          if (row.collectionModel is NamedMultiCollectionModel) {
-            for (int i = 0; i < row.collectionModel.counterState; i++) {
-              toAdd.add(CollectionRow<NamedMultiCollectionModel>.forRoller(
-                  row.collectionModel.copy(),
-                  rollerScreenModel.dismissCollectionRow));
-            }
-          } else {
-            for (int i = 0; i < row.collectionModel.counterState; i++) {
-              toAdd.add(CollectionRow<NamedCollectionModel>.forRoller(
-                  row.collectionModel.copy(),
-                  rollerScreenModel.dismissCollectionRow));
-            }
-          }
+    List<CollectionModel> toAdd = [];
+    list.forEach((collectionModel) {
+      if (collectionModel is NamedMultiCollectionModel) {
+        for (int i = 0; i < collectionModel.counterState; i++) {
+          toAdd.add(collectionModel.copy());
+        }
+      } else {
+        for (int i = 0; i < collectionModel.collectionModel.counterState; i++) {
+          toAdd.add(collectionModel.copy());
         }
       }
     });
     return toAdd;
   }
 }
+

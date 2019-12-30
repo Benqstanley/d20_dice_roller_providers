@@ -14,7 +14,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Directory namedCollectionsDirectory;
   List<NamedMultiCollectionModel> namedMultiCollections = [];
   List<NamedCollectionModel> namedCollections = [];
-  List<ChangeNotifier> collections = [];
+  List<CollectionModel> collections = [];
   bool filesLoaded = false;
   BuildContext context;
 

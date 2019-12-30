@@ -1,5 +1,4 @@
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
-import 'package:d20_dice_roller/named_collections/choose_named_collection/bloc/view_named_collections_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
