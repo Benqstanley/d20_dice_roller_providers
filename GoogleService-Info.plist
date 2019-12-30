@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>116766809041-392efbd1o396pghnss73fppg548dkhgq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.116766809041-392efbd1o396pghnss73fppg548dkhgq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBXqCk0hT9KMvJjB64ANfEBihlpYMsmUUA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>116766809041</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.zianderthalapps.d20DiceRoller</string>
+	<key>PROJECT_ID</key>
+	<string>d20-dice-roller-d0c09</string>
+	<key>STORAGE_BUCKET</key>
+	<string>d20-dice-roller-d0c09.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:116766809041:ios:02fee812494733a12f9ef0</string>
+	<key>DATABASE_URL</key>
+	<string>https://d20-dice-roller-d0c09.firebaseio.com</string>
+</dict>
+</plist>

@@ -37,7 +37,6 @@
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
-**/android
 !**/android/app/src/main/AndroidManifest.xml
 
 
@@ -67,7 +66,6 @@
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
-**/ios
 !**/ios/Runner/Info.plist
 
 # Exceptions to above rules.
