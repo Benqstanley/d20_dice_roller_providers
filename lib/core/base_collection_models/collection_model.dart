@@ -17,6 +17,7 @@ class CollectionModel extends ChangeNotifier {
 
   void changeCheckbox(bool newValue) {
     checkBox = newValue;
+
     notifyListeners();
   }
 
