@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "285765218427",
+    "firebase_url": "https://d20-dice-roller-android.firebaseio.com",
+    "project_id": "d20-dice-roller-android",
+    "storage_bucket": "d20-dice-roller-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285765218427:android:5b21f9715eaf45af31b2de",
+        "android_client_info": {
+          "package_name": "com.zianderthalapps.d20diceroller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285765218427-v2s3kg29a1n3sq3hpkupmk14f5g5ieag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcIaEPnLzFrlUcOhtK04Jk4H5Nflmphx4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285765218427-v2s3kg29a1n3sq3hpkupmk14f5g5ieag.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
