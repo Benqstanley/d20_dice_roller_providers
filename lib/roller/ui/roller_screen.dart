@@ -8,7 +8,6 @@ import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
-import 'package:d20_dice_roller/uikit/screen_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
