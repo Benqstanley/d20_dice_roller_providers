@@ -91,7 +91,6 @@ class RollerScreen extends StatelessWidget {
         ),
         AdmobBanner(adUnitId: AdInfo.adId,
           adSize: AdmobBannerSize.FULL_BANNER,),
-        SizedBox(height: 32,)
       ],
     );
   }
