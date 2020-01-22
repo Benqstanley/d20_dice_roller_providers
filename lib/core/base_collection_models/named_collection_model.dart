@@ -12,20 +12,24 @@ class NamedCollectionModel extends CollectionModel {
     String path,
     @required String name,
     @required List<SingleTypeCollectionModel> singleTypeCollections,
+    int multiplier = 1,
   }) : super(
           name,
           path: path,
           singleTypeCollections: singleTypeCollections,
+          multiplier: multiplier,
         );
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> toReturn = {};
     toReturn["name"] = name;
+    toReturn["multiplier"] = multiplier;
     toReturn["singleTypeCollections"] = singleTypeCollections
         .map((collection) => {
               "numberOfDice": collection.numberOfDice,
               "diceType": diceTypeStrings[collection.diceType],
               "modifier": collection.modifier,
+              "multiplier": collection.multiplier,
             })
         .toList();
     return toReturn;
@@ -38,10 +42,15 @@ class NamedCollectionModel extends CollectionModel {
       Map<String, dynamic> map = item as Map<String, dynamic>;
       collections.add(SingleTypeCollectionModel.fromJson(map));
     });
+    int multiplier = 1;
+    if (json.containsKey("multiplier")) {
+      multiplier = json["multiplier"];
+    }
     return NamedCollectionModel(
       path: path,
       name: json["name"],
       singleTypeCollections: collections,
+      multiplier: multiplier,
     );
   }
 

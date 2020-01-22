@@ -10,10 +10,15 @@ class CollectionModel extends ChangeNotifier {
   final List<NamedCollectionModel> parts;
   bool checkBox;
   int counterState = 1;
+  int multiplier = 1;
 
-  CollectionModel(this.name,
-      {this.path, this.singleTypeCollections, this.parts})
-      : assert(parts == null || singleTypeCollections == null);
+  CollectionModel(
+    this.name, {
+    this.path,
+    this.singleTypeCollections,
+    this.parts,
+    this.multiplier,
+  }) : assert(parts == null || singleTypeCollections == null);
 
   void changeCheckbox(bool newValue) {
     checkBox = newValue;
@@ -26,6 +31,21 @@ class CollectionModel extends ChangeNotifier {
   }
 
   void decrement() {
+    if (counterState > 1) {
+      counterState--;
+    } else {
+      counterState = 1;
+      checkBox = false;
+    }
+    notifyListeners();
+  }
+
+  void incrementMultiplier() {
+    counterState++;
+    notifyListeners();
+  }
+
+  void decrementMultiplier() {
     if (counterState > 1) {
       counterState--;
     } else {

@@ -5,22 +5,26 @@ class SingleTypeCollectionModel extends ChangeNotifier {
   int numberOfDice;
   DiceType diceType;
   int modifier;
+  int multiplier = 1;
 
   //for managing a checkbox if one is needed on the associated RowType
   bool checkBox = true;
 
-  void changeCheckbox(bool newValue){
+  void changeCheckbox(bool newValue) {
     checkBox = newValue;
     notifyListeners();
   }
 
   SingleTypeCollectionModel();
 
-  factory SingleTypeCollectionModel.fromJson(Map<String, dynamic> json){
+  factory SingleTypeCollectionModel.fromJson(Map<String, dynamic> json) {
     SingleTypeCollectionModel toReturn = SingleTypeCollectionModel();
     toReturn.numberOfDice = json["numberOfDice"];
     toReturn.diceType = diceStringTypes[json["diceType"]];
     toReturn.modifier = json["modifier"];
+    if (json.containsKey("multiplier")) {
+      toReturn.multiplier = json["multiplier"];
+    }
     return toReturn;
   }
 
@@ -28,13 +32,16 @@ class SingleTypeCollectionModel extends ChangeNotifier {
     int numberOfDice,
     DiceType diceType,
     int modifier,
+    int multiplier,
   }) {
     bool noChanges = numberOfDice == null &&
         diceType == null &&
-        modifier == null;
+        modifier == null &&
+        multiplier == null;
     this.numberOfDice = numberOfDice ?? this.numberOfDice;
     this.diceType = diceType ?? this.diceType;
     this.modifier = modifier ?? this.modifier;
+    this.multiplier = multiplier ?? this.multiplier;
     if (!noChanges) {
       notifyListeners();
     }
@@ -46,12 +53,20 @@ class SingleTypeCollectionModel extends ChangeNotifier {
 
   @override
   String toString() {
-    return "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString();
+    String baseString =
+        "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString();
+    if (multiplier != 1) {
+      baseString = "($baseString)$multiplier";
+    }
+    return baseString;
   }
 
   //To Be Overridden by any extending class.
 
-  bool determineRollability(){
-    return checkBox && numberOfDice != null && numberOfDice > 0 && diceType != null;
+  bool determineRollability() {
+    return checkBox &&
+        numberOfDice != null &&
+        numberOfDice > 0 &&
+        diceType != null;
   }
 }
