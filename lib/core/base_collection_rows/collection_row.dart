@@ -1,4 +1,6 @@
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/mult_counter.dart';
+import 'package:d20_dice_roller/core/mult_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -128,7 +130,6 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
       counterState = model.multiplier.toString();
     }
     checkBox = model.checkBox;
-
     return Card(
       elevation: 5,
       color: Theme.of(context).backgroundColor,
@@ -213,12 +214,19 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                   ],
                 ),
               ),
-              if(selector == ScreenSelector.createScreen) Icon(Icons.close),
-              if(selector == ScreenSelector.createScreen) SizedBox(width: 16,),
-              buildTrailing(
-                checkBox,
+              if (selector == ScreenSelector.createScreen) Icon(Icons.close),
+              if (selector == ScreenSelector.createScreen)
+                SizedBox(
+                  width: 16,
+                ),
+              MultCounter(
                 counterState,
                 context,
+                handleCheckboxChanged,
+                checkBoxValue: checkBox,
+                handleDecrement: handleDecrement,
+                handleIncrement: handleIncrement,
+                showCheckBox: selector != ScreenSelector.rollerScreen,
               ),
             ],
           ),
@@ -231,8 +239,12 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
     bool checkBoxValue,
     String counterState,
     BuildContext context,
-  ) {
-    if (selector == ScreenSelector.rollerScreen || !checkBoxValue) {
+    Function handleCheckboxChanged, {
+    bool showCheckBox = true,
+    Function handleIncrement,
+    Function handleDecrement,
+  }) {
+    if (showCheckBox && !checkBoxValue) {
       return Container(
         height: 66,
         child: Center(
@@ -292,37 +304,5 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
         ],
       );
     }
-  }
-}
-
-class MultButton extends StatelessWidget {
-  final Function onTap;
-  final String text;
-
-  MultButton({
-    this.onTap,
-    this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Ink(
-      decoration: BoxDecoration(
-        color: Theme.of(context).buttonColor,
-        border: Border.all(),
-      ),
-      height: 30,
-      width: 50,
-      child: InkWell(
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 24),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        onTap: onTap,
-      ),
-    );
   }
 }

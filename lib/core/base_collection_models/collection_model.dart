@@ -8,7 +8,7 @@ class CollectionModel extends ChangeNotifier {
   final String name;
   final List<SingleTypeCollectionModel> singleTypeCollections;
   final List<NamedCollectionModel> parts;
-  bool checkBox;
+  bool checkBox = false;
   int counterState = 1;
   int multiplier = 1;
 

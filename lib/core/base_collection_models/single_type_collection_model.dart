@@ -10,6 +10,20 @@ class SingleTypeCollectionModel extends ChangeNotifier {
   //for managing a checkbox if one is needed on the associated RowType
   bool checkBox = true;
 
+  void incrementMultiplier() {
+    multiplier++;
+    notifyListeners();
+  }
+
+  void decrementMultiplier() {
+    if (multiplier > 1) {
+      multiplier--;
+    } else {
+      multiplier = 1;
+    }
+    notifyListeners();
+  }
+
   void changeCheckbox(bool newValue) {
     checkBox = newValue;
     notifyListeners();

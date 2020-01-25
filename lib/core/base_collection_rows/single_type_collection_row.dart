@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/mult_counter.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,21 +9,20 @@ class SingleTypeCollectionRow extends StatelessWidget {
   final Function handleCheckbox;
   final Key key = UniqueKey();
   final SingleTypeCollectionModel collectionModel;
+  final bool forCreate;
 
-  SingleTypeCollectionRow(
-    this.collectionModel,
-    this.onDismissed, {
-    this.handleCheckbox,
-  });
+  SingleTypeCollectionRow(this.collectionModel, this.onDismissed,
+      {this.handleCheckbox, this.forCreate = false});
 
   factory SingleTypeCollectionRow.forCreate(
+    SingleTypeCollectionModel collectionModel,
     Function onDismissed,
   ) {
-    var collectionModel = SingleTypeCollectionModel();
+    collectionModel = collectionModel ?? SingleTypeCollectionModel();
     return SingleTypeCollectionRow(
       collectionModel,
       onDismissed,
-      handleCheckbox: collectionModel.changeCheckbox,
+      forCreate: true,
     );
   }
 
@@ -47,6 +47,7 @@ class SingleTypeCollectionRow extends StatelessWidget {
         needsCheckbox,
         (_) => onDismissed(collectionModel),
         handleCheckBoxChange: handleCheckbox,
+        forCreate: forCreate,
       ),
     );
   }
@@ -59,10 +60,15 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
   final Function handleCheckBoxChange;
   final double spacing = 4;
   final bool needsCheckbox;
+  final bool forCreate;
 
-  SingleTypeCollectionBaseRowContents(this.needsCheckbox, this.onDismissed,
-      {this.handleCheckBoxChange})
-      : assert(!needsCheckbox || handleCheckBoxChange != null);
+  SingleTypeCollectionBaseRowContents(
+    this.needsCheckbox,
+    this.onDismissed, {
+    this.handleCheckBoxChange,
+    this.forCreate = false,
+  })  : assert(!needsCheckbox || handleCheckBoxChange != null),
+        assert(!needsCheckbox || !forCreate);
 
   @override
   Widget build(BuildContext context) {
@@ -102,64 +108,102 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(),
           ),
-          child: Padding(
-            padding: EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(hintText: "# of Dice"),
-                    controller: numberOfDiceController,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                SizedBox(
-                  width: spacing,
-                ),
-                Icon(Icons.close),
-                SizedBox(
-                  width: spacing,
-                ),
-                DropdownButton<DiceType>(
-                  hint: Text("Type"),
-                  value: collectionModel.diceType,
-                  onChanged: (DiceType type) {
-                    collectionModel.updateWith(diceType: type);
-                  },
-                  items: diceTypes
-                      .map((type) => DropdownMenuItem<DiceType>(
-                            value: type,
-                            child: Text(diceTypeStrings[type]),
-                          ))
-                      .toList(),
-                ),
-                SizedBox(
-                  width: spacing,
-                ),
-                Icon(Icons.add),
-                SizedBox(
-                  width: spacing,
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(hintText: "Modifier"),
-                    controller: modifierController,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                if (needsCheckbox)
-                  Column(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text('Roll'),
-                      Checkbox(
-                        value: collectionModel.checkBox,
-                        onChanged: handleCheckBoxChange,
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(hintText: "# of Dice"),
+                          controller: numberOfDiceController,
+                          keyboardType: TextInputType.number,
+                        ),
                       ),
+                      SizedBox(
+                        width: spacing,
+                      ),
+                      Icon(Icons.close),
+                      SizedBox(
+                        width: spacing,
+                      ),
+                      DropdownButton<DiceType>(
+                        hint: Text("Type"),
+                        value: collectionModel.diceType,
+                        onChanged: (DiceType type) {
+                          collectionModel.updateWith(diceType: type);
+                        },
+                        items: diceTypes
+                            .map((type) => DropdownMenuItem<DiceType>(
+                                  value: type,
+                                  child: Text(diceTypeStrings[type]),
+                                ))
+                            .toList(),
+                      ),
+                      SizedBox(
+                        width: spacing,
+                      ),
+                      Icon(Icons.add),
+                      SizedBox(
+                        width: spacing,
+                      ),
+                      Flexible(
+                        fit: forCreate ? FlexFit.loose : FlexFit.tight,
+                        child: TextField(
+                          decoration: InputDecoration(hintText: "Modifier"),
+                          controller: modifierController,
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      if (needsCheckbox)
+                        Column(
+                          children: <Widget>[
+                            Text('Roll'),
+                            Checkbox(
+                              value: collectionModel.checkBox,
+                              onChanged: handleCheckBoxChange,
+                            ),
+                          ],
+                        ),
                     ],
-                  )
-              ],
-            ),
+                  ),
+                ),
+              ),
+              if (forCreate)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      height: 70,
+                      width: 1,
+                      color: Theme.of(context).dividerColor,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Icon(Icons.close, size: 20,),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    MultCounter(
+                      collectionModel.multiplier.toString(),
+                      context,
+                      collectionModel.changeCheckbox,
+                      checkBoxValue: true,
+                      handleIncrement: collectionModel.incrementMultiplier,
+                      handleDecrement: collectionModel.decrementMultiplier,
+                    ),
+                  ],
+                )
+            ],
           ),
         ),
       ),

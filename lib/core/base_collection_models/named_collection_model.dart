@@ -58,12 +58,19 @@ class NamedCollectionModel extends CollectionModel {
   String toString() {
     StringBuffer toReturn = StringBuffer(name);
     toReturn.write(": ");
+    bool hasMult = multiplier != 1;
+    if (hasMult) {
+      toReturn.write("(");
+    }
     singleTypeCollections.forEach((element) {
       toReturn.write(element.toString());
       toReturn.write(", ");
     });
-    String returnString = toReturn.toString();
-    return returnString.substring(0, returnString.length - 2);
+    String returnString = toReturn.toString().substring(0, toReturn.length - 2);
+    if (hasMult) {
+      returnString = returnString + ") x $multiplier";
+    }
+    return returnString;
   }
 
   String toJsonString() {

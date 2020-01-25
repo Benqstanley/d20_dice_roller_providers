@@ -282,7 +282,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
             shrinkWrap: true,
             itemCount: namedCollectionCreateModel.singleTypeCollections.length,
             itemBuilder: (ctx, index) {
-              return SingleTypeCollectionRow(
+              return SingleTypeCollectionRow.forCreate(
                 namedCollectionCreateModel.singleTypeCollections[index],
                 namedCollectionCreateModel.dismissRow,
               );
