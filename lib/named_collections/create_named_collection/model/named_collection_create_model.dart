@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 class NamedCollectionCreateModel extends CreateModel {
   TextEditingController nameController = TextEditingController();
   List<SingleTypeCollectionModel> singleTypeCollections = [];
+  int multiplier = 1;
 
   NamedCollectionCreateModel({NamedCollectionModel model}) {
     List<SingleTypeCollectionModel> models = model?.singleTypeCollections;
@@ -57,8 +58,10 @@ class NamedCollectionCreateModel extends CreateModel {
 
   NamedCollectionModel returnModel() {
     var collectionModel = NamedCollectionModel(
-        name: nameController.text,
-        singleTypeCollections: singleTypeCollections);
+      name: nameController.text,
+      singleTypeCollections: singleTypeCollections,
+      multiplier: multiplier,
+    );
     return collectionModel;
   }
 
@@ -75,7 +78,7 @@ class NamedCollectionCreateModel extends CreateModel {
       file = await file.create();
       await file.writeAsString(jsonString);
       return true;
-    }else if(forEditing){
+    } else if (forEditing) {
       await file.writeAsString(jsonString);
       return true;
     }

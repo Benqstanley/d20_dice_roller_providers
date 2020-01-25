@@ -80,25 +80,24 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
     modifierController.addListener(() {
       collectionModel.modifier = int.tryParse(modifierController.text);
     });
-    return Dismissible(
-      key: UniqueKey(),
-      onDismissed: onDismissed,
-      background: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).errorColor,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Center(
-              child: ListTile(
-            trailing: Icon(Icons.delete),
-            leading: Icon(Icons.delete),
-          ))),
-      child: Padding(
-        padding: EdgeInsets.all(2),
+    return Card(
+      elevation: 5,
+      color: Theme.of(context).backgroundColor,
+      child: Dismissible(
+        key: UniqueKey(),
+        onDismissed: onDismissed,
+        background: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).errorColor,
+            ),
+            child: Center(
+                child: ListTile(
+              trailing: Icon(Icons.delete),
+              leading: Icon(Icons.delete),
+            ))),
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(),
-            borderRadius: BorderRadius.circular(5),
           ),
           child: Padding(
             padding: EdgeInsets.all(12),

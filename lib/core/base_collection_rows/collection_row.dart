@@ -24,12 +24,20 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   });
 
   factory CollectionRow.forCreate(
-      T collectionModel, Function onDismissed, Function handleEdit) {
+    T collectionModel,
+    Function onDismissed,
+    Function handleEdit,
+    Function handleIncrement,
+    Function handleDecrement,
+  ) {
+    collectionModel.checkBox = true;
     return CollectionRow(
       collectionModel,
       onDismissed,
       ScreenSelector.createScreen,
       handleEdit: handleEdit,
+      handleIncrement: handleIncrement,
+      handleDecrement: handleDecrement,
     );
   }
 
@@ -116,34 +124,35 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
     bool checkBox;
     if (selector == ScreenSelector.chooseCollections) {
       counterState = model.counterState.toString();
+    } else if (selector == ScreenSelector.createScreen) {
+      counterState = model.multiplier.toString();
     }
-    if (selector != ScreenSelector.createScreen) {
-      checkBox = model.checkBox;
-    }
-    return Dismissible(
-      key: key,
-      onDismissed: (_) => onDismissed(model),
-      background: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).errorColor,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Center(
-              child: ListTile(
-            leading: Text(
-              "Delete",
-              style: TextStyle(color: Colors.white),
+    checkBox = model.checkBox;
+
+    return Card(
+      elevation: 5,
+      color: Theme.of(context).backgroundColor,
+      child: Dismissible(
+        key: key,
+        onDismissed: (_) => onDismissed(model),
+        background: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).errorColor,
             ),
-            trailing: Icon(Icons.delete),
-          ))),
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
+            child: Center(
+                child: ListTile(
+              leading: Text(
+                selector == ScreenSelector.rollerScreen ? "Remove" : "Delete",
+                style: TextStyle(color: Colors.white),
+              ),
+              trailing: Icon(Icons.delete),
+            ))),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-              border: Border.all(), borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(border: Border.all()),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               selector == ScreenSelector.chooseCollections ||
                       selector == ScreenSelector.createScreen
@@ -158,13 +167,20 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                     )
                   : Container(),
               Expanded(
+                flex: 6,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      model.name + ":",
-                      style: TextStyle(fontSize: 18),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            model.name + ":",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,19 +208,17 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                                     .toList(),
                           ),
                         ),
-                        selector == ScreenSelector.createScreen
-                            ? Container(
-                                width: 0,
-                              )
-                            : buildTrailing(
-                                checkBox,
-                                counterState,
-                                context,
-                              ),
                       ],
                     )
                   ],
                 ),
+              ),
+              Icon(Icons.close),
+              SizedBox(width: 8,),
+              buildTrailing(
+                checkBox,
+                counterState,
+                context,
               ),
             ],
           ),
@@ -219,43 +233,96 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
     BuildContext context,
   ) {
     if (selector == ScreenSelector.rollerScreen || !checkBoxValue) {
-      return Checkbox(
-        value: checkBoxValue,
-        onChanged: handleCheckboxChanged,
-      );
-    } else {
-      return Flexible(
-        flex: 1,
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              flex: 2,
-              child: FlatButton(
-                child: Text('-'),
-                onPressed: handleDecrement,
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                alignment: AlignmentDirectional.centerEnd,
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                    border: Border.all(),
-                    color: Theme.of(context).scaffoldBackgroundColor),
-                child: Text(counterState),
-              ),
-            ),
-            Flexible(
-              flex: 2,
-              child: FlatButton(
-                child: Text('+'),
-                onPressed: handleIncrement,
-              ),
-            )
-          ],
+      return Container(
+        height: 66,
+        child: Center(
+          child: Checkbox(
+            value: checkBoxValue,
+            onChanged: handleCheckboxChanged,
+          ),
         ),
       );
+    } else {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Flexible(
+            flex: 1,
+            child: Container(
+              alignment: AlignmentDirectional.centerEnd,
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide()),
+                  color: Theme.of(context).backgroundColor),
+              child: Text(counterState),
+            ),
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+            flex: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Flexible(
+                  flex: 2,
+                  child: MultButton(
+                    text: '+',
+                    onTap: handleIncrement,
+                  ),
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+                Flexible(
+                  flex: 2,
+                  child: MultButton(
+                    text: '-',
+                    onTap: () {
+                      handleDecrement();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
     }
+  }
+}
+
+class MultButton extends StatelessWidget {
+  final Function onTap;
+  final String text;
+
+  MultButton({
+    this.onTap,
+    this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Ink(
+      decoration: BoxDecoration(
+        color: Theme.of(context).buttonColor,
+        border: Border.all(),
+      ),
+      height: 30,
+      width: 50,
+      child: InkWell(
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 24),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        onTap: onTap,
+      ),
+    );
   }
 }

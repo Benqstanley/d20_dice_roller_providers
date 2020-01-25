@@ -12,6 +12,20 @@ class CollectionModel extends ChangeNotifier {
   int counterState = 1;
   int multiplier = 1;
 
+  void incrementMultiplier() {
+    multiplier++;
+    notifyListeners();
+  }
+
+  void decrementMultiplier() {
+    if (multiplier > 1) {
+      multiplier--;
+    } else {
+      multiplier = 1;
+    }
+    notifyListeners();
+  }
+
   CollectionModel(
     this.name, {
     this.path,
@@ -31,21 +45,6 @@ class CollectionModel extends ChangeNotifier {
   }
 
   void decrement() {
-    if (counterState > 1) {
-      counterState--;
-    } else {
-      counterState = 1;
-      checkBox = false;
-    }
-    notifyListeners();
-  }
-
-  void incrementMultiplier() {
-    counterState++;
-    notifyListeners();
-  }
-
-  void decrementMultiplier() {
     if (counterState > 1) {
       counterState--;
     } else {

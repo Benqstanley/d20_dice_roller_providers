@@ -9,9 +9,10 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   bool isMultiPart = false;
   final TextEditingController nameController = TextEditingController();
   List<NamedCollectionModel> namedModels = [];
+  int multiplier = 1;
 
-  NamedMultiCollectionCreateModel({NamedMultiCollectionModel model}){
-    if(model != null){
+  NamedMultiCollectionCreateModel({NamedMultiCollectionModel model}) {
+    if (model != null) {
       namedModels = model.parts;
       nameController.text = model.name;
     }
@@ -44,7 +45,9 @@ class NamedMultiCollectionCreateModel extends CreateModel {
   NamedMultiCollectionModel returnModel() {
     return NamedMultiCollectionModel(
       name: nameController.text,
-      parts: namedModels);
+      parts: namedModels,
+      multiplier: multiplier,
+    );
   }
 
   @override
@@ -59,7 +62,7 @@ class NamedMultiCollectionCreateModel extends CreateModel {
     if (!(await file.exists())) {
       await file.writeAsString(jsonString);
       return true;
-    }else if(forEditing){
+    } else if (forEditing) {
       await file.writeAsString(jsonString);
       return true;
     }

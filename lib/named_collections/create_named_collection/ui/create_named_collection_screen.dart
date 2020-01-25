@@ -171,8 +171,11 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     return CollectionRow<NamedCollectionModel>.forCreate(
                         model,
                         namedMultiCollectionModel.dismissMultiPartRow,
-                        passParameters(context, namedMultiCollectionModel,
-                            index: index));
+                        passParametersForEdit(
+                            context, namedMultiCollectionModel,
+                            index: index),
+                        model.incrementMultiplier,
+                        model.decrementMultiplier);
                   })
               : Center(child: Text("There's Nothing Here Yet")),
         ),
@@ -191,7 +194,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
             ),
             RaisedButton(
                 child: Text('Add Part'),
-                onPressed: passParameters(context, namedMultiCollectionModel)),
+                onPressed:
+                    passParametersForEdit(context, namedMultiCollectionModel)),
             RaisedButton(
               child: Text('Save'),
               onPressed: () async {
@@ -213,7 +217,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
     );
   }
 
-  Function passParameters(BuildContext context,
+  Function passParametersForEdit(BuildContext context,
       NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
       {int index}) {
     var navigator = () {
