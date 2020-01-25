@@ -93,7 +93,10 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
             child: Center(
                 child: ListTile(
               trailing: Icon(Icons.delete),
-              leading: Icon(Icons.delete),
+              leading: Text(
+                "Remove",
+                style: TextStyle(color: Colors.white),
+              ),
             ))),
         child: Container(
           decoration: BoxDecoration(

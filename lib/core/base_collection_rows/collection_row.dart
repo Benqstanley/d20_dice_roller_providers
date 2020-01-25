@@ -213,8 +213,8 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.close),
-              SizedBox(width: 8,),
+              if(selector == ScreenSelector.createScreen) Icon(Icons.close),
+              if(selector == ScreenSelector.createScreen) SizedBox(width: 16,),
               buildTrailing(
                 checkBox,
                 counterState,
@@ -259,7 +259,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 8,
+            width: 16,
           ),
           Flexible(
             flex: 3,

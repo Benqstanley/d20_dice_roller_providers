@@ -1,4 +1,4 @@
-package com.zianderthalapps.d20_dice_roller
+package com.zianderthalapps.d20diceroller
 
 import android.os.Bundle
 

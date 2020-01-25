@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zianderthalapps.d20_dice_roller">
+    package="com.zianderthalapps.d20diceroller">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -11,7 +11,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="D20 Dice Roller"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
     <meta-data
         android:name="com.google.android.gms.ads.APPLICATION_ID"
         android:value="ca-app-pub-1987396634848838~8239928503"/>

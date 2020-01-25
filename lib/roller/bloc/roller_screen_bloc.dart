@@ -15,9 +15,10 @@ class RollerScreenBloc extends ChangeNotifier {
     addSingleTypeCollectionModel();
   }
 
-  void dismissSingleTypeCollectionModel(SingleTypeCollectionModel toBeDismissed) {
+  void dismissSingleTypeCollectionModel(
+      SingleTypeCollectionModel toBeDismissed) {
     singleTypeModels.remove(toBeDismissed);
-    if (singleTypeModels.isEmpty) {
+    if (singleTypeModels.isEmpty && collectionModels.isEmpty) {
       addSingleTypeCollectionModel();
     } else {
       notifyListeners();
@@ -35,9 +36,16 @@ class RollerScreenBloc extends ChangeNotifier {
   }
 
   void resetScreen() {
-    singleTypeModels.clear();
-    collectionModels.clear();
-    addSingleTypeCollectionModel();
+    if (singleTypeModels.isNotEmpty && collectionModels.isNotEmpty) {
+      singleTypeModels.clear();
+      notifyListeners();
+    } else if (singleTypeModels.isNotEmpty && collectionModels.isEmpty) {
+      singleTypeModels.clear();
+    } else {
+      collectionModels.clear();
+      addSingleTypeCollectionModel();
+      return;
+    }
   }
 
   void rollCollections(
