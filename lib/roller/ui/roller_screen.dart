@@ -20,7 +20,6 @@ class RollerScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("Dice to Roll"),
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(4.0),
@@ -89,8 +88,10 @@ class RollerScreen extends StatelessWidget {
             ],
           ),
         ),
-        AdmobBanner(adUnitId: AdInfo.adId,
-          adSize: AdmobBannerSize.FULL_BANNER,),
+        AdmobBanner(
+          adUnitId: AdInfo.adId,
+          adSize: AdmobBannerSize.FULL_BANNER,
+        ),
       ],
     );
   }

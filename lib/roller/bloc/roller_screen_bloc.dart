@@ -27,6 +27,9 @@ class RollerScreenBloc extends ChangeNotifier {
 
   void dismissCollectionModel(CollectionModel toBeDismissed) {
     collectionModels.remove(toBeDismissed);
+    if(collectionModels.isEmpty && singleTypeModels.isEmpty){
+      addSingleTypeCollectionModel();
+    }
     notifyListeners();
   }
 

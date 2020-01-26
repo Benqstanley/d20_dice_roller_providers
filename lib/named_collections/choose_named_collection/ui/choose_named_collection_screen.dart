@@ -65,45 +65,48 @@ class _ChooseNamedCollectionsScreenState
             );
           }
           if (snapshot.hasData) {
-            List<dynamic> itemsToDisplay = prepareChooseScreenRows(bloc);
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: itemsToDisplay.length + bloc.collections.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index < itemsToDisplay.length) {
-                        return itemsToDisplay[index];
-                      } else {
-                        return mapCollectionToRow(
-                            bloc.collections[index - itemsToDisplay.length],
-                            bloc);
-                      }
-                    },
+            List<dynamic> itemsToDisplay = [];//prepareChooseScreenRows();
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: itemsToDisplay.length + bloc.collections.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index < itemsToDisplay.length) {
+                          return itemsToDisplay[index];
+                        } else {
+                          return mapCollectionToRow(
+                              bloc.collections[index - itemsToDisplay.length],
+                              bloc);
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Container(
-                  height: 1,
-                  color: Theme.of(context).dividerColor,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: RaisedButton(
-                    child: Text("Add Selection To Roller"),
-                    onPressed: () {
-                      rollerScreenBloc.collectionModels
-                          .addAll(prepareRowsToAdd());
-                      Navigator.of(context).pushReplacementNamed(
-                          AppWideStrings.rollerScreenPath);
-                    },
+                  Container(
+                    height: 1,
+                    color: Theme.of(context).dividerColor,
                   ),
-                ),
-                AdmobBanner(
-                  adUnitId: AdInfo.adId,
-                  adSize: AdmobBannerSize.FULL_BANNER,
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: RaisedButton(
+                      child: Text("Add Selection To Roller"),
+                      onPressed: () {
+                        rollerScreenBloc.collectionModels
+                            .addAll(prepareRowsToAdd());
+                        Navigator.of(context).pushReplacementNamed(
+                            AppWideStrings.rollerScreenPath);
+                      },
+                    ),
+                  ),
+                  AdmobBanner(
+                    adUnitId: AdInfo.adId,
+                    adSize: AdmobBannerSize.FULL_BANNER,
+                  )
+                ],
+              ),
             );
           } else {
             return Container();
@@ -111,7 +114,7 @@ class _ChooseNamedCollectionsScreenState
         });
   }
 
-  List<dynamic> prepareChooseScreenRows(ViewNamedCollectionsBloc bloc) {
+  List<dynamic> prepareChooseScreenRows() {
     List<dynamic> itemsToDisplay = [
       Container(
         padding: const EdgeInsets.all(8.0),
