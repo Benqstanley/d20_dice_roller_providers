@@ -9,6 +9,15 @@ import 'package:d20_dice_roller/core/dice_types.dart';
 class Utility {
   static Random random = Random();
 
+  static List<Map<String, dynamic>> rollSingleTypeCollectionWithMultiplier(SingleTypeCollectionModel model){
+    List<Map<String, dynamic>> results = [];
+    int i = 1;
+    for(i = 1; i <= model.multiplier; i++){
+      results.add(rollSingleTypeCollection(model));
+    }
+    return results;
+  }
+
   static Map<String, dynamic> rollSingleTypeCollection(SingleTypeCollectionModel model) {
     StringBuffer expandedResultBuffer = StringBuffer();
     int rollValue = 0;
@@ -30,6 +39,7 @@ class Utility {
     result['shortResult'] = rollValue;
     return result;
   }
+
   static Map<String, dynamic> rollNamedCollection(NamedCollectionModel model) {
     Map<String, dynamic> result = Map();
     List<Map<String, dynamic>> singleTypeResults = [];
@@ -50,6 +60,14 @@ class Utility {
     result["name"] = model.name;
     result["namedResults"] = namedResults;
     return result;
+  }
+
+  static List<Map<String, dynamic>> rollCollectionWithMultiplier(CollectionModel model){
+    List<Map<String, dynamic>> results = [];
+    for(int i = 1; i <= model.multiplier; i++){
+      results.add(rollCollection(model));
+    }
+    return results;
   }
 
   static Map<String, dynamic> rollCollection(CollectionModel model) {

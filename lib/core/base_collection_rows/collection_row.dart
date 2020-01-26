@@ -1,10 +1,13 @@
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/mult_counter.dart';
-import 'package:d20_dice_roller/core/mult_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum ScreenSelector { rollerScreen, chooseCollections, createScreen }
+enum ScreenSelector {
+  rollerScreen,
+  chooseCollections,
+  createScreen,
+}
 
 class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   final T collectionModel;
@@ -29,8 +32,6 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
     T collectionModel,
     Function onDismissed,
     Function handleEdit,
-    Function handleIncrement,
-    Function handleDecrement,
   ) {
     collectionModel.checkBox = true;
     return CollectionRow(
@@ -38,8 +39,8 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
       onDismissed,
       ScreenSelector.createScreen,
       handleEdit: handleEdit,
-      handleIncrement: handleIncrement,
-      handleDecrement: handleDecrement,
+      handleIncrement: collectionModel.incrementMultiplier,
+      handleDecrement: collectionModel.decrementMultiplier,
     );
   }
 
@@ -124,9 +125,10 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
     T model = Provider.of<T>(context);
     String counterState;
     bool checkBox;
+    bool forCreate = selector == ScreenSelector.createScreen;
     if (selector == ScreenSelector.chooseCollections) {
       counterState = model.counterState.toString();
-    } else if (selector == ScreenSelector.createScreen) {
+    } else if (forCreate) {
       counterState = model.multiplier.toString();
     }
     checkBox = model.checkBox;
@@ -150,159 +152,115 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
             ))),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(border: Border.all()),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              selector == ScreenSelector.chooseCollections ||
-                      selector == ScreenSelector.createScreen
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        child: Icon(Icons.edit),
-                        onTap: () {
-                          handleEdit();
-                        },
+          child: Padding(
+            padding: selector == ScreenSelector.rollerScreen
+                ? const EdgeInsets.fromLTRB(8, 0, 0, 0)
+                : EdgeInsets.all(0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                selector == ScreenSelector.chooseCollections ||
+                        selector == ScreenSelector.createScreen
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Icon(Icons.edit),
+                          onTap: () {
+                            handleEdit();
+                          },
+                        ),
+                      )
+                    : Container(),
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              model.name + ":",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ],
                       ),
-                    )
-                  : Container(),
-              Expanded(
-                flex: 6,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: model.singleTypeCollections != null
+                                  ? model.singleTypeCollections
+                                      .map((singleTypeCollection) => Text(
+                                            singleTypeCollection.toString(),
+                                            style: TextStyle(fontSize: 16),
+                                          ))
+                                      .toList()
+                                  : model.parts
+                                      .map((part) => Text(
+                                            part.toString(),
+                                            style: TextStyle(fontSize: 16),
+                                          ))
+                                      .toList(),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            model.name + ":",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      width: 8,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: model.singleTypeCollections != null
-                                ? model.singleTypeCollections
-                                    .map((singleTypeCollection) => Text(
-                                          singleTypeCollection.toString(),
-                                          style: TextStyle(fontSize: 16),
-                                        ))
-                                    .toList()
-                                : model.parts
-                                    .map((part) => Text(
-                                          part.toString(),
-                                          style: TextStyle(fontSize: 16),
-                                        ))
-                                    .toList(),
-                          ),
-                        ),
-                      ],
-                    )
+                    if (forCreate)
+                      Container(
+                        height: 74,
+                        width: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    if (selector != ScreenSelector.rollerScreen && checkBox)
+                      Icon(
+                        Icons.close,
+                        size: 20,
+                      ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: MultCounter(
+                        counterState,
+                        context,
+                        handleCheckboxChanged,
+                        checkBoxValue: forCreate ? true : checkBox,
+                        handleIncrement: handleIncrement,
+                        handleDecrement: handleDecrement,
+                        forRoller: selector == ScreenSelector.rollerScreen,
+                      ),
+                    ),
                   ],
-                ),
-              ),
-              if (selector == ScreenSelector.createScreen) Icon(Icons.close),
-              if (selector == ScreenSelector.createScreen)
-                SizedBox(
-                  width: 16,
-                ),
-              MultCounter(
-                counterState,
-                context,
-                handleCheckboxChanged,
-                checkBoxValue: checkBox,
-                handleDecrement: handleDecrement,
-                handleIncrement: handleIncrement,
-                showCheckBox: selector != ScreenSelector.rollerScreen,
-              ),
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  Widget buildTrailing(
-    bool checkBoxValue,
-    String counterState,
-    BuildContext context,
-    Function handleCheckboxChanged, {
-    bool showCheckBox = true,
-    Function handleIncrement,
-    Function handleDecrement,
-  }) {
-    if (showCheckBox && !checkBoxValue) {
-      return Container(
-        height: 66,
-        child: Center(
-          child: Checkbox(
-            value: checkBoxValue,
-            onChanged: handleCheckboxChanged,
-          ),
-        ),
-      );
-    } else {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: Container(
-              alignment: AlignmentDirectional.centerEnd,
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide()),
-                  color: Theme.of(context).backgroundColor),
-              child: Text(counterState),
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Flexible(
-            flex: 3,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Flexible(
-                  flex: 2,
-                  child: MultButton(
-                    text: '+',
-                    onTap: handleIncrement,
-                  ),
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Flexible(
-                  flex: 2,
-                  child: MultButton(
-                    text: '-',
-                    onTap: () {
-                      handleDecrement();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
   }
 }

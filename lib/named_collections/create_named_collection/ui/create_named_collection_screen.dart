@@ -169,13 +169,11 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     NamedCollectionModel model =
                         namedMultiCollectionModel.namedModels[index];
                     return CollectionRow<NamedCollectionModel>.forCreate(
-                        model,
-                        namedMultiCollectionModel.dismissMultiPartRow,
-                        passParametersForEdit(
-                            context, namedMultiCollectionModel,
-                            index: index),
-                        model.incrementMultiplier,
-                        model.decrementMultiplier);
+                      model,
+                      namedMultiCollectionModel.dismissMultiPartRow,
+                      passParametersForEdit(context, namedMultiCollectionModel,
+                          index: index),
+                    );
                   })
               : Center(child: Text("There's Nothing Here Yet")),
         ),

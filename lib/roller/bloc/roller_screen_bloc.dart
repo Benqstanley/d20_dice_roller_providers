@@ -60,8 +60,9 @@ class RollerScreenBloc extends ChangeNotifier {
     }
     for (CollectionModel model in collectionModels) {
       if (model.checkBox) {
-        Map result = Utility.rollCollection(model);
-        results.add(result);
+        List<Map<String, dynamic>> result =
+            Utility.rollCollectionWithMultiplier(model);
+        results.addAll(result);
       }
     }
     if (results.isNotEmpty) {

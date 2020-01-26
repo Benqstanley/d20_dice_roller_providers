@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class MultCounter extends StatelessWidget {
   bool checkBoxValue;
+  bool forRoller;
   String counterState;
   BuildContext context;
   Function handleCheckboxChanged;
@@ -18,10 +19,22 @@ class MultCounter extends StatelessWidget {
     this.showCheckBox = true,
     this.handleIncrement,
     this.handleDecrement,
+    this.forRoller = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (forRoller) {
+      return Container(
+        height: 66,
+        child: Center(
+          child: Checkbox(
+            value: checkBoxValue,
+            onChanged: handleCheckboxChanged,
+          ),
+        ),
+      );
+    }
     if (showCheckBox && !checkBoxValue) {
       return Container(
         height: 66,
