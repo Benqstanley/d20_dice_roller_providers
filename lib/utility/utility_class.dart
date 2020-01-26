@@ -90,7 +90,7 @@ class Utility {
     } else {
       List<Map<String, dynamic>> namedResults = [];
       for (NamedCollectionModel namedModel in model.parts) {
-        namedResults.add(rollCollection(namedModel));
+        namedResults.addAll(rollCollectionWithMultiplier(namedModel));
       }
       result["name"] = model.name;
       result["namedResults"] = namedResults;
