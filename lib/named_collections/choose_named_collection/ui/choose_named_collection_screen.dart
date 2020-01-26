@@ -65,7 +65,6 @@ class _ChooseNamedCollectionsScreenState
             );
           }
           if (snapshot.hasData) {
-            List<dynamic> itemsToDisplay = [];//prepareChooseScreenRows();
             return Padding(
               padding: const EdgeInsets.all(4.0),
               child: Column(
@@ -73,15 +72,10 @@ class _ChooseNamedCollectionsScreenState
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      itemCount: itemsToDisplay.length + bloc.collections.length,
+                      itemCount: bloc.collections.length,
                       itemBuilder: (BuildContext context, int index) {
-                        if (index < itemsToDisplay.length) {
-                          return itemsToDisplay[index];
-                        } else {
-                          return mapCollectionToRow(
-                              bloc.collections[index - itemsToDisplay.length],
-                              bloc);
-                        }
+                        return mapCollectionToRow(
+                            bloc.collections[index], bloc);
                       },
                     ),
                   ),
