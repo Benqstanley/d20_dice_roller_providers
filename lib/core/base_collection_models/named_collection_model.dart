@@ -56,20 +56,19 @@ class NamedCollectionModel extends CollectionModel {
 
   @override
   String toString() {
-    StringBuffer toReturn = StringBuffer(name);
-    toReturn.write(": ");
     bool hasMult = multiplier != 1;
+    String nameString = name;
     if (hasMult) {
-      toReturn.write("(");
+      nameString = nameString + " x $multiplier";
     }
+    StringBuffer toReturn = StringBuffer(nameString);
+    toReturn.write(": ");
+
     singleTypeCollections.forEach((element) {
       toReturn.write(element.toString());
       toReturn.write(", ");
     });
     String returnString = toReturn.toString().substring(0, toReturn.length - 2);
-    if (hasMult) {
-      returnString = returnString + ") x $multiplier";
-    }
     return returnString;
   }
 

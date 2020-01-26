@@ -70,8 +70,14 @@ class SingleTypeCollectionModel extends ChangeNotifier {
     String baseString =
         "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString();
     if (multiplier != 1) {
-      baseString = "($baseString)$multiplier";
+      baseString = "($baseString) x $multiplier";
     }
+    return baseString;
+  }
+
+  String toStringForRoller() {
+    String baseString =
+        "$numberOfDice x ${diceTypeStrings[diceType]}" + modifierString();
     return baseString;
   }
 

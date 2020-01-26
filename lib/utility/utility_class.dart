@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
-import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 
@@ -13,14 +12,17 @@ class Utility {
       SingleTypeCollectionModel model) {
     List<Map<String, dynamic>> results = [];
     int i = 1;
+    bool hasMult = model.multiplier > 1;
     for (i = 1; i <= model.multiplier; i++) {
-      results.add(rollSingleTypeCollection(model));
+      results
+          .add(rollSingleTypeCollection(model, instance: hasMult ? i : null));
     }
     return results;
   }
 
   static Map<String, dynamic> rollSingleTypeCollection(
-      SingleTypeCollectionModel model) {
+      SingleTypeCollectionModel model,
+      {int instance}) {
     StringBuffer expandedResultBuffer = StringBuffer();
     int rollValue = 0;
     Map<String, dynamic> result = Map();
@@ -35,47 +37,25 @@ class Utility {
     }
     expandedResultBuffer.write(" = $rollValue");
     String expandedResult = expandedResultBuffer.toString().substring(3);
-    result['collectionDescription'] = model.toString();
+    String instanceAddOn = instance != null ? " ($instance)" : "";
+    result['collectionDescription'] = model.toStringForRoller() + instanceAddOn;
     result['expandedResult'] = expandedResult;
     result['shortResult'] = rollValue;
     return result;
   }
 
-  static Map<String, dynamic> rollNamedCollection(NamedCollectionModel model) {
-    Map<String, dynamic> result = Map();
-    List<Map<String, dynamic>> singleTypeResults = [];
-    for (SingleTypeCollectionModel singleModel in model.singleTypeCollections) {
-      singleTypeResults.add(rollSingleTypeCollection(singleModel));
-    }
-    result["name"] = model.name;
-    result["singleResults"] = singleTypeResults;
-    return result;
-  }
-
-  static Map<String, dynamic> rollNamedMultiCollection(
-      NamedMultiCollectionModel model) {
-    Map<String, dynamic> result = Map();
-    List<Map<String, dynamic>> namedResults = [];
-    for (NamedCollectionModel namedModel in model.parts) {
-      namedResults.add(rollNamedCollection(namedModel));
-    }
-    result["name"] = model.name;
-    result["namedResults"] = namedResults;
-    return result;
-  }
-
   static List<Map<String, dynamic>> rollCollectionWithMultiplier(
       CollectionModel model) {
-    print(model);
-    print(model.multiplier);
+    bool hasMult = model.multiplier > 1;
     List<Map<String, dynamic>> results = [];
     for (int i = 1; i <= model.multiplier; i++) {
-      results.add(rollCollection(model));
+      results.add(rollCollection(model, instance: hasMult ? i : null));
     }
     return results;
   }
 
-  static Map<String, dynamic> rollCollection(CollectionModel model) {
+  static Map<String, dynamic> rollCollection(CollectionModel model,
+      {int instance}) {
     Map<String, dynamic> result = Map();
     if (model is NamedCollectionModel) {
       List<Map<String, dynamic>> singleTypeResults = [];
@@ -84,7 +64,8 @@ class Utility {
         singleTypeResults
             .addAll(rollSingleTypeCollectionWithMultiplier(singleModel));
       }
-      result["name"] = model.name;
+      String instanceAddOn = instance != null ? " ($instance)" : "";
+      result["name"] = model.name + instanceAddOn;
       result["singleResults"] = singleTypeResults;
       return result;
     } else {
