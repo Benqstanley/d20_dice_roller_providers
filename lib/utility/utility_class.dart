@@ -56,6 +56,7 @@ class Utility {
 
   static Map<String, dynamic> rollCollection(CollectionModel model,
       {int instance}) {
+    String instanceAddOn = instance != null ? " ($instance)" : "";
     Map<String, dynamic> result = Map();
     if (model is NamedCollectionModel) {
       List<Map<String, dynamic>> singleTypeResults = [];
@@ -64,7 +65,6 @@ class Utility {
         singleTypeResults
             .addAll(rollSingleTypeCollectionWithMultiplier(singleModel));
       }
-      String instanceAddOn = instance != null ? " ($instance)" : "";
       result["name"] = model.name + instanceAddOn;
       result["singleResults"] = singleTypeResults;
       return result;
@@ -73,7 +73,7 @@ class Utility {
       for (NamedCollectionModel namedModel in model.parts) {
         namedResults.addAll(rollCollectionWithMultiplier(namedModel));
       }
-      result["name"] = model.name;
+      result["name"] = model.name + instanceAddOn;
       result["namedResults"] = namedResults;
       return result;
     }

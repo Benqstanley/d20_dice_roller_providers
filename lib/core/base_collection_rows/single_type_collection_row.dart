@@ -1,5 +1,5 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/mult_counter.dart';
+import 'package:d20_dice_roller/core/mult_counter.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -182,7 +182,7 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                       width: 8,
                     ),
                     Container(
-                      height: 70,
+                      height: 72,
                       width: 1,
                       color: Theme.of(context).dividerColor,
                     ),
@@ -196,7 +196,7 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                     MultCounter(
                       collectionModel.multiplier.toString(),
                       context,
-                      collectionModel.changeCheckbox,
+                      handleCheckboxChanged: collectionModel.changeCheckbox,
                       checkBoxValue: true,
                       handleIncrement: collectionModel.incrementMultiplier,
                       handleDecrement: collectionModel.decrementMultiplier,

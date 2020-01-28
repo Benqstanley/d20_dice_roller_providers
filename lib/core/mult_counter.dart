@@ -10,17 +10,17 @@ class MultCounter extends StatelessWidget {
   bool showCheckBox = true;
   Function handleIncrement;
   Function handleDecrement;
+  bool scaffoldBackground;
 
-  MultCounter(
-    this.counterState,
-    this.context,
-    this.handleCheckboxChanged, {
-    this.checkBoxValue = false,
-    this.showCheckBox = true,
-    this.handleIncrement,
-    this.handleDecrement,
-    this.forRoller = false,
-  });
+  MultCounter(this.counterState, this.context,
+      {this.handleCheckboxChanged,
+      this.checkBoxValue = false,
+      this.showCheckBox = true,
+      this.handleIncrement,
+      this.handleDecrement,
+      this.forRoller = false,
+      this.scaffoldBackground = false})
+      : assert(handleCheckboxChanged != null || !showCheckBox);
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,9 @@ class MultCounter extends StatelessWidget {
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                   border: Border(bottom: BorderSide()),
-                  color: Theme.of(context).backgroundColor),
+                  color: scaffoldBackground
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : Theme.of(context).backgroundColor),
               child: Text(counterState),
             ),
           ),
@@ -84,9 +86,11 @@ class MultCounter extends StatelessWidget {
                   flex: 2,
                   child: MultButton(
                     text: '-',
-                    onTap: () {
-                      handleDecrement();
-                    },
+                    onTap: int.tryParse(counterState) > 1
+                        ? () {
+                            handleDecrement();
+                          }
+                        : null,
                   ),
                 ),
               ],

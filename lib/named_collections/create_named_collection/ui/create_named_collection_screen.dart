@@ -7,6 +7,7 @@ import 'package:d20_dice_roller/core/base_collection_models/named_collection_mod
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
+import 'package:d20_dice_roller/core/mult_counter.dart';
 import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
@@ -121,6 +122,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
     NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
     NamedCollectionCreateModel namedCollectionCreateModel,
   }) {
+    var currentModel = !isMulti || inPart
+        ? namedCollectionCreateModel
+        : namedMultiCollectionCreateModel;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -128,11 +132,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
           Expanded(
             child: TextField(
               enabled: !forEditing,
-              controller: !isMulti
-                  ? namedCollectionCreateModel.nameController
-                  : inPart
-                      ? namedCollectionCreateModel.nameController
-                      : namedMultiCollectionCreateModel.nameController,
+              controller: currentModel.nameController,
               decoration: InputDecoration(
                 hintText: !inPart ? "Name Your Collection" : "Name This Part",
               ),
@@ -147,7 +147,23 @@ class CreateNamedCollectionContents extends StatelessWidget {
                   onChanged: createScreenBloc.changeMultiStatus,
                 )
               ],
-            )
+            ),
+          Expanded(
+            flex: 0,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                MultCounter(
+                  currentModel.multiplier.toString(),
+                  context,
+                  handleIncrement: currentModel.incrementMultiplier,
+                  handleDecrement: currentModel.decrementMultiplier,
+                  showCheckBox: false,
+                  scaffoldBackground: true,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -325,8 +341,6 @@ class CreateNamedCollectionContents extends StatelessWidget {
                       .saveCollection(forEditing: forEditing)
                       .then((value) async {
                     if (value) {
-                      //TODO: show snackbar to redirect to saved collections
-                      //TODO: and refresh create screen
                       Navigator.of(context).pushReplacementNamed(
                           AppWideStrings.viewNamedCollectionsPath);
                     }

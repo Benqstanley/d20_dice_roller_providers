@@ -79,9 +79,9 @@ class NamedCollectionModel extends CollectionModel {
   @override
   NamedCollectionModel copy() {
     return NamedCollectionModel(
-      name: name,
-      path: path,
-      singleTypeCollections: singleTypeCollections,
-    );
+        name: name,
+        path: path,
+        singleTypeCollections: singleTypeCollections,
+        multiplier: multiplier);
   }
 }

@@ -3,18 +3,16 @@ import 'dart:io';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_multi_collection_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/create_model.dart';
-import 'package:flutter/material.dart';
 
 class NamedMultiCollectionCreateModel extends CreateModel {
   bool isMultiPart = false;
-  final TextEditingController nameController = TextEditingController();
   List<NamedCollectionModel> namedModels = [];
-  int multiplier = 1;
 
   NamedMultiCollectionCreateModel({NamedMultiCollectionModel model}) {
     if (model != null) {
       namedModels = model.parts;
       nameController.text = model.name;
+      this.multiplier = model.multiplier;
     }
   }
 

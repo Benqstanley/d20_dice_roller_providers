@@ -1,5 +1,5 @@
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
-import 'package:d20_dice_roller/core/base_collection_rows/mult_counter.dart';
+import 'package:d20_dice_roller/core/mult_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +58,10 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   }
 
   factory CollectionRow.forChoose(
-      T collectionModel, Function onDismissed, Function handleEdit) {
+    T collectionModel,
+    Function onDismissed,
+    Function handleEdit,
+  ) {
     collectionModel.checkBox = false;
     return CollectionRow(
       collectionModel,
@@ -132,6 +135,8 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
       counterState = model.multiplier.toString();
     }
     checkBox = model.checkBox;
+    String multiplierAddOn =
+        model.multiplier > 1 ? " (${model.multiplier})" : "";
     return Card(
       elevation: 5,
       color: Theme.of(context).backgroundColor,
@@ -182,7 +187,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              model.name + ":",
+                              model.name + ":" + multiplierAddOn,
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -247,7 +252,13 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                       child: MultCounter(
                         counterState,
                         context,
-                        handleCheckboxChanged,
+                        showCheckBox:
+                            selector == ScreenSelector.chooseCollections,
+                        handleCheckboxChanged:
+                            selector == ScreenSelector.chooseCollections ||
+                                    selector == ScreenSelector.rollerScreen
+                                ? handleCheckboxChanged
+                                : null,
                         checkBoxValue: forCreate ? true : checkBox,
                         handleIncrement: handleIncrement,
                         handleDecrement: handleDecrement,

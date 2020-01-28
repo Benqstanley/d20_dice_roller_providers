@@ -11,9 +11,12 @@ class MultButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool active = onTap != null;
     return Ink(
       decoration: BoxDecoration(
-        color: Theme.of(context).buttonColor,
+        color: active
+            ? Theme.of(context).buttonColor
+            : Theme.of(context).disabledColor,
         border: Border.all(),
       ),
       height: 30,
@@ -22,7 +25,7 @@ class MultButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
         ),
