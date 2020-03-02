@@ -7,6 +7,7 @@ import 'package:d20_dice_roller/core/base_collection_models/single_type_collecti
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row.dart';
 import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
+import 'package:d20_dice_roller/roller/ui/roller_screen_keys.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,18 +67,21 @@ class RollerScreen extends StatelessWidget {
             children: <Widget>[
               RaisedButton(
                 child: Text('Clear'),
+                key: RollerScreenKeys.clearButtonKey,
                 onPressed: () {
                   rollerScreenBloc.resetScreen();
                 },
               ),
               RaisedButton(
                 child: Text('Add Row'),
+                key: RollerScreenKeys.addRowButtonKey,
                 onPressed: () {
                   rollerScreenBloc.addSingleTypeCollectionModel();
                 },
               ),
               RaisedButton(
                 child: Text('Roll'),
+                key: RollerScreenKeys.rollButtonKey,
                 onPressed: () {
                   rollerScreenBloc.rollCollections(
                     context,
