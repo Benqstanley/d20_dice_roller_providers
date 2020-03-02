@@ -13,6 +13,7 @@ class ContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     List<SingleChildCloneableWidget> providers = [];
     providers.addAll(changeNotifiers.map((changeNotifier) {
       switch (changeNotifier.runtimeType) {

@@ -19,10 +19,9 @@ import 'ads/bloc/ad_mob_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize(AdInfo.appId);
   await PrefService.init(prefix: 'pref_');
   PrefService.setDefaultValues({'roll_detail': true, 'app_theme': 0});
-
+  Admob.initialize(AdInfo.appId);
   runApp(DiceRollerMain());
 }
 

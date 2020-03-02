@@ -1,6 +1,7 @@
 import 'package:d20_dice_roller/core/base_collection_models/single_type_collection_model.dart';
-import 'package:d20_dice_roller/core/mult_counter.dart';
+import 'package:d20_dice_roller/core/base_collection_rows/collection_row_keys.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
+import 'package:d20_dice_roller/core/mult_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -120,6 +121,7 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          key: CollectionRowKeys.numberOfDiceTextField,
                           decoration: InputDecoration(hintText: "# of Dice"),
                           controller: numberOfDiceController,
                           keyboardType: TextInputType.number,
@@ -133,6 +135,7 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                         width: spacing,
                       ),
                       DropdownButton<DiceType>(
+                        key: CollectionRowKeys.diceTypeDropDown,
                         hint: Text("Type"),
                         value: collectionModel.diceType,
                         onChanged: (DiceType type) {
@@ -189,7 +192,10 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                     SizedBox(
                       width: 4,
                     ),
-                    Icon(Icons.close, size: 20,),
+                    Icon(
+                      Icons.close,
+                      size: 20,
+                    ),
                     SizedBox(
                       width: 8,
                     ),

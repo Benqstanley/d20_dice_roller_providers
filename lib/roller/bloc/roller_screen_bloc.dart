@@ -44,6 +44,7 @@ class RollerScreenBloc extends ChangeNotifier {
       notifyListeners();
     } else if (singleTypeModels.isNotEmpty && collectionModels.isEmpty) {
       singleTypeModels.clear();
+      addSingleTypeCollectionModel();
     } else {
       collectionModels.clear();
       addSingleTypeCollectionModel();
