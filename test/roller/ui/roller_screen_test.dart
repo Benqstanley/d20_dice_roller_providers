@@ -119,5 +119,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(RollerModalSheet), findsOneWidget);
     expect(find.byType(RollResult), findsNWidgets(1));
+    await tester.tap(find.text("RollerScreen", skipOffstage: false));
+    await tester.pumpAndSettle();
+    expect(find.byType(RollerModalSheet), findsNothing);
   });
 }
