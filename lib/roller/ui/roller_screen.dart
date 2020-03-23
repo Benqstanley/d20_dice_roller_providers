@@ -36,13 +36,10 @@ class RollerScreen extends StatelessWidget {
                     return CollectionRow<NamedMultiCollectionModel>.forRoller(
                         collectionModel,
                         rollerScreenBloc.dismissCollectionModel);
-                  } else if (rollerScreenBloc.collectionModels[index]
-                      is NamedCollectionModel) {
+                  } else {
                     return CollectionRow<NamedCollectionModel>.forRoller(
                         collectionModel,
                         rollerScreenBloc.dismissCollectionModel);
-                  } else {
-                    return Container();
                   }
                 }
                 SingleTypeCollectionModel collectionModel =

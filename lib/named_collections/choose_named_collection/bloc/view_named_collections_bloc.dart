@@ -95,6 +95,8 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
         namedCollectionsDirectory != null;
   }
 
+  ///Getting Saved Files from storage in JSON format.
+
   Future<bool> getSavedFiles() async {
     if(filesLoaded) return true;
     namedMultiCollections = [];
@@ -127,9 +129,19 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
     }
   }
 
+  void printWrapped(String toPrint){
+    if(toPrint.length > 200){
+      print(toPrint.substring(0, 200));
+      return printWrapped(toPrint.substring(200));
+    }else{
+      return print(toPrint);
+    }
+  }
+
   Future<bool> decodeMultiFile(FileSystemEntity entity) async {
     if (await File(entity.path).exists()) {
       String jsonString = await File(entity.path).readAsString();
+      printWrapped(jsonString);
       try {
         namedMultiCollections.add(NamedMultiCollectionModel.fromJson(
             json.decode(jsonString), entity.path));
@@ -144,6 +156,7 @@ class ViewNamedCollectionsBloc extends ChangeNotifier {
   Future<bool> decodeNamedFile(FileSystemEntity entity) async {
     if (await File(entity.path).exists()) {
       String jsonString = await File(entity.path).readAsString();
+      printWrapped(jsonString);
       try {
         namedCollections.add(NamedCollectionModel.fromJson(
             json.decode(jsonString),
