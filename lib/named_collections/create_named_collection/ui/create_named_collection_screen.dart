@@ -202,8 +202,12 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     return CollectionRow<NamedCollectionModel>.forCreate(
                       model,
                       namedMultiCollectionModel.dismissMultiPartRow,
-                      passNamedMultiCollectionToPartCreator(context, namedMultiCollectionModel,
-                          index: index),
+                      passNamedMultiCollectionToPartCreator(
+                        context,
+                        namedMultiCollectionModel,
+                        index: index,
+                      ),
+                      index,
                     );
                   })
               : Center(child: Text("There's Nothing Here Yet")),
@@ -216,16 +220,19 @@ class CreateNamedCollectionContents extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             RaisedButton(
+              key: CreateNamedCollectionScreenKeys.clearScreenKey,
               child: Text('Clear'),
               onPressed: () {
                 namedMultiCollectionModel.resetRowsList();
               },
             ),
             RaisedButton(
+                key: CreateNamedCollectionScreenKeys.addPartKey,
                 child: Text('Add Part'),
-                onPressed:
-                    passNamedMultiCollectionToPartCreator(context, namedMultiCollectionModel)),
+                onPressed: passNamedMultiCollectionToPartCreator(
+                    context, namedMultiCollectionModel)),
             RaisedButton(
+              key: CreateNamedCollectionScreenKeys.saveCollectionKey,
               child: Text('Save'),
               onPressed: () async {
                 namedMultiCollectionModel
@@ -277,6 +284,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
               return SingleTypeCollectionRow.forCreate(
                 namedCollectionCreateModel.singleTypeCollections[index],
                 namedCollectionCreateModel.dismissRow,
+                index,
               );
             },
           ),
@@ -289,18 +297,21 @@ class CreateNamedCollectionContents extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             RaisedButton(
+              key: CreateNamedCollectionScreenKeys.clearScreenKey,
               child: Text('Clear'),
               onPressed: () {
                 namedCollectionCreateModel.resetList();
               },
             ),
             RaisedButton(
+              key: CreateNamedCollectionScreenKeys.addRowKey,
               child: Text('Add Row'),
               onPressed: () {
                 namedCollectionCreateModel.addSingleTypeCollectionModel();
               },
             ),
             RaisedButton(
+              key: CreateNamedCollectionScreenKeys.saveCollectionKey,
               child: Text('Save'),
               onPressed: () {
                 if (inPart) {

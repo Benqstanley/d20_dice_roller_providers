@@ -11,6 +11,7 @@ class CollectionModel extends ChangeNotifier {
   bool checkBox = false;
   int counterState = 1;
   int multiplier = 1;
+  int indexForCreate;
 
   void incrementMultiplier() {
     multiplier++;

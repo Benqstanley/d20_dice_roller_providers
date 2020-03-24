@@ -1,8 +1,8 @@
-import 'package:d20_dice_roller/core/base_collection_rows/single_type_collection_row.dart';
+import 'package:d20_dice_roller/core/mult_counter.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen_keys.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
-import 'package:d20_dice_roller/roller/ui/roller_screen.dart';
-import 'package:d20_dice_roller/roller/ui/roller_screen_keys.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +12,14 @@ import 'package:preferences/preference_service.dart';
 import '../../../container_widget.dart';
 
 void main() {
-  final Finder addRowButton = find.byKey(RollerScreenKeys.addRowButtonKey);
-  final Finder resetButton = find.byKey(RollerScreenKeys.clearButtonKey);
+  final Finder addRowButton =
+      find.byKey(CreateNamedCollectionScreenKeys.addRowKey);
+  final Finder singleTypeRows = find.byWidgetPredicate((w) {
+    if (w is MultCounter) return w.key.toString().contains('rowIncrementerKey');
+    return false;
+  });
+  final Finder clearButton =
+      find.byKey(CreateNamedCollectionScreenKeys.clearScreenKey);
 
   setUpAll(() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -29,17 +35,8 @@ void main() {
     PrefService.setDefaultValues({'roll_detail': true, 'app_theme': 0});
   });
 
-  Future<int> addRow(
-    WidgetTester tester,
-    int currentCount,
-  ) async {
-    await tester.tap(addRowButton);
-    await tester.pumpAndSettle();
-    currentCount = currentCount + 1;
-    return currentCount;
-  }
-
-  testWidgets('Add Row Button test', (WidgetTester tester) async {
+  testWidgets('CreateNamedCollectionScreen topIncrementerTest',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
     var rollerScreenBloc = RollerScreenBloc();
     var sessionHistory = SessionHistoryModel();
@@ -50,44 +47,23 @@ void main() {
         sessionHistory,
         createScreenBloc,
       ],
-      RollerScreen(),
+      CreateNamedCollectionScreen(),
     );
 
     await tester.pumpWidget(widget);
     await tester.pumpAndSettle();
-    var singleTypeCollectionRowFinder =
-        find.byType(SingleTypeCollectionRow, skipOffstage: false);
-    expect(singleTypeCollectionRowFinder, findsOneWidget);
-    int currentCount = 1;
-    currentCount = await addRow(tester, currentCount);
-    expect(singleTypeCollectionRowFinder, findsNWidgets(currentCount));
-    currentCount = await addRow(tester, currentCount);
-    expect(singleTypeCollectionRowFinder, findsNWidgets(currentCount));
-    currentCount = await addRow(tester, currentCount);
-    expect(singleTypeCollectionRowFinder, findsNWidgets(currentCount));
-    currentCount = await addRow(tester, currentCount);
-    expect(singleTypeCollectionRowFinder, findsNWidgets(currentCount));
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = await addRow(tester, currentCount);
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
-    currentCount = 1;
-    await tester.tap(resetButton);
+    expect(find.byKey(CreateNamedCollectionScreenKeys.topLevelIncrementer),
+        findsOneWidget);
+    expect(find.byKey(CreateNamedCollectionScreenKeys.multiStatusBox),
+        findsOneWidget);
+    expect(singleTypeRows, findsOneWidget);
+    await tester.tap(addRowButton);
     await tester.pumpAndSettle();
-    expect(rollerScreenBloc.singleTypeModels.length, currentCount);
+    await tester.tap(addRowButton);
+    await tester.pumpAndSettle();
+    expect(singleTypeRows, findsNWidgets(3));
+    await tester.tap(clearButton);
+    await tester.pumpAndSettle();
+    expect(singleTypeRows, findsOneWidget);
   });
 }

@@ -6,6 +6,7 @@ class SingleTypeCollectionModel extends ChangeNotifier {
   DiceType diceType;
   int modifier;
   int multiplier = 1;
+  int indexForCreate;
 
   //for managing a checkbox if one is needed on the associated RowType
   bool checkBox = true;

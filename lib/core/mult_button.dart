@@ -5,9 +5,10 @@ class MultButton extends StatelessWidget {
   final String text;
 
   MultButton({
+    Key key,
     this.onTap,
     this.text,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

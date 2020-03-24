@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/main.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/roller/bloc/roller_screen_bloc.dart';
 import 'package:d20_dice_roller/session_history/model/session_history_model.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,10 @@ class ContainerWidget extends StatelessWidget {
           );
         case SessionHistoryModel:
           return ChangeNotifierProvider<SessionHistoryModel>(
+            create: (context) => changeNotifier,
+          );
+        case CreateScreenBloc:
+          return ChangeNotifierProvider<CreateScreenBloc>(
             create: (context) => changeNotifier,
           );
         default:

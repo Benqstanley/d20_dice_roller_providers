@@ -1,4 +1,5 @@
 import 'package:d20_dice_roller/core/mult_button.dart';
+import 'package:d20_dice_roller/core/mult_button_keys.dart';
 import 'package:flutter/material.dart';
 
 class MultCounter extends StatelessWidget {
@@ -79,6 +80,7 @@ class MultCounter extends StatelessWidget {
                 Flexible(
                   flex: 2,
                   child: MultButton(
+                    key: MultButtonKeys.incrementKey,
                     text: '+',
                     onTap: handleIncrement,
                   ),
@@ -89,6 +91,7 @@ class MultCounter extends StatelessWidget {
                 Flexible(
                   flex: 2,
                   child: MultButton(
+                    key: MultButtonKeys.decrementKey,
                     text: '-',
                     onTap: int.tryParse(counterState) > 1
                         ? () {

@@ -2,6 +2,7 @@ import 'package:d20_dice_roller/core/base_collection_models/single_type_collecti
 import 'package:d20_dice_roller/core/base_collection_rows/collection_row_keys.dart';
 import 'package:d20_dice_roller/core/dice_types.dart';
 import 'package:d20_dice_roller/core/mult_counter.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,14 +13,20 @@ class SingleTypeCollectionRow extends StatelessWidget {
   final SingleTypeCollectionModel collectionModel;
   final bool forCreate;
 
-  SingleTypeCollectionRow(this.collectionModel, this.onDismissed,
-      {this.handleCheckbox, this.forCreate = false});
+  SingleTypeCollectionRow(
+    this.collectionModel,
+    this.onDismissed, {
+    this.handleCheckbox,
+    this.forCreate = false,
+  });
 
   factory SingleTypeCollectionRow.forCreate(
     SingleTypeCollectionModel collectionModel,
     Function onDismissed,
+    int index,
   ) {
     collectionModel = collectionModel ?? SingleTypeCollectionModel();
+    collectionModel.indexForCreate = index;
     return SingleTypeCollectionRow(
       collectionModel,
       onDismissed,
@@ -202,6 +209,8 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                     MultCounter(
                       collectionModel.multiplier.toString(),
                       context,
+                      key: collectionModel.indexForCreate != null ? CreateNamedCollectionScreenKeys.rowIncrementerKey(
+                          collectionModel.indexForCreate) : null,
                       handleCheckboxChanged: collectionModel.changeCheckbox,
                       checkBoxValue: true,
                       handleIncrement: collectionModel.incrementMultiplier,

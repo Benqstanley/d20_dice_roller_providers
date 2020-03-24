@@ -1,5 +1,6 @@
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/mult_counter.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,13 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
   final Function handleCheckboxChanged;
   final Function handleEdit;
   final ScreenSelector selector;
+  final int index;
 
   CollectionRow(
     this.collectionModel,
     this.onDismissed,
     this.selector, {
+    this.index,
     this.handleCheckboxChanged,
     this.handleDecrement,
     this.handleIncrement,
@@ -32,12 +35,15 @@ class CollectionRow<T extends CollectionModel> extends StatelessWidget {
     T collectionModel,
     Function onDismissed,
     Function handleEdit,
+    int index,
   ) {
     collectionModel.checkBox = true;
+    collectionModel.indexForCreate = index;
     return CollectionRow(
       collectionModel,
       onDismissed,
       ScreenSelector.createScreen,
+      index: index,
       handleEdit: handleEdit,
       handleIncrement: collectionModel.incrementMultiplier,
       handleDecrement: collectionModel.decrementMultiplier,
@@ -252,6 +258,10 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
                       child: MultCounter(
                         counterState,
                         context,
+                        key: model.indexForCreate != null
+                            ? CreateNamedCollectionScreenKeys.rowIncrementerKey(
+                                model.indexForCreate)
+                            : null,
                         showCheckBox:
                             selector == ScreenSelector.chooseCollections,
                         handleCheckboxChanged:
