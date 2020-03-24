@@ -141,6 +141,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: TextField(
+              key: CreateNamedCollectionScreenKeys.nameFieldKey,
               enabled: !forEditing,
               controller: currentModel.nameController,
               decoration: InputDecoration(

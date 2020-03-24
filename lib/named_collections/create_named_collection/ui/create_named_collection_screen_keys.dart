@@ -7,6 +7,7 @@ class CreateNamedCollectionScreenKeys{
   static Key addRowKey = Key('addRowKey');
   static Key clearScreenKey = Key('clearScreenKey');
   static Key saveCollectionKey = Key('saveCollectionKey');
+  static Key nameFieldKey = Key('nameFieldKey');
 
   static Key rowIncrementerKey(int index){
     return Key('rowIncrementerKey$index');
