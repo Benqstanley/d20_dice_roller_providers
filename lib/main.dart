@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:d20_dice_roller/app_preferences/ui/app_preferences.dart';
 import 'package:d20_dice_roller/app_theme/bloc/app_theme_bloc.dart';
@@ -102,7 +100,7 @@ class PageWrapper extends StatelessWidget {
             .pushReplacementNamed(AppWideStrings.createCollectionPath),
       );
     }
-    if(action != null){
+    if (action != null) {
       actions = [];
       actions.add(action);
     }

@@ -12,13 +12,17 @@ import 'package:d20_dice_roller/main.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/bloc/create_screen_bloc.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_collection_create_model.dart';
 import 'package:d20_dice_roller/named_collections/create_named_collection/model/named_multi_collection_create_model.dart';
+import 'package:d20_dice_roller/named_collections/create_named_collection/ui/create_named_collection_screen_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateNamedCollectionScreen extends StatelessWidget {
   final CollectionModel modelToEdit;
 
-  CreateNamedCollectionScreen({this.modelToEdit});
+  CreateNamedCollectionScreen({
+    Key key,
+    this.modelToEdit,
+  }) : super(key: key);
 
   factory CreateNamedCollectionScreen.forEdit(CollectionModel modelToEdit) {
     var screen = CreateNamedCollectionScreen(
@@ -57,7 +61,10 @@ class CreateNamedCollectionContents extends StatelessWidget {
   final bool inPart;
   final bool forEditing;
 
-  CreateNamedCollectionContents({this.inPart = false, this.forEditing = false});
+  CreateNamedCollectionContents({
+    this.inPart = false,
+    this.forEditing = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +122,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
     );
   }
 
+  //Top level name isn't available for change in editing for saving reasons.
+  //TODO: allow the user to change the name and clean up the save files.
+
   Widget buildNameAndTypeRow(
     BuildContext context,
     bool isMulti, {
@@ -143,6 +153,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
               children: <Widget>[
                 Text("Multi"),
                 Checkbox(
+                  key: CreateNamedCollectionScreenKeys.multiStatusBox,
                   value: createScreenBloc.isMulti,
                   onChanged: createScreenBloc.changeMultiStatus,
                 )
@@ -156,6 +167,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                 MultCounter(
                   currentModel.multiplier.toString(),
                   context,
+                  key: CreateNamedCollectionScreenKeys.topLevelIncrementer,
                   handleIncrement: currentModel.incrementMultiplier,
                   handleDecrement: currentModel.decrementMultiplier,
                   showCheckBox: false,
@@ -168,6 +180,9 @@ class CreateNamedCollectionContents extends StatelessWidget {
       ),
     );
   }
+
+  //Creates the Widgets where users can add NamedCollections as Parts of a
+  //Multi Collection. Clicking Add Part navigates to a buildSinglePartCreator
 
   Widget buildMultiPartCreator({
     NamedMultiCollectionCreateModel namedMultiCollectionModel,
@@ -187,7 +202,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
                     return CollectionRow<NamedCollectionModel>.forCreate(
                       model,
                       namedMultiCollectionModel.dismissMultiPartRow,
-                      passParametersForEdit(context, namedMultiCollectionModel,
+                      passNamedMultiCollectionToPartCreator(context, namedMultiCollectionModel,
                           index: index),
                     );
                   })
@@ -209,7 +224,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
             RaisedButton(
                 child: Text('Add Part'),
                 onPressed:
-                    passParametersForEdit(context, namedMultiCollectionModel)),
+                    passNamedMultiCollectionToPartCreator(context, namedMultiCollectionModel)),
             RaisedButton(
               child: Text('Save'),
               onPressed: () async {
@@ -231,46 +246,8 @@ class CreateNamedCollectionContents extends StatelessWidget {
     );
   }
 
-  Function passParametersForEdit(BuildContext context,
-      NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
-      {int index}) {
-    var navigator = () {
-      Navigator.of(context)
-          .push(
-        MaterialPageRoute(
-          builder: (ctx) => MultiProvider(
-            child: CreateNamedCollectionContents(
-              inPart: true,
-            ),
-            providers: [
-              ChangeNotifierProvider(
-                create: (ctx) => CreateScreenBloc(),
-              ),
-              ChangeNotifierProvider.value(
-                value: namedMultiCollectionCreateModel,
-              ),
-              ChangeNotifierProvider(
-                create: (context) => NamedCollectionCreateModel(
-                    model: index != null
-                        ? namedMultiCollectionCreateModel.namedModels[index]
-                        : null),
-              ),
-            ],
-          ),
-        ),
-      )
-          .then((result) {
-        if (result == null) return;
-        if (index != null) {
-          namedMultiCollectionCreateModel.namedModels.removeAt(index);
-          namedMultiCollectionCreateModel.namedModels.insert(index, result);
-        } else {
-          namedMultiCollectionCreateModel.absorbNamedCollection(result);
-        }
-      });
-    };
-    return navigator;
-  }
+  //Creates the widget where the user can create single type collections
+  //to add to a namedCollection.
 
   Widget buildSinglePartCreator({
     NamedCollectionCreateModel namedCollectionModel,
@@ -283,6 +260,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
   }
 
   //Will be the main body of buildSinglePartCreator()
+
   Widget buildPartCreator({
     NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
     NamedCollectionCreateModel namedCollectionCreateModel,
@@ -352,5 +330,49 @@ class CreateNamedCollectionContents extends StatelessWidget {
         )
       ],
     );
+  }
+
+  //This returns a function that handles navigation to the CreateNamedScreen
+  //for editing purposes
+
+  Function passNamedMultiCollectionToPartCreator(BuildContext context,
+      NamedMultiCollectionCreateModel namedMultiCollectionCreateModel,
+      {int index}) {
+    var navigator = () {
+      Navigator.of(context)
+          .push(
+        MaterialPageRoute(
+          builder: (ctx) => MultiProvider(
+            child: CreateNamedCollectionContents(
+              inPart: true,
+            ),
+            providers: [
+              ChangeNotifierProvider(
+                create: (ctx) => CreateScreenBloc(),
+              ),
+              ChangeNotifierProvider.value(
+                value: namedMultiCollectionCreateModel,
+              ),
+              ChangeNotifierProvider(
+                create: (context) => NamedCollectionCreateModel(
+                    model: index != null
+                        ? namedMultiCollectionCreateModel.namedModels[index]
+                        : null),
+              ),
+            ],
+          ),
+        ),
+      )
+          .then((result) {
+        if (result == null) return;
+        if (index != null) {
+          namedMultiCollectionCreateModel.namedModels.removeAt(index);
+          namedMultiCollectionCreateModel.namedModels.insert(index, result);
+        } else {
+          namedMultiCollectionCreateModel.absorbNamedCollection(result);
+        }
+      });
+    };
+    return navigator;
   }
 }

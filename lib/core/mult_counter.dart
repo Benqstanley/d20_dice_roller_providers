@@ -2,25 +2,29 @@ import 'package:d20_dice_roller/core/mult_button.dart';
 import 'package:flutter/material.dart';
 
 class MultCounter extends StatelessWidget {
-  bool checkBoxValue;
-  bool forRoller;
-  String counterState;
-  BuildContext context;
-  Function handleCheckboxChanged;
-  bool showCheckBox = true;
-  Function handleIncrement;
-  Function handleDecrement;
-  bool scaffoldBackground;
+  final bool checkBoxValue;
+  final bool forRoller;
+  final String counterState;
+  final BuildContext context;
+  final Function handleCheckboxChanged;
+  final bool showCheckBox;
+  final Function handleIncrement;
+  final Function handleDecrement;
+  final bool scaffoldBackground;
 
-  MultCounter(this.counterState, this.context,
-      {this.handleCheckboxChanged,
-      this.checkBoxValue = false,
-      this.showCheckBox = true,
-      this.handleIncrement,
-      this.handleDecrement,
-      this.forRoller = false,
-      this.scaffoldBackground = false})
-      : assert(handleCheckboxChanged != null || !showCheckBox);
+  MultCounter(
+    this.counterState,
+    this.context, {
+    this.handleCheckboxChanged,
+    this.checkBoxValue = false,
+    this.showCheckBox = true,
+    this.handleIncrement,
+    this.handleDecrement,
+    this.forRoller = false,
+    this.scaffoldBackground = false,
+    Key key,
+  })  : assert(handleCheckboxChanged != null || !showCheckBox),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
