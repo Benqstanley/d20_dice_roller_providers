@@ -191,6 +191,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
     BuildContext context,
   }) {
     return Column(
+      key: CreateNamedCollectionScreenKeys.multiPartCreator,
       children: <Widget>[
         Expanded(
           child: namedMultiCollectionModel.namedModels.isNotEmpty
@@ -275,6 +276,7 @@ class CreateNamedCollectionContents extends StatelessWidget {
     BuildContext context,
   }) {
     return Column(
+      key: CreateNamedCollectionScreenKeys.partCreator,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Expanded(

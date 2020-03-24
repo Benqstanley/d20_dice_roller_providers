@@ -14,6 +14,12 @@ import '../../../container_widget.dart';
 void main() {
   final Finder addRowButton =
       find.byKey(CreateNamedCollectionScreenKeys.addRowKey);
+  final Finder multiStatusBox =
+      find.byKey(CreateNamedCollectionScreenKeys.multiStatusBox);
+  final Finder multiPartCreator =
+      find.byKey(CreateNamedCollectionScreenKeys.multiPartCreator);
+  final Finder partCreator =
+      find.byKey(CreateNamedCollectionScreenKeys.partCreator);
   final Finder singleTypeRows = find.byWidgetPredicate((w) {
     if (w is MultCounter) return w.key.toString().contains('rowIncrementerKey');
     return false;
@@ -52,10 +58,10 @@ void main() {
 
     await tester.pumpWidget(widget);
     await tester.pumpAndSettle();
+    expect(partCreator, findsOneWidget);
     expect(find.byKey(CreateNamedCollectionScreenKeys.topLevelIncrementer),
         findsOneWidget);
-    expect(find.byKey(CreateNamedCollectionScreenKeys.multiStatusBox),
-        findsOneWidget);
+    expect(multiStatusBox, findsOneWidget);
     expect(singleTypeRows, findsOneWidget);
     await tester.tap(addRowButton);
     await tester.pumpAndSettle();
@@ -65,5 +71,27 @@ void main() {
     await tester.tap(clearButton);
     await tester.pumpAndSettle();
     expect(singleTypeRows, findsOneWidget);
+  });
+
+  testWidgets('CreateNamedCollectionScreen topIncrementerTest',
+      (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    var rollerScreenBloc = RollerScreenBloc();
+    var sessionHistory = SessionHistoryModel();
+    var createScreenBloc = CreateScreenBloc();
+    var widget = ContainerWidget(
+      [
+        rollerScreenBloc,
+        sessionHistory,
+        createScreenBloc,
+      ],
+      CreateNamedCollectionScreen(),
+    );
+
+    await tester.pumpWidget(widget);
+    await tester.pumpAndSettle();
+    await tester.tap(multiStatusBox);
+    await tester.pumpAndSettle();
+    expect(multiPartCreator, findsOneWidget);
   });
 }
