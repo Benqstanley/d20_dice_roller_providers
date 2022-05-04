@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)"
+options: "cae9fcfd2bf9db8482a0d88c6f36b227a8b88bcc8878cce39915348d7f00bf04"
+build_start_time: [1636046066, 873775959]
+build_end_time: [1636046074, 856434822]
+inputs:
+  "/Users/zianderthalapps/Personal/d20_dice_roller/ios/Runner/AppDelegate.swift": [1575947887, 699986934]

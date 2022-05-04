@@ -151,7 +151,10 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                         items: diceTypes
                             .map((type) => DropdownMenuItem<DiceType>(
                                   value: type,
-                                  child: Text(diceTypeStrings[type]),
+                                  child: Text(
+                                    diceTypeStrings[type],
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ))
                             .toList(),
                       ),
@@ -209,8 +212,10 @@ class SingleTypeCollectionBaseRowContents extends StatelessWidget {
                     MultCounter(
                       collectionModel.multiplier.toString(),
                       context,
-                      key: collectionModel.indexForCreate != null ? CreateNamedCollectionScreenKeys.rowIncrementerKey(
-                          collectionModel.indexForCreate) : null,
+                      key: collectionModel.indexForCreate != null
+                          ? CreateNamedCollectionScreenKeys.rowIncrementerKey(
+                              collectionModel.indexForCreate)
+                          : null,
                       handleCheckboxChanged: collectionModel.changeCheckbox,
                       checkBoxValue: true,
                       handleIncrement: collectionModel.incrementMultiplier,

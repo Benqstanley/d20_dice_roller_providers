@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:d20_dice_roller/ads/bloc/ad_mob_bloc.dart';
 import 'package:d20_dice_roller/core/base_collection_models/collection_model.dart';
 import 'package:d20_dice_roller/core/base_collection_models/named_collection_model.dart';
@@ -88,10 +87,6 @@ class RollerScreen extends StatelessWidget {
               )
             ],
           ),
-        ),
-        AdmobBanner(
-          adUnitId: AdInfo.adId,
-          adSize: AdmobBannerSize.FULL_BANNER,
         ),
       ],
     );

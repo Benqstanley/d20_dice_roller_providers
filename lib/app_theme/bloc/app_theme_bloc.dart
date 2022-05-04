@@ -38,12 +38,12 @@ class AppThemeBloc extends ChangeNotifier {
     appTheme = appTheme ?? AppTheme.defaultTheme();
     themeData = themeData = ThemeData(
         textTheme: TextTheme(
-            headline: TextStyle(fontSize: 26),
-            title: TextStyle(color: appTheme.appBarTitle),
+            headline1: TextStyle(fontSize: 26),
+            subtitle1: TextStyle(color: appTheme.appBarTitle),
             button: TextStyle(
               fontSize: 18,
             ),
-            display1: TextStyle(
+            headline4: TextStyle(
               fontSize: 22,
               color: defaultFontColor,
             )),
@@ -84,16 +84,16 @@ class AppThemeBloc extends ChangeNotifier {
     dividerColor = appTheme.dividerColor ?? themeData.dividerColor;
     errorColor = appTheme.errorColor ?? themeData.errorColor;
     scaffoldColor = appTheme.scaffoldColor ?? themeData.scaffoldBackgroundColor;
-    fontColor = appTheme.fontColor ?? themeData.textTheme.display1.color;
+    fontColor = appTheme.fontColor ?? themeData.textTheme.headline4.color;
     colorSwatch = appTheme.primarySwatch;
     themeData = ThemeData(
         textTheme: TextTheme(
-            title: TextStyle(color: appTheme.appBarTitle),
-            headline: TextStyle(fontSize: 26),
+            subtitle1: TextStyle(color: appTheme.appBarTitle),
+            headline1: TextStyle(fontSize: 26),
             button: TextStyle(
               fontSize: 18,
             ),
-            display1: TextStyle(
+            headline4: TextStyle(
               fontSize: 22,
               color: fontColor,
             )),

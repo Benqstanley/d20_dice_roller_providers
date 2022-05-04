@@ -33,7 +33,7 @@ class SessionHistoryScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   "Session History",
-                  style: Theme.of(context).textTheme.headline,
+                  style: Theme.of(context).textTheme.headline1,
                 ),
               ),
             ),
@@ -59,7 +59,7 @@ class SessionHistoryScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("No History Yet", style: Theme.of(context).textTheme.display1),
+            Text("No History Yet", style: Theme.of(context).textTheme.headline4),
             RaisedButton(
               onPressed: () => Navigator.of(context).pushReplacementNamed('/'),
               child: Text("Go Roll Some Dice!"),

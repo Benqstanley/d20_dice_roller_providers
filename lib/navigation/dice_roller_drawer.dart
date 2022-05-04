@@ -10,7 +10,7 @@ class DiceRollerDrawer extends StatelessWidget {
         child: Text(
           'Dice Roller',
           style: TextStyle(
-              fontSize: 26, color: Theme.of(context).primaryTextTheme.title.color),
+              fontSize: 26, color: Theme.of(context).primaryTextTheme.headline6.color),
         ),
         decoration: BoxDecoration(color: appColor.primary),
       ),

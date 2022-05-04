@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:d20_dice_roller/ads/bloc/ad_mob_bloc.dart';
 import 'package:d20_dice_roller/app_wide_keys.dart';
 import 'package:d20_dice_roller/app_wide_strings.dart';
@@ -113,10 +112,6 @@ class CreateNamedCollectionContents extends StatelessWidget {
                         context: context,
                       )),
           ),
-          AdmobBanner(
-            adUnitId: AdInfo.adId,
-            adSize: AdmobBannerSize.FULL_BANNER,
-          )
         ],
       ),
     );

@@ -22,7 +22,7 @@ class _AppPreferencesState extends State<AppPreferences> {
       PreferenceDialogLink(
         "Theme",
         onPop: () {
-          Provider.of<AppThemeBloc>(context).updateFromPreferences();
+          Provider.of<AppThemeBloc>(context, listen: false).updateFromPreferences();
         },
         dialog: ThemePicker(
           null,
@@ -61,7 +61,6 @@ class ThemePickerState extends PreferenceDialogState {
   void initState() {
     super.initState();
     if (widget.onlySaveOnSubmit) {
-      PrefService.clearCache();
       PrefService.enableCaching();
     }
   }
@@ -69,7 +68,6 @@ class ThemePickerState extends PreferenceDialogState {
   @override
   void dispose() {
     PrefService.disableCaching();
-    PrefService.clearCache();
     super.dispose();
   }
 
@@ -92,7 +90,7 @@ class ThemePickerState extends PreferenceDialogState {
                 padding: const EdgeInsets.all(4.0),
                 child: ColorTile(themeColors[index], index, selectedWidget, () {
                   PrefService.setInt("app_theme", index);
-                  Provider.of<AppThemeBloc>(context).tempUpdate(index);
+                  Provider.of<AppThemeBloc>(context, listen: false).tempUpdate(index);
                   setState(() {
                     selectedWidget = index;
                   });
@@ -109,7 +107,7 @@ class ThemePickerState extends PreferenceDialogState {
                 FlatButton(
                   child: Text(widget.cancelText),
                   onPressed: () {
-                    Provider.of<AppThemeBloc>(context).undoTemp();
+                    Provider.of<AppThemeBloc>(context, listen: false).undoTemp();
                     Navigator.of(context).pop();
                   },
                 )

@@ -131,7 +131,7 @@ class CollectionRowContents<T extends CollectionModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    T model = Provider.of<T>(context);
+    T model = Provider.of<T>(context, listen: true);
     String counterState;
     bool checkBox;
     bool forCreate = selector == ScreenSelector.createScreen;
